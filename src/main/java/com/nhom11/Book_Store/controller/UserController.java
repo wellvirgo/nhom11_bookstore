@@ -30,6 +30,7 @@ public class UserController {
     public String register(Model model) {
         UserCreation userCreation = new UserCreation();
         model.addAttribute("userCreation", userCreation);
+
         return "user/register";
     }
 

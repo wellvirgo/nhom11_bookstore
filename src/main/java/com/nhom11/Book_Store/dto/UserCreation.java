@@ -12,9 +12,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreation {
-    @Email(message = "Email is not incorrect format.")
+    @Email(message = "Email không đúng định dạng.")
     String email;
 
-    @StrongPassword(message = "Password need to have at least 6 characters: letters, digits, special symbols")
+    @StrongPassword(message = "Mật khẩu cần có tối thiểu 6 kí tự: chữ, số, kí tự đặc biệt")
     String password;
 }

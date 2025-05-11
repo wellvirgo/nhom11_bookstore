@@ -25,7 +25,7 @@ public class UserService {
     public User create(UserCreation userCreation) {
         String email = userCreation.getEmail();
         if (isExistUser(email))
-            throw new AppException("Email is already in use.");
+            throw new AppException("Email đã tồn tại trong hệ thống.");
 
         String hashedPassword = passwordEncoder.encode(userCreation.getPassword());
         User user = User.builder()
@@ -35,5 +35,9 @@ public class UserService {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

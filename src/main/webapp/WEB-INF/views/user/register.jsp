@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Register</title>
+    <title>Đăng ký</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -19,8 +19,9 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +35,9 @@
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet">
     <style>
-
+        .error {
+            color: red;
+        }
     </style>
 </head>
 
@@ -43,15 +46,17 @@
 <main>
     <div class="container">
 
-        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <section
+                class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                    <div
+                            class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
                         <div class="d-flex justify-content-center py-4">
                             <a href="index.html" class="logo d-flex align-items-center w-auto">
                                 <img src="/images/logo.png" alt="">
-                                <span class="d-none d-lg-block">Fashara</span>
+                                <span class="d-none d-lg-block">BookStore</span>
                             </a>
                         </div><!-- End Logo -->
 
@@ -60,8 +65,8 @@
                             <div class="card-body">
 
                                 <div class="pt-4 pb-2">
-                                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                                    <p class="text-center small">Enter your personal details to create account</p>
+                                    <h5 class="card-title text-center pb-0 fs-4">Đăng ký tài khoản</h5>
+                                    <p class="text-center small">Nhập thông tin tạo tài khoản</p>
                                 </div>
 
                                 <!-- If email has been registered, display error message -->
@@ -71,41 +76,44 @@
                                     </div>
                                 </c:if>
 
-                                <%--@elvariable id="userCreation" type="com.nhom11.Book_Store.dto.UserCreation"--%>
-                                <form:form method="post" action="/register" modelAttribute="userCreation"
-                                           class="row g-3 needs-validation"
+                                <%--@elvariable id="userCreation"
+                                    type="com.nhom11.Book_Store.dto.UserCreation" --%>
+                                <form:form method="post" action="/register"
+                                           modelAttribute="userCreation" class="row g-3 needs-validation"
                                            novalidate="novalidate">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                    <input type="hidden" name="${_csrf.parameterName}"
+                                           value="${_csrf.token}"/>
 
                                     <div class="col-12">
-                                        <label for="yourEmail" class="form-label">Your Email</label>
+                                        <label for="yourEmail" class="form-label">Email</label>
                                         <form:input path="email" type="email" name="email"
-                                                    class="form-control"
-                                                    id="yourEmail"
+                                                    class="form-control" id="yourEmail"
                                                     required="required"/>
-                                        <div class="invalid-feedback">Please enter a valid Email address!</div>
+                                        <div class="invalid-feedback">Vui lòng nhập email hợp lệ!</div>
                                         <!-- If email is incorrect format, display error message -->
-                                        <form:errors path="email" cssClass="error-message"/>
+                                        <form:errors path="email" cssClass="error"/>
                                     </div>
 
                                     <div class="col-12">
-                                        <label for="yourPassword" class="form-label">Password</label>
+                                        <label for="yourPassword"
+                                               class="form-label">Mật khẩu</label>
                                         <form:password path="password" name="password"
-                                                       cssClass="form-control"
-                                                       id="yourPassword"
+                                                       cssClass="form-control" id="yourPassword"
                                                        required="required"/>
-                                        <div class="invalid-feedback">Please enter your password!</div>
+                                        <div class="invalid-feedback">Vui lòng nhập mật khẩu!
+                                        </div>
                                         <!-- If password is weak, display error message-->
-                                        <form:errors path="password" cssClass="error-message"/>
+                                        <form:errors path="password" cssClass="error"/>
                                     </div>
 
                                     <div class="col-12">
                                         <button class="btn btn-primary w-100" type="submit">
-                                            Create Account
+                                            Đăng ký
                                         </button>
                                     </div>
                                     <div class="col-12">
-                                        <p class="small mb-0">Already have an account? <a href="login">Login</a></p>
+                                        <p class="small mb-0">Đã có tài khoản? <a
+                                                href="/login">Đăng nhập</a></p>
                                     </div>
                                 </form:form>
 
