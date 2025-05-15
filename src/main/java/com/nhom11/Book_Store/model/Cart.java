@@ -1,5 +1,8 @@
 package com.nhom11.Book_Store.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -31,7 +31,10 @@ public class SecurityConfig {
             "/css/user/**",
             "/vendor/**",
             "/images/**",
-            "/js/user/**"};
+            "/js/user/**",
+            "/product/**",
+            "/product/add-to-card"
+        };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -51,19 +54,30 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
+                        // .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 
-                        .requestMatchers("/admin/das").hasRole("ADMIN")
+                        // .requestMatchers("/admin/das").hasRole("ADMIN")
 
-                        .requestMatchers(PUBLIC_URLS).permitAll()
+                        // .requestMatchers(PUBLIC_URLS).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll())
-
+                        // .requestMatchers(HttpMethod.GET, "/favicon.ico").permitAll())
+                
+                        .anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable()) 
                 .formLogin(form->form
                         .loginPage("/login")
-                        .failureUrl("/login?error")
+                        .defaultSuccessUrl("/product", true) // ← khi login thành công, redirect vào /product
+                        .failureUrl("/login?error=true")   // khi login sai
+                        // .failureUrl("/login?error")
                         .permitAll());
 
         return http.build();
+        // http
+        // .authorizeHttpRequests(auth -> auth
+        //     .anyRequest().permitAll()  // Cho phép tất cả các request
+        // )
+        // .csrf(csrf -> csrf.disable());  // Tắt bảo vệ CSRF
+
+        // return http.build();
     }
 }
