@@ -26,7 +26,7 @@ public class Product extends BaseEntity {
     String productCode;
     int publishYear;
     String language;
-    int weight;
+    float weight;
     String size;
     int quantityPage;
     int quantityAvailable;

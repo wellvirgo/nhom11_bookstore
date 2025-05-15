@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html lang="en">
@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <title>Login</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -33,13 +33,8 @@
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Updated: Apr 20 2024 with Bootstrap v5.3.3
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -55,7 +50,7 @@
                         <div class="d-flex justify-content-center py-4">
                             <a href="#" class="logo d-flex align-items-center w-auto">
                                 <img src="/images/logo.png" alt="">
-                                <span class="d-none d-lg-block">NiceAdmin</span>
+                                <span class="d-none d-lg-block">BookStore</span>
                             </a>
                         </div><!-- End Logo -->
 
@@ -64,56 +59,57 @@
                             <div class="card-body">
 
                                 <div class="pt-4 pb-2">
-                                    <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                                    <p class="text-center small">Enter your username & password to login</p>
+                                    <h5 class="card-title text-center pb-0 fs-4">Đăng nhập vào tài khoản</h5>
+                                    <p class="text-center small">Nhập email và mật khẩu để đăng nhập</p>
                                 </div>
 
                                 <form class="row g-3 needs-validation" novalidate action="/login" method="post">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                    <c:if test="${param.error!=null}">
-                                        <div class="my-2" style="color: red;"><strong>Invalid email or password</strong>
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                    <c:if test="${param.logout!=null}">
+                                        <div class="my-2" id="logoutId" style="color: green;">
+                                            <strong>Đăng xuất thành công</strong>
                                         </div>
                                     </c:if>
+                                    <c:if test="${param.error!=null}">
+                                        <div class="my-2" style="color: red;">
+                                            <strong>Email hoặc mật khẩu không chính xác</strong>
+                                        </div>
+                                    </c:if>
+
                                     <div class="col-12">
-                                        <label for="yourUsername" class="form-label">Username</label>
+                                        <label for="yourUsername" class="form-label">Email</label>
                                         <div class="input-group has-validation">
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                            <input type="text" name="username" class="form-control" id="yourUsername" required>
-                                            <div class="invalid-feedback">Please enter your username.</div>
+                                            <input type="text" name="username" class="form-control" id="yourUsername"
+                                                   required>
+                                            <div class="invalid-feedback">Vui lòng nhập email!</div>
                                         </div>
                                     </div>
 
                                     <div class="col-12">
-                                        <label for="yourPassword" class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control" id="yourPassword" required>
-                                        <div class="invalid-feedback">Please enter your password!</div>
+                                        <label for="yourPassword" class="form-label">Mật khẩu</label>
+                                        <input type="password" name="password" class="form-control" id="yourPassword"
+                                               required>
+                                        <div class="invalid-feedback">Vui lòng nhập mật khẩu!</div>
                                     </div>
 
-                                    <div class="col-12">
+                                    <%--<div class="col-12">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                                            <input class="form-check-input" type="checkbox" name="remember" value="true"
+                                                   id="rememberMe">
                                             <label class="form-check-label" for="rememberMe">Remember me</label>
                                         </div>
+                                    </div>--%>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100" type="submit">Đăng nhập</button>
                                     </div>
                                     <div class="col-12">
-                                        <button class="btn btn-primary w-100" type="submit">Login</button>
-                                    </div>
-                                    <div class="col-12">
-                                        <p class="small mb-0">Don't have account? <a href="#">Create an account</a></p>
+                                        <p class="small mb-0">Chưa có tài khoản? <a href="/register">Đăng ký</a></p>
                                     </div>
                                 </form>
 
                             </div>
                         </div>
-
-                        <div class="credits">
-                            <!-- All the links in the footer should remain intact. -->
-                            <!-- You can delete the links only if you purchased the pro version. -->
-                            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                        </div>
-
                     </div>
                 </div>
             </div>

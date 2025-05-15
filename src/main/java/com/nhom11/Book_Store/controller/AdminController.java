@@ -1,6 +1,5 @@
 package com.nhom11.Book_Store.controller;
 
-import com.nhom11.Book_Store.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +17,7 @@ public class AdminController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String username = userDetails.getUsername();
         model.addAttribute("username", username);
+
         return "admin/das";
     }
 }

@@ -315,5 +315,4 @@
       }).observe(mainContainer);
     }, 200);
   }
-
 })();
