@@ -33,6 +33,13 @@ public class UserController {
 
         return "user/register";
     }
+    @GetMapping("/home")
+    public String hone(Model model) {
+        UserCreation userCreation = new UserCreation();
+        model.addAttribute("userCreation", userCreation);
+
+        return "user/home";
+    }
 
     @PostMapping("/register")
     public String register(@ModelAttribute(name = "userCreation") @Valid UserCreation userCreation,
