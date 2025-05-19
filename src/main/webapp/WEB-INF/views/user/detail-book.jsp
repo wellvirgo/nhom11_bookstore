@@ -24,7 +24,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="/css/detail-product.css" rel="stylesheet">
+    <link href="/css/user/detail-product.css" rel="stylesheet">
   </head>
   <span>
     <div class="preloader-wrapper">
@@ -132,8 +132,87 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <div class="row">
       <div class="col-md-12">
         <h2 class="section-title">Mô tả sản phẩm</h2>
-        <div id="description-product"></div>
-      </div>
+        <div id="description-product">
+            <section class="product-info-tabs py-5">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="d-flex flex-column flex-md-row align-items-start gap-5">
+                            <div class="nav flex-row flex-wrap flex-md-column nav-pills me-3 col-lg-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <button class="nav-link text-start active" id="v-pills-description-tab" data-bs-toggle="pill" data-bs-target="#v-pills-description" type="button" role="tab" aria-controls="v-pills-description" aria-selected="true">Description</button>
+                                <button class="nav-link text-start" id="v-pills-additional-tab" data-bs-toggle="pill" data-bs-target="#v-pills-additional" type="button" role="tab" aria-controls="v-pills-additional" aria-selected="false" tabindex="-1">Additional Information</button>
+                                <button class="nav-link text-start" id="v-pills-reviews-tab" data-bs-toggle="pill" data-bs-target="#v-pills-reviews" type="button" role="tab" aria-controls="v-pills-reviews" aria-selected="false" tabindex="-1">Customer Reviews</button>
+                            </div>
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade active show" id="v-pills-description" role="tabpanel" aria-labelledby="v-pills-description-tab" tabindex="0">
+                                    <h5>Mô tả sản phẩm</h5>
+                                    <div x-data="{ isExpanded: false }">
+                                        <p x-show="isExpanded" x-collapse.min.200px>
+                                            ${product.description}
+                                        </p>
+                                        <button class="btn btn-link p-0" @click="isExpanded = !isExpanded">
+                                            <span x-text="isExpanded ? 'Ẩn bớt' : 'Xem thêm'"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-additional" role="tabpanel" aria-labelledby="v-pills-additional-tab" tabindex="0">
+                                    <h5>Thông tin chi tiết</h5>
+                                    <div class="meta-product py-2">
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Mã hàng:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.productCode}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Tên nhà cung cấp:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item"><a href="#">${product.supplier}</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Tác giả:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.author}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Ngôn ngữ:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.language}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">NXB:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.publisher}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Năm XB:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.publishYear}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Trọng lượng:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.weight}g</li>
+                                            </ul>
+                                        </div>
+                                        <div class="meta-item d-flex align-items-baseline">
+                                            <h6 class="item-title no-margin pe-2">Số trang:</h6>
+                                            <ul class="select-list list-unstyled d-flex">
+                                                <li class="select-item">${product.quantityOfPages} tờ</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
   </div>
   <div class="container-fluid">
