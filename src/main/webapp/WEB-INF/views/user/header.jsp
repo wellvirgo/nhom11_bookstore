@@ -453,41 +453,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </div>
         </div>
       </div>
-      <div class="container-fluid">
-        <div class="row py-3">
-          <div
-            class="d-flex justify-content-center justify-content-sm-between align-items-center"
-          >
-            <nav class="main-menu d-flex navbar navbar-expand-lg">
-              <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar"
-              >
-                <span class="navbar-toggler-icon"></span>
-              </button>
-
-              <div
-                class="offcanvas offcanvas-end"
-                tabindex="-1"
-                id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel"
-              >
-                <div class="offcanvas-header justify-content-center">
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </div>
-      </div>
     </header>
 
     <%-- Thêm phần nội dung chính của trang ở đây --%>

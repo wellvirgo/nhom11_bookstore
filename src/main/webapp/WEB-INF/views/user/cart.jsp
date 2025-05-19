@@ -254,18 +254,20 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
               </div>
               <div class="button-wrap row g-2">
                 <div class="col-md-6">
-                  <button
+                  <a
+                    href="/list-books"
                     class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100"
                   >
                     Tiếp tục mua hàng
-                  </button>
+                  </a>
                 </div>
                 <div class="col-md-6">
-                  <button
+                  <a
+                    href="/payment"
                     class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100"
                   >
                     Thanh toán
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

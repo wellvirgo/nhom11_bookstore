@@ -374,4 +374,59 @@ public String detailBook(Model model) {
         userService.create(userCreation);
         return "redirect:/login";
     }
+
+    @GetMapping("/payment")
+    public String payment(Model model) {
+        // Fake cart items data
+        List<Map<String, Object>> cartItems = new ArrayList<>();
+        
+        Map<String, Object> item1 = new HashMap<>();
+        item1.put("cartItemId", 34);
+        item1.put("productId", 2);
+        item1.put("name", "Nghi Giau & Lam Giau (Tai Ban 2020)");
+        item1.put("price", 88000);
+        item1.put("originalPrice", 110000);
+        item1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
+        item1.put("quantity", 13);
+        item1.put("totalPrice", 88000 * 13);
+
+        Map<String, Object> item2 = new HashMap<>();
+        item2.put("cartItemId", 35);
+        item2.put("productId", 1);
+        item2.put("name", "Nha Gia Kim (Tai Ban 2020)");
+        item2.put("price", 638300);
+        item2.put("originalPrice", 79000);
+        item2.put("image", "https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg");
+        item2.put("quantity", 1);
+        item2.put("totalPrice", 638300);
+
+        cartItems.add(item1);
+        cartItems.add(item2);
+
+        // Fake shipping address
+        Map<String, Object> shippingAddress = new HashMap<>();
+        shippingAddress.put("id", 16);
+        shippingAddress.put("recipientName", "Cường");
+        shippingAddress.put("phoneNumber", "032424");
+        shippingAddress.put("city", "Bắc Giang");
+        shippingAddress.put("district", "Lục Ngạn");
+        shippingAddress.put("ward", "Phượng Sơn");
+        shippingAddress.put("detail", "Số nhà 123");
+
+        // Calculate totals
+        double subtotal = cartItems.stream()
+        .mapToDouble(item -> ((Number) item.get("totalPrice")).doubleValue())
+        .sum();
+    
+    double shippingFee = 50000;
+    double total = subtotal + shippingFee;
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("shippingAddress", shippingAddress);
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("shippingFee", shippingFee);
+        model.addAttribute("total", total);
+
+        return "user/payment";
+    }
 }
