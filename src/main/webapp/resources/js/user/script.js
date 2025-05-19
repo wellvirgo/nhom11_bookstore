@@ -11,11 +11,6 @@
       $("body").removeClass("preloader-site");
     });
   };
-  fetch("header.html")
-    .then((response) => response.text())
-    .then((data) => {
-      document.getElementById("header-container").innerHTML = data;
-    });
   // init Chocolat light box
   var initChocolat = function () {
     Chocolat(document.querySelectorAll(".image-link"), {

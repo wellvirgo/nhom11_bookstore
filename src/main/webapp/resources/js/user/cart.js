@@ -1,13 +1,3 @@
-$(document).ready(function () {
-  setTimeout(() => {
-    const url = window.location.pathname;
-    if (url === "/cart.html") {
-      refreshCart();
-    } else {
-      getCart();
-    }
-  }, 300);
-});
 function animateBadge($el, newVal) {
   $el.text(newVal);
   $el.addClass("badge-animate");
