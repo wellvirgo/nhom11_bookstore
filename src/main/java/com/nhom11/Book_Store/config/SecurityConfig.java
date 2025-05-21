@@ -35,8 +35,9 @@ public class SecurityConfig {
             "/vendor/**",
             "/images/**",
             "/js/user/**",
-            "/product/**",
-            "/product/add-to-card"
+            // "/product/**",
+            // "/product/add-to-card"
+
         };
 
     private static final String[] PUBLIC_GET_URLS = {
@@ -70,13 +71,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 
-                        // .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
 
-                        // .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(PUBLIC_URLS).permitAll()
 
-                        // .requestMatchers(HttpMethod.GET, PUBLIC_GET_URLS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_GET_URLS).permitAll()
 
                         .requestMatchers(HttpMethod.POST, PUBLIC_POST_URLS).permitAll()
 

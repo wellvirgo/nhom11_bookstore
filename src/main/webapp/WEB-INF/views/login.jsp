@@ -63,7 +63,7 @@
                                     <p class="text-center small">Nhập email và mật khẩu để đăng nhập</p>
                                 </div>
 
-                                <form class="row g-3 needs-validation" novalidate action="/login" method="post">
+                                <form id="loginForm" class="row g-3 needs-validation" novalidate action="/login" method="post">
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                     <c:if test="${param.logout!=null}">
                                         <div class="my-2" id="logoutId" style="color: green;">
@@ -82,7 +82,7 @@
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                                             <input type="text" name="username" class="form-control" id="yourUsername"
                                                    required>
-                                            <div class="invalid-feedback">Vui lòng nhập email!</div>
+                                            <!-- <div class="invalid-feedback">Vui lòng nhập email!</div> -->
                                         </div>
                                     </div>
 
@@ -90,7 +90,7 @@
                                         <label for="yourPassword" class="form-label">Mật khẩu</label>
                                         <input type="password" name="password" class="form-control" id="yourPassword"
                                                required>
-                                        <div class="invalid-feedback">Vui lòng nhập mật khẩu!</div>
+                                        <!-- <div class="invalid-feedback">Vui lòng nhập mật khẩu!</div> -->
                                     </div>
 
                                     <%--<div class="col-12">
@@ -113,7 +113,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
 
     </div>

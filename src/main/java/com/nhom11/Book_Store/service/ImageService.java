@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,5 +23,12 @@ public class ImageService {
         imageDTOList = imageRepository.findAllPrimaryImageDTOByBookId(true);
 
         return imageDTOList;
+    }
+
+    //Note: hàm trả về danh sách ảnh chính của tất cả sản phẩm - Quỳnh Trang - 2/5/20252025
+    public Map<Long, String> getPrimaryImageMap() {
+    List<ImageDTO> imageDTOList = imageRepository.findAllPrimaryImageDTOByBookId(true);
+    return imageDTOList.stream()
+            .collect(Collectors.toMap(ImageDTO::getBookId, ImageDTO::getUrl, (v1, v2) -> v1));
     }
 }

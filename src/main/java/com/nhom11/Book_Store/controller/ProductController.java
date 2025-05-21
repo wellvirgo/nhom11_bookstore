@@ -1,6 +1,9 @@
 package com.nhom11.Book_Store.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,11 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.nhom11.Book_Store.dto.ImageDTO;
 import com.nhom11.Book_Store.model.Cart;
 import com.nhom11.Book_Store.model.CartItem;
 import com.nhom11.Book_Store.model.Product;
 import com.nhom11.Book_Store.model.User;
 import com.nhom11.Book_Store.service.CartService;
+import com.nhom11.Book_Store.service.ImageService;
 import com.nhom11.Book_Store.service.ProductService;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,21 +29,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/user")
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ImageService imageService;
+    @Autowired
     private CartService cartService;
     //Xem danh sach san pham
-    @GetMapping 
+    @GetMapping("/home")
     public String listProduct(Model model){
         List<Product> listP = productService.getAllProduct();
-        // In nội dung của listP ra console
-        // System.out.println("Danh sách sản phẩm:");
-        // for (Product product : listP) {
-        //     System.out.println(product);
-        // }
+        Map<Long, String> productImages = imageService.getPrimaryImageMap();
+        System.out.println("\n===================== DANH SÁCH ảnhảnh ======================" + productImages); 
         model.addAttribute("listSP", listP);
+        model.addAttribute("productImages", productImages);
         return "home";
     }
     //Xem chi tiet san pham

@@ -1051,7 +1051,29 @@ td {
 .profile .profile-edit img {
     max-width: 120px;
 }
+/* Thông báo */
 
+  .custom-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #444;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    font-size: 16px;
+    opacity: 0.95;
+  }
+
+  .custom-toast.success {
+    background-color: #28a745;
+  }
+
+  .custom-toast.error {
+    background-color: #dc3545;
+  }
 /*--------------------------------------------------------------
 # F.A.Q Page
 --------------------------------------------------------------*/
