@@ -341,7 +341,25 @@ h6 {
   margin-top: 0;
   padding: 8px 0;
 }
+<<<<<<< HEAD
 
+=======
+@keyframes badge-bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.badge-animate {
+  display: inline-block;
+  animation: badge-bump 300ms ease-in-out;
+}
+>>>>>>> 6ed8a507285c88c3cbd4196c24a8a0cba347ade0
 .autocomplete-item {
   display: flex;
   align-items: center;
@@ -395,6 +413,7 @@ h6 {
   text-align: center;
   font-size: 14px;
 }
+<<<<<<< HEAD
 /* Thông báo */
 
   .custom-toast {
@@ -418,6 +437,8 @@ h6 {
   .custom-toast.error {
     background-color: #dc3545;
   }
+=======
+>>>>>>> 6ed8a507285c88c3cbd4196c24a8a0cba347ade0
 
 /* Make sure the search form properly positions the dropdown */
 #search-form {
@@ -996,3 +1017,16 @@ h6 {
     height: 740px;
   }
 }
+<<<<<<< HEAD
+=======
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-color);
+}
+>>>>>>> 6ed8a507285c88c3cbd4196c24a8a0cba347ade0

@@ -30,7 +30,7 @@ function showToast(type, message) {
                 <small style="font-size: 18px;">${message}</small>
             </div>
         </div>
-    `;  
+    `;
 
   // Thêm vào container
   let toastContainer = document.getElementById("toast-container");

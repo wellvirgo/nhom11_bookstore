@@ -58,6 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const category = params.get("id");
   getDetailProduct(category);
   getRelatedProduct();
+  thumbsSwiper.update();
+  relatedSwiper.update();
+  mainSwiper.update();
 });
 async function getDetailProduct(params) {
   try {
@@ -137,7 +140,7 @@ function fetchRelatedProduct(items) {
     container.innerHTML += html;
   });
 }
-function fetchData(item) {
+function fetchData() {
   const container1 = document.getElementById("img-swiper");
   const container2 = document.getElementById("img-swiper-2");
   item.images.forEach((a) => {
