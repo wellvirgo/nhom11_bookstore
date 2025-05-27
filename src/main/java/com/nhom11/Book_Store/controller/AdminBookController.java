@@ -80,6 +80,8 @@ public class AdminBookController {
     public String getAddBookPage(Model model, @RequestParam("status") Optional<String> statusOptional) {
         model.addAttribute("genreNames", genreService.getAllGenreNames());
         model.addAttribute("productCreation", new ProductCreation());
+        model.addAttribute("sidebarSelected", "book");
+        model.addAttribute("sidebarSelectedVal", "addBook");
         statusOptional.ifPresent(s -> model.addAttribute("status", s));
 
         return "admin/book/add-book";
@@ -95,9 +97,7 @@ public class AdminBookController {
             @RequestParam("additionalImages") MultipartFile[] additionalImages,
             HttpSession session) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("genreNames", genreService.getAllGenreNames());
-            model.addAttribute("status", "error");
-            return "admin/book/add-book";
+            return "redirect:/admin/add-book?status=error";
         }
         productCreation.setCoverImage(coverImage);
         productCreation.setBackCoverImage(backCoverImage);
@@ -128,5 +128,7 @@ public class AdminBookController {
         model.addAttribute("categoryNames", categoryService.getCategoryNames());
         model.addAttribute("mode", mode);
         model.addAttribute("status", status);
+        model.addAttribute("sidebarSelected", "book");
+        model.addAttribute("sidebarSelectedVal","listBook");
     }
 }
