@@ -79,9 +79,9 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var toastEl = document.querySelector('.toast');
+                let toastEl = document.querySelector('.toast');
                 if (toastEl) {
-                    var toast = new bootstrap.Toast(toastEl);
+                    let toast = new bootstrap.Toast(toastEl);
                     toast.show();
                 }
             });

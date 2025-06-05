@@ -15,7 +15,7 @@ public class ProductShowListAdminDTO {
     String author;
     long price;
     int quantityAvailable;
-    boolean isDeleted;
+    boolean inActive;
     Genre genre;
     String imageUrl;
 }

@@ -1,6 +1,7 @@
 package com.nhom11.Book_Store.service;
 
 import com.nhom11.Book_Store.dto.ProductCreation;
+import com.nhom11.Book_Store.dto.ProductInTrash;
 import com.nhom11.Book_Store.mapper.ProductMapper;
 import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Image;
@@ -19,6 +20,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,9 +57,9 @@ public class ProductService {
                     return productRepository.findAllStatusIsAlmostOutOf(pageable, statusCondition);
                 }
                 case "Hết hàng":
-                    return productRepository.findAllByQuantityAvailable(pageable, 0);
+                    return productRepository.findAllByQuantityAvailableAndIsDeleted(pageable, 0, false);
                 case "Ngừng kinh doanh":
-                    return productRepository.findAllByIsDeleted(pageable, true);
+                    return productRepository.findAllByInActiveAndIsDeleted(pageable, true, false);
             }
         }
         return productRepository.findAll(pageable);
@@ -86,7 +91,7 @@ public class ProductService {
                             findAllByCategoryNameAndStatusIsOutOf(categoryName, statusCondition, pageable);
                 }
                 case "Ngừng kinh doanh":
-                    return productRepository.findAllByCategoryNameAndIsDeleted(categoryName, pageable);
+                    return productRepository.findAllByCategoryNameAndInActive(categoryName, pageable);
             }
         }
         return productRepository.findAllByCategoryName(categoryName, pageable);
@@ -113,6 +118,34 @@ public class ProductService {
             saveImage(image, productFetchedFromDB, false, orderOfAdditionalImages.get());
             orderOfAdditionalImages.getAndIncrement();
         });
+    }
+
+    public int deleteProduct(long id) {
+        LocalDate now = LocalDate.now();
+        return productRepository.softDelete(id, now);
+    }
+
+    public int deletePermanently(long id) {
+        return productRepository.deletePermanently(id);
+    }
+
+
+    public List<ProductInTrash> findAllInTrash() {
+
+        return productRepository.findAllInTrash()
+                .stream()
+                .map(productInTrash -> {
+                    LocalDate now = LocalDate.now();
+                    productInTrash.setDeletedTime(
+                            Math.max(0, 30 - ChronoUnit.DAYS.between(productInTrash.getDeletedOn(), now)));
+                    productInTrash.setDeletedOn(null);
+                    return productInTrash;
+                })
+                .toList();
+    }
+
+    public int restoreDeletedProduct(long id) {
+        return productRepository.restoreDeletedProduct(id);
     }
 
     private void saveImage(MultipartFile image, Product product, boolean isPrimary, int order) {
