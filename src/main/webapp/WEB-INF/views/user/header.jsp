@@ -306,7 +306,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             class="col-sm-4 col-lg-3 text-center text-sm-start d-flex justify-content-sm-start justify-content-center"
           >
             <div class="main-logo d-flex align-items-center">
-              <a href="<c:url value='/home'/>">
+              <a href="<c:url value='/user/home'/>">
                 <img
                   src="<c:url value='/images/logo.png'/>"
                   alt="logo"
@@ -334,13 +334,14 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                 <form
                   id="search-form"
                   class="text-center"
-                  action="<c:url value='/user'/>"
-                  method="post"
+                  action="<c:url value='/user/search'/>"
+                  method="get"
                 >
                   <input
                     type="text"
                     class="form-control border-0 bg-transparent"
                     id="menusearch"
+                    name="keyword"
                     placeholder="Search for more than 20,000 products"
                   />
                 </form>
@@ -465,8 +466,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <script src="js/user/plugins.js"></script>
     <script src="js/user/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

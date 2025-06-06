@@ -341,9 +341,6 @@ h6 {
   margin-top: 0;
   padding: 8px 0;
 }
-<<<<<<< HEAD
-
-=======
 @keyframes badge-bump {
   0% {
     transform: scale(1);
@@ -359,7 +356,6 @@ h6 {
   display: inline-block;
   animation: badge-bump 300ms ease-in-out;
 }
->>>>>>> 6ed8a507285c88c3cbd4196c24a8a0cba347ade0
 .autocomplete-item {
   display: flex;
   align-items: center;
@@ -413,32 +409,6 @@ h6 {
   text-align: center;
   font-size: 14px;
 }
-<<<<<<< HEAD
-/* Thông báo */
-
-  .custom-toast {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #444;
-    color: white;
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    font-size: 30px;
-    opacity: 0.95;
-  }
-
-  .custom-toast.success {
-    background-color: #28a745;
-  }
-
-  .custom-toast.error {
-    background-color: #dc3545;
-  }
-=======
->>>>>>> 6ed8a507285c88c3cbd4196c24a8a0cba347ade0
 
 /* Make sure the search form properly positions the dropdown */
 #search-form {
@@ -1017,8 +987,6 @@ h6 {
     height: 740px;
   }
 }
-<<<<<<< HEAD
-=======
 
 .nav-item.active::after {
   content: "";
@@ -1029,4 +997,3 @@ h6 {
   height: 2px;
   background-color: var(--accent-color);
 }
->>>>>>> 6ed8a507285c88c3cbd4196c24a8a0cba347ade0

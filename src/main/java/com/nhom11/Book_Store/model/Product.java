@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -41,4 +42,7 @@ public class Product extends BaseEntity {
 
     @ManyToMany(mappedBy = "products")
     Set<Voucher> vouchers = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Image> images;
 }
