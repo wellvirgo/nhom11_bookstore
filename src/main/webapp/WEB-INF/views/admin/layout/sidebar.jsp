@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <aside id="sidebar" class="sidebar">
 
@@ -12,17 +13,17 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#books-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link ${sidebarSelected eq 'book'?'':'collapsed'}" data-bs-target="#books-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-book"></i><span>Quản lý sách</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="books-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <ul id="books-nav" class="nav-content collapse ${sidebarSelected eq 'book'?'show':''}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="/admin/list-books">
+                    <a href="/admin/list-books" class="${sidebarSelectedVal eq 'listBook'?'active':''}">
                         <i class="bi bi-circle"></i><span>Kho sách</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/admin/add-book">
+                    <a href="/admin/add-book" class="${sidebarSelectedVal eq 'addBook'?'active':''}">
                         <i class="bi bi-circle"></i><span>Thêm mới sách</span>
                     </a>
                 </li>
@@ -30,12 +31,12 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link ${sidebarSelected eq 'order'?'':'collapsed'}" data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-cart"></i><span>Quản lý đơn hàng</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="orders-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <ul id="orders-nav" class="nav-content collapse ${sidebarSelected eq 'order'?'show':''}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="/admin/list-orders">
+                    <a href="/admin/list-orders" class="${sidebarSelectedVal eq 'listOrder'?'active':''}">
                         <i class="bi bi-circle"></i><span>Danh sách đơn hàng</span>
                     </a>
                 </li>

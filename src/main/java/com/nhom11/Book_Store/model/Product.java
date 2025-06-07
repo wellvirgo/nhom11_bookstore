@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,10 @@ public class Product extends BaseEntity {
 
     @Column(columnDefinition = "boolean default false")
     boolean isDeleted;
+    LocalDate deletedOn;
+
+    @Column(columnDefinition = "boolean default false")
+    boolean inActive;
 
     @ManyToOne
     @JoinColumn(name = "genre_id")

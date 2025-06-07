@@ -39,6 +39,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String email = authentication.getName();
         User user = userService.getUserByEmail(email);
 
+        session.setAttribute("user", user);
         session.setAttribute("userId", user.getId());
         session.setAttribute("name", String.format("%s %s", user.getFirstName(), user.getLastName()));
         session.setAttribute("userTyp", user.getUserType());

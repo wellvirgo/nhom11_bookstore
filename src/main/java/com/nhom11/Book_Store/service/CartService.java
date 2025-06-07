@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.nhom11.Book_Store.model.Cart;
 import com.nhom11.Book_Store.model.CartItem;
 import com.nhom11.Book_Store.model.Product;
+import com.nhom11.Book_Store.model.User;
 import com.nhom11.Book_Store.repository.CartItemRepository;
 import com.nhom11.Book_Store.repository.CartRepository;
+import com.nhom11.Book_Store.repository.UserRepository;
 
 @Service
 public class CartService {
@@ -19,9 +21,22 @@ public class CartService {
     @Autowired
     private CartItemRepository cartItemRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     // Lấy giỏ hàng theo User ID
     public Cart getCartByUserId(Long userId) {
-        return cartRepository.findByUserId(userId);
+        Cart cart = cartRepository.findByUserId(userId);
+        User user = userRepository.findById(userId).orElse(null);
+        if (cart == null) {
+            // Nếu chưa có giỏ hàng, tạo mới
+            cart = new Cart();
+            cart.setUser(user);
+            cart.setTotalAmount(0);
+            cart.setSelectedAll(false);
+            cart = cartRepository.save(cart);
+        }
+        return cart;
     }
 
     // Lấy danh sách CartItem theo Cart ID
@@ -52,5 +67,24 @@ public class CartService {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
         cartItemRepository.save(cartItem);
+    }
+    public CartItem findCartItemByProductId(Long cartId, Long productId) {
+        return cartItemRepository.findByCartIdAndProductId(cartId, productId);
+    }
+    //trả về kiểu cartitem
+    public CartItem addOrUpdateCartItemLike(Cart cart, Product product, int quantity) {
+        CartItem cartItem = findCartItemByProductId(cart.getId(), product.getId());
+        if (cartItem == null) {
+            // Tạo mới nếu chưa tồn tại
+            cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProduct(product);
+            cartItem.setQuantity(quantity);
+            cartItem.setSelected(true);
+        } else {
+            // Cộng thêm số lượng nếu đã tồn tại
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        }
+        return cartItemRepository.save(cartItem);
     }
 }

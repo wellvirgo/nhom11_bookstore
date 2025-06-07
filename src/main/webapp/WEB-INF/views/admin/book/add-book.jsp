@@ -31,7 +31,6 @@
     <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
     <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet">
@@ -80,9 +79,9 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var toastEl = document.querySelector('.toast');
+                let toastEl = document.querySelector('.toast');
                 if (toastEl) {
-                    var toast = new bootstrap.Toast(toastEl);
+                    let toast = new bootstrap.Toast(toastEl);
                     toast.show();
                 }
             });
@@ -191,7 +190,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label for="publisher" class="form-label">Nhà xuất bản<span
+                                            <label for="publisher" class="form-label">Nhà xuất bản <span
                                                     class="text-danger">*</span></label>
                                             <form:select path="publisher"
                                                          class="form-select" id="publisher" required="required">
@@ -216,7 +215,6 @@
                                             <label for="coverType" class="form-label">Hình thức bìa</label>
                                             <form:select path="book_layout"
                                                          class="form-select" id="coverType">
-                                                <option selected disabled value="">-- Chọn hình thức bìa --</option>
                                                 <form:option value="Bìa cứng">Bìa cứng</form:option>
                                                 <form:option value="Bìa mềm">Bìa mềm</form:option>
                                                 <form:option value="CD/USB">CD/USB</form:option>
@@ -238,7 +236,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="publishYear" class="form-label">Năm xuất bản<span
+                                            <label for="publishYear" class="form-label">Năm xuất bản <span
                                                     class="text-danger">*</span></label>
                                             <form:input path="publishYear"
                                                         type="number" class="form-control number-input" id="publishYear"
@@ -266,7 +264,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="weight" class="form-label">Khối lượng (gram)<span
+                                            <label for="weight" class="form-label">Khối lượng (gram) <span
                                                     class="text-danger">*</span></label>
                                             <form:input path="weight"
                                                         type="number" class="form-control number-input" id="weight"
@@ -284,7 +282,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="pageCount" class="form-label">Số trang<span
+                                            <label for="pageCount" class="form-label">Số trang <span
                                                     class="text-danger">*</span></label>
                                             <form:input path="quantityPage"
                                                         type="number" class="form-control number-input" id="pageCount"
@@ -298,6 +296,7 @@
                                             <label for="inventory" class="form-label">Số lượng <span
                                                     class="text-danger">*</span></label>
                                             <form:input path="quantityAvailable"
+                                                        min="1"
                                                         type="number" class="form-control number-input" id="inventory"
                                                         required="required"
                                                         placeholder="VD: 100"/>
@@ -342,7 +341,8 @@
                                 <div class="tab-pane fade" id="book-images">
                                     <div class="row mb-4">
                                         <div class="col-md-6">
-                                            <label class="form-label fw-bold">Ảnh bìa sách</label>
+                                            <label class="form-label fw-bold">Ảnh bìa sách <span
+                                                    class="text-danger">*</span></label>
                                             <div class="image-upload-container">
                                                 <div class="upload-area" id="coverImageUpload">
                                                     <i class="bi bi-cloud-arrow-up fs-1"></i>
@@ -392,7 +392,8 @@
                                     <div class="d-flex justify-content-between mt-4">
                                         <button type="button" class="btn btn-secondary prev-tab">Quay lại</button>
                                         <div>
-                                            <a href="/admin/list-books" type="button" class="btn btn-secondary me-2">Hủy</a>
+                                            <a href="/admin/list-books" type="button"
+                                               class="btn btn-secondary me-2">Hủy</a>
                                             <button type="submit" class="btn btn-success">Lưu sách</button>
                                         </div>
                                     </div>
@@ -410,12 +411,8 @@
 <jsp:include page="../layout/footer.jsp"/>
 
 <!-- Vendor JS Files -->
-<script src="/vendor/apexcharts/apexcharts.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/vendor/chart.js/chart.umd.js"></script>
-<script src="/vendor/echarts/echarts.min.js"></script>
 <script src="/vendor/quill/quill.js"></script>
-<script src="/vendor/simple-datatables/simple-datatables.js"></script>
 <script src="/vendor/tinymce/tinymce.min.js"></script>
 
 <!-- Template JS Files -->

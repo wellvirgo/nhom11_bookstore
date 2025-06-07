@@ -111,19 +111,19 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               <div class="stock-button-wrap">
                 <div class="input-group product-qty" style="max-width: 150px;">
                   <span class="input-group-btn">
-                    <button class="quantity-left-minus btn btn-light btn-number">-</button>
+                    <button class="quantity-left-minus btn btn-light btn-number" data-id="${product.id}" >-</button>
                   </span>
                     <input id="quantity-${product.id}" name="quantity" class="form-control input-number text-center"
                          value="1" max="${product.quantityAvailable}" min="1" />
                   <span class="input-group-btn">
-                    <button class="quantity-right-plus btn btn-light btn-number">+</button>
+                    <button class="quantity-right-plus btn btn-light btn-number" data-id="${product.id}" data-avail ="${product.quantityAvailable}" >+</button>
                   </span>
                 </div>
               </div>
             </div>
             <div class="qty-button d-flex flex-wrap pt-3">
               <button type="submit" class="btn btn-primary py-3 px-4 text-uppercase me-3 mt-3">Mua ngay</button>
-              <button type="submit" class="btn btn-dark py-3 px-4 text-uppercase mt-3">Thêm vào giỏ hàng</button>
+              <button  onclick="addToCart('${product.id}')" type="submit" class="btn btn-dark py-3 px-4 text-uppercase mt-3">Thêm vào giỏ hàng</button>
             </div>
           </div>
         </div>
