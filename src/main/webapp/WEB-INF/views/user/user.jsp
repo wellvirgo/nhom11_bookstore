@@ -167,20 +167,20 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         <div class="col-md-3">
           <div class="profile-menu card border-0 p-4">
             <div class="nav flex-column">
-              <a href="#" class="nav-item d-flex align-items-center mb-3 active">
+              <a href="<c:url value='/user-control'/>" class="nav-item d-flex align-items-center mb-3 active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person me-3" viewBox="0 0 16 16">
                   <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                 </svg>
                 Hồ sơ cá nhân
               </a>
-              <a href="<c:url value='/user/address'/>" class="nav-item d-flex align-items-center mb-3">
+              <a href="<c:url value='/user-address'/>" class="nav-item d-flex align-items-center mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo-alt me-3" viewBox="0 0 16 16">
                   <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
                   <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                 </svg>
                 Sổ địa chỉ
               </a>
-              <a href="<c:url value='/user/orders'/>" class="nav-item d-flex align-items-center mb-3">
+              <a href="<c:url value='/user-orders'/>" class="nav-item d-flex align-items-center mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box me-3" viewBox="0 0 16 16">
                   <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/>
                 </svg>
@@ -199,54 +199,52 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         </div>
         
         <div class="col-md-9" style="min-height: 700px;">
+          <form id="profileForm" method="post" action="/user/update">
             <div class="">
-                <label class="form-label">Họ <span>*</span></label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    name="name"
-                    value="${user.firstName}" 
-                />
+              <label class="form-label">Họ <span>*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                name="firstName"
+                value="${user.firstName}" 
+                readonly
+              />
             </div>     
             <div class="">
-                <label class="form-label">Tên <span>*</span></label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    name="name"
-                    value="${user.lastName}" 
-                />
+              <label class="form-label">Tên <span>*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                name="lastName"
+                value="${user.lastName}" 
+                readonly
+              />
             </div>
             <div class="">
-                <label class="form-label">Giới tính <span>*</span></label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    name="name"
-                    value="${user.gender}"
-                />
+              <label class="form-label">Giới tính <span>*</span></label>
+              <select class="form-control" name="gender" id="genderSelect" disabled>
+                <option value="MALE" ${user.gender == 'MALE' ? 'selected' : ''}>Nam</option>
+                <option value="FEMALE" ${user.gender == 'FEMALE' ? 'selected' : ''}>Nữ</option>
+              </select>
             </div>
             <div class="">
-                <label class="form-label">Name <span>*</span></label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    name="name"
-                    value="${user.phoneNumber}" 
-                />
-            </div>               
-            <div class="">
-                <label class="form-label">Location</label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    name="location"
-                    value="${user.location}" 
-                />
+              <label class="form-label">Số điện thoại <span>*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                name="telephone"
+                value="${user.telephone}" 
+                readonly
+              />
             </div>
-                      
+            <div class="mt-3">
+              <button type="button" id="editBtn" class="btn btn-primary">Sửa</button>
+              <button type="button" id="saveBtn" class="btn btn-success d-none">Lưu</button>
+              <button type="button" id="cancelBtn" class="btn btn-secondary d-none">Hủy</button>
             </div>
+          </form>
         </div>
+
       </div>
     </div>
     <footer class="py-5">
@@ -255,7 +253,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
 
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="footer-menu">
-              <img src="images/logo.png" alt="logo">
+              <img src="/images/logo.png" alt="logo">
               <div class="social-links mt-5">
                 <ul class="d-flex list-unstyled gap-2">
                   <li>
@@ -407,15 +405,15 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         </div>
       </div>
     </div>
-    <script src="js/jquery-3.7.1.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/user/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/script.js"></script>
+    <script src="/js/user/plugins.js"></script>
+    <script src="/js/user/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="/js/toast.js"></script>
-    <script src="/js/user.js"></script>
+    <script src="/js/user/cart.js"></script>
+    <script src="/js/user/toast.js"></script>
+    <script src="/js/user/user.js"></script>
   </body>
 </html>

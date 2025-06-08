@@ -1,7 +1,15 @@
 package com.nhom11.Book_Store.controller;
 
 import com.nhom11.Book_Store.dto.UserCreation;
+import com.nhom11.Book_Store.model.Address;
+import com.nhom11.Book_Store.model.Order;
+import com.nhom11.Book_Store.model.OrderItem;
 import com.nhom11.Book_Store.model.User;
+import com.nhom11.Book_Store.repository.AddressRepository;
+import com.nhom11.Book_Store.repository.OrderItemRepository;
+import com.nhom11.Book_Store.repository.OrderRepository;
+import com.nhom11.Book_Store.repository.UserRepository;
+import com.nhom11.Book_Store.service.ImageService;
 import com.nhom11.Book_Store.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -13,9 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Slf4j
@@ -34,7 +41,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Controller
 public class UserController {
-    UserService userService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AddressRepository addressRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping("/login")
     public String login() {
@@ -48,6 +66,122 @@ public class UserController {
 
         return "user/register";
     }
+    @GetMapping("/user-control")
+    public String userProfile(Model model, HttpSession session) {
+        // Lấy user hiện tại từ session hoặc service
+        User user = (User) session.getAttribute("currentUser");
+        model.addAttribute("user", user);
+        // Trả về view hồ sơ cá nhân
+        return "user/user"; // hoặc "user/user" nếu bạn đặt tên file là user.jsp
+    }
+    @GetMapping("user-address")
+    public String userAddress(Model model, HttpSession session) {
+        // Lấy user hiện tại từ session hoặc service
+        User user = (User) session.getAttribute("user");
+        List<Address> addressList = addressRepository.findByUser(user);
+        model.addAttribute("user", user);
+        model.addAttribute("addressList", addressList);
+        // Trả về view địa chỉ người dùng
+        return "user/address"; // hoặc "user/address" nếu bạn đặt tên file là address.jsp
+    }
+    @GetMapping("user-orders")
+    public String userOrders(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return "redirect:/login";
+        List<Order> orders = orderRepository.findByUserId(user.getId());
+        
+        // Lấy danh sách OrderItem cho từng Order
+        Map<Long, List<OrderItem>> orderItemsMap = new HashMap<>();
+        // Map<productId, imageUrl> cho ảnh chính
+        Map<Long, String> productImageMap = new HashMap<>();
+
+        for (Order order : orders) {
+            List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+            
+            orderItemsMap.put(order.getId(), orderItems);
+
+            // Lấy ảnh chính cho từng sản phẩm trong order item
+            for (OrderItem item : orderItems) {
+                Long productId = item.getProduct().getId();
+                // Nếu chưa có ảnh thì lấy, tránh gọi lại nhiều lần
+                if (!productImageMap.containsKey(productId)) {
+                    String imageUrl = imageService.getImagebyID(productId);
+                    productImageMap.put(productId, imageUrl);
+                }
+            }
+        }
+
+        model.addAttribute("orders", orders);
+        model.addAttribute("orderItemsMap", orderItemsMap); 
+        model.addAttribute("productImageMap", productImageMap); 
+        return "user/order";
+    }
+    @PostMapping("/user/update")
+    public String updateProfile(@ModelAttribute User user, HttpSession session, Model model) {
+        // Lấy user hiện tại từ session (hoặc DB)
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null) {
+            currentUser.setFirstName(user.getFirstName());
+            currentUser.setLastName(user.getLastName());
+            currentUser.setGender(user.getGender());
+            currentUser.setTelephone(user.getTelephone());
+
+            // Lưu lại vào DB
+            userRepository.save(currentUser);
+
+            // Cập nhật lại session
+            session.setAttribute("user", currentUser);
+        }
+        // Redirect về trang hồ sơ cá nhân (hoặc trả về view)
+        return "user/user";
+    }
+    @PostMapping("/user/address/add")
+    public String addAddress(@ModelAttribute Address address, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            address.setUser(user);
+            addressRepository.save(address);
+        }
+        return "redirect:/user-address";
+    }
+    @PostMapping("/user/address/update")
+    public String updateAddress(@ModelAttribute Address address, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            // Đảm bảo address có id, các trường đã được binding từ form
+            address.setUser(user); // Gắn lại user cho address
+            addressRepository.save(address); // save sẽ update nếu id đã tồn tại
+        }
+        return "redirect:/user-address";
+    }
+
+    @GetMapping("/user/address/delete")
+    public String deleteAddress(@RequestParam("id") Long id, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            // Có thể kiểm tra quyền sở hữu trước khi xóa
+            addressRepository.deleteById(id);
+        }
+        return "redirect:/user-address";
+    }
+    @PostMapping("/user-orders/cancel")
+    public String cancelOrder(@RequestParam("orderId") Long orderId, RedirectAttributes redirectAttributes) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy đơn hàng.");
+            return "redirect:/user-orders";
+        }
+        if ("Processing".equals(order.getStatus())) {
+            order.setStatus("Cancelled");
+            orderRepository.save(order);
+            redirectAttributes.addFlashAttribute("success", "Đã hủy đơn hàng thành công.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Chỉ có thể hủy đơn hàng đang xử lý.");
+        }
+        return "redirect:/user-orders";
+    }
+ 
+
 
     // //Trang chủ
     // @GetMapping({"/", "/home"})
@@ -139,37 +273,37 @@ public class UserController {
         return "user/user";
     }
 
-    //QL Địa chỉ
-    @GetMapping("/user/address")
-public String address(Model model) {
+//     //QL Địa chỉ
+//     @GetMapping("/user/address")
+// public String address(Model model) {
 
-    //Fake dữ liệu địa chỉ
-    List<Map<String, Object>> addresses = new ArrayList<>();
+//     //Fake dữ liệu địa chỉ
+//     List<Map<String, Object>> addresses = new ArrayList<>();
 
-    Map<String, Object> addr1 = new HashMap<>();
-    addr1.put("id", 16);
-    addr1.put("recipientName", "Cường");
-    addr1.put("phoneNumber", "032424");
-    addr1.put("city", "Bắc Giang");
-    addr1.put("district", "Lục Ngạn");
-    addr1.put("ward", "Phượng Sơn");
-    addr1.put("detail", "Số nhà 123");
+//     Map<String, Object> addr1 = new HashMap<>();
+//     addr1.put("id", 16);
+//     addr1.put("recipientName", "Cường");
+//     addr1.put("phoneNumber", "032424");
+//     addr1.put("city", "Bắc Giang");
+//     addr1.put("district", "Lục Ngạn");
+//     addr1.put("ward", "Phượng Sơn");
+//     addr1.put("detail", "Số nhà 123");
 
-    Map<String, Object> addr2 = new HashMap<>();
-    addr2.put("id", 17);
-    addr2.put("recipientName", "Minh");
-    addr2.put("phoneNumber", "0911223344");
-    addr2.put("city", "Hà Nội");
-    addr2.put("district", "Đống Đa");
-    addr2.put("ward", "Láng Hạ");
-    addr2.put("detail", "Tòa nhà A12");
+//     Map<String, Object> addr2 = new HashMap<>();
+//     addr2.put("id", 17);
+//     addr2.put("recipientName", "Minh");
+//     addr2.put("phoneNumber", "0911223344");
+//     addr2.put("city", "Hà Nội");
+//     addr2.put("district", "Đống Đa");
+//     addr2.put("ward", "Láng Hạ");
+//     addr2.put("detail", "Tòa nhà A12");
 
-    addresses.add(addr1);
-    addresses.add(addr2);
+//     addresses.add(addr1);
+//     addresses.add(addr2);
 
-    model.addAttribute("addressList", addresses);
-    return "user/address"; // address.jsp
-}
+//     model.addAttribute("addressList", addresses);
+//     return "user/address"; // address.jsp
+// }
 
     //Quản lý đơn hàng
     @GetMapping("/user/orders")

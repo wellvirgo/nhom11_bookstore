@@ -123,7 +123,9 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                               class="product-checkbox pointer form-check-input"
                               style="border: 1px solid #545759"
                               data-price="${item.product.price * item.quantity}"
-                              onchange="updatePrice(this, '${item.product.price} * item.quantity')"
+                              data-id="${item.id}"
+                              data-thanhtien="${item.product.price * item.quantity}"
+                              onchange="updatePrice(this, '${item.product.price*item.quantity}')"
                             />
                           </div>
                         </td>
@@ -178,7 +180,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                               </span>
                               <input id="quantity-${item.product.id}" name="quantity" class="form-control input-number text-center"
                                value="${item.quantity}" max="${item.product.quantityAvailable}" min="1" 
-                               onchange = "submitQuantity('${item.id}')"
+                               onchange = "submitQuantity('${item.id}', '${item.product.id}')"
                                />
                   
                               <span class="input-group-btn">
@@ -216,7 +218,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                             class="cart-remove d-flex align-items-center"
                             style="height: 120px"
                           >
-                            <a href="#">
+                            <a href="javascript:void(0);" onclick="removeCartItem('${item.id}')">
                               <svg width="24" height="24">
                                 <use xlink:href="#trash"></use>
                               </svg>
@@ -264,19 +266,15 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
               <div class="button-wrap row g-2">
                 <div class="col-md-6">
                   <a
-                    href="/user/home"
+                    href="javascript:history.back()"
                     class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100"
                   >
                     Tiếp tục mua hàng
                   </a>
                 </div>
                 <div class="col-md-6">
-                  <a
-                    href="/payment"
-                    class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100"
-                  >
-                    Thanh toán
-                  </a>
+                  <button id="checkout-button" class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100" disabled style="opacity: 0.5; pointer-events: none;" data-id="${item.id}">
+                    Thanh Toán</button>
                 </div>
               </div>
             </div>

@@ -10,30 +10,87 @@
 //   $('#checkAll').on('change', function () {
 //     $('.product-checkbox').prop('checked', $(this).prop('checked'));
 //   });
+function updateCheckoutButton() {
+  const anyChecked = document.querySelectorAll('.product-checkbox:checked').length > 0;
+  const checkoutBtn = document.getElementById('checkout-button');
+  
+  if (anyChecked) {
+    checkoutBtn.disabled = false;
+    checkoutBtn.style.opacity = '1';
+    checkoutBtn.style.pointerEvents = 'auto';
+  } else {
+    checkoutBtn.disabled = true;
+    checkoutBtn.style.opacity = '0.5';
+    checkoutBtn.style.pointerEvents = 'none';
+  }
+}
+
+// Gắn sự kiện cho tất cả checkbox
+document.querySelectorAll('.product-checkbox').forEach(cb => {
+  cb.addEventListener('change', updateCheckoutButton);
+});
+
+// Gọi lần đầu để set đúng trạng thái ban đầu
+updateCheckoutButton();
 
 function toggleAllCheckboxes(selectAllCheckbox) {
-    const checkboxes = document.querySelectorAll(".product-checkbox");
-    checkboxes.forEach(cb => {
-        cb.checked = selectAllCheckbox.checked;
-        // Cập nhật tổng giá trị nếu cần
-        cb.dispatchEvent(new Event("change")); // Kích hoạt sự kiện onchange
-    });
-}
-function updatePrice(checkbox, thanhtien){
-  thanhtienInt = parseInt(thanhtien);
-  console.log("hello" + thanhtienInt);
+  const checkboxes = document.querySelectorAll(".product-checkbox");
   let tongtien = document.getElementById("totalValue");
-  let tongtienFormat = parseInt(tongtien.innerText.replace(/\./g, ''));
-  console.log("tongtienFormat: " + tongtienFormat);
 
-  if (checkbox.checked){
-    tongtienFormat += thanhtienInt;
+  // Nếu chọn tất cả, cộng tổng tiền của tất cả sản phẩm
+  if (selectAllCheckbox.checked) {
+    let total = 0;
+    checkboxes.forEach(cb => {
+      cb.checked = true;
+      const thanhtien = cb.getAttribute("data-thanhtien");
+      if (thanhtien) {
+        total += parseInt(thanhtien);
+      }
+    });
+    tongtien.innerText = total.toLocaleString('vi-VN') + " đ";
+  } else {
+    // Bỏ chọn tất cả, tổng tiền về 0
+    checkboxes.forEach(cb => {
+      cb.checked = false;
+    });
+    tongtien.innerText = "0 đ";
   }
-  else{
-    tongtienFormat -= thanhtienInt;
-  }
-  console.log("tongtienFormat sau khi thay doi: " + tongtienFormat);
-  tongtien.innerText = tongtienFormat.toLocaleString('vi-VN') + " đ";
+  updateCheckoutButton();
+}
+
+// Gắn sự kiện cho tất cả checkbox sản phẩm để cập nhật trạng thái checkbox "chọn tất cả"
+document.querySelectorAll('.product-checkbox').forEach(cb => {
+  cb.addEventListener('change', function () {
+    // Nếu có ít nhất 1 sản phẩm bị bỏ chọn thì bỏ chọn ô "chọn tất cả"
+    const allCheckbox = document.getElementById('checkAll');
+    if (!this.checked) {
+      allCheckbox.checked = false;
+    } else {
+      // Nếu tất cả sản phẩm đều được chọn thì check ô "chọn tất cả"
+      const checkboxes = document.querySelectorAll('.product-checkbox');
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+      allCheckbox.checked = allChecked;
+    }
+    updateCheckoutButton();
+    // Cập nhật lại tổng tiền
+    updatePrice();
+  });
+});
+
+// Hàm cập nhật tổng tiền (không cần truyền tham số)
+function updatePrice() {
+  const checkboxes = document.querySelectorAll(".product-checkbox");
+  let total = 0;
+  checkboxes.forEach(cb => {
+    if (cb.checked) {
+      const value = cb.getAttribute("data-thanhtien");
+      if (value) {
+        total += parseInt(value);
+      }
+    }
+  });
+  let tongtien = document.getElementById("totalValue");
+  tongtien.innerText = total.toLocaleString('vi-VN') + " đ";
 }
 
 function animateBadge($el, newVal) {
@@ -49,34 +106,70 @@ $('.quantity-right-plus').click(function (e) {
   e.preventDefault();
   let id = $(this).data('id');
   let avail = $(this).data('avail');
-  let v = parseInt($('#quantity-' + id ).val());
+  let input = document.getElementById('quantity-' + id);
+  let v = parseInt(input.value);
   if (v<avail){
     v = v+1;
   }
-  $('#quantity-' + id).val(v);
+  input.value = v;
+  input.dispatchEvent(new Event('change')); 
 });
 
 $('.quantity-left-minus').click(function(e){
   e.preventDefault();
   let id = $(this).data('id');
-  let v = parseInt($('#quantity-' + id).val());
+  let input = document.getElementById('quantity-' + id);
+  let v = parseInt(input.value);
   if (v>1){
     v = v-1;
   }
-  $('#quantity-' + id).val(v);
+  input.value = v;
+  input.dispatchEvent(new Event('change'));
 });
-function submitQuantity(itemId) {
-    const qty = document.getElementById(`quantity-${itemId}`).value;
+function submitQuantity(itemId, productId) {
+    console.log(`Cập nhật số lượng cho sản phẩm ${productId} với ID giỏ hàng ${itemId}`);
+    const qty = document.getElementById(`quantity-${productId}`).value;
+    console.log(`Cập nhật số lượng cho sản phẩm ${itemId}: ${qty}`);
 
     // Gửi lên server, ví dụ:
-    fetch(`/cart/updateQuantity`, {
+    fetch(`/user/updateQuantity`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: itemId, quantity: qty })
     }).then(res => {
-        if (!res.ok) alert("Lỗi cập nhật");
+        if (!res.ok) {
+            alert("Lỗi cập nhật");
+        } else {
+            // Nếu thành công thì reload lại trang
+            location.reload();
+        }
     });
 }
+function removeCartItem(cartItemId) {
+  if (!confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?")) return;
+  fetch('/user/remove-cart-item', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: cartItemId })
+  })
+  .then(res => {
+    if (res.ok) location.reload();
+    else alert("Xóa sản phẩm thất bại!");
+  });
+}
+document.getElementById('checkout-button').addEventListener('click',function(){
+  const checkedIds = [];
+  document.querySelectorAll('.product-checkbox:checked').forEach(cb =>{
+    checkedIds.push(cb.getAttribute('data-id'));
+  });
+
+  if(checkedIds.length === 0){
+    alert('Vui lòng chọn sản phẩm để thanh toán');
+    return;
+  }
+  window.location.href = '/user/payment?ids=' + checkedIds.join(',');
+});
+
 // const emptyCart = `
 //     <div className="d-flex">
 //         <div className="justify-center"style="display:flex;justify-content:center">

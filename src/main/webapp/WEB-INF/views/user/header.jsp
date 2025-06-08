@@ -426,7 +426,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               </li>
               <li>
                 <a
-                  href="<c:url value='/user'/>"
+                    href="<c:url value='/user-control?param=profile'/>"
                   class="rounded-circle bg-light p-2 mx-1"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24">

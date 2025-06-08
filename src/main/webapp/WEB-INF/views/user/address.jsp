@@ -167,20 +167,20 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         <div class="col-md-3">
           <div class="profile-menu card border-0 p-4">
             <div class="nav flex-column">
-              <a href="<c:url value='/user'/>"class="nav-item d-flex align-items-center mb-3 ">
+              <a href="<c:url value='/user-control'/>"class="nav-item d-flex align-items-center mb-3 ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person me-3" viewBox="0 0 16 16">
                   <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                 </svg>
                 Hồ sơ cá nhân
               </a>
-              <a href="#" class="nav-item d-flex align-items-center mb-3 active">
+              <a href="<c:url value='/user-address'/>" class="nav-item d-flex align-items-center mb-3 active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo-alt me-3" viewBox="0 0 16 16">
                   <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
                   <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                 </svg>
                 Sổ địa chỉ
               </a>
-              <a href="<c:url value='/user/orders'/>" class="nav-item d-flex align-items-center mb-3">
+              <a href="<c:url value='/user-orders'/>" class="nav-item d-flex align-items-center mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box me-3" viewBox="0 0 16 16">
                   <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/>
                 </svg>
@@ -198,8 +198,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </div>
         </div>
         
-        <div class="col-md-9" style="min-height: 700px;">
-            <c:forEach var="addr" items="${addressList}">
+        <%-- <div class="col-md-9" style="min-height: 700px;">
+          <c:forEach var="addr" items="${addressList}">
             <div class="address-card">
                 <p><strong>Người nhận:</strong> ${addr.recipientName}</p>
                 <p><strong>Số điện thoại:</strong> ${addr.phoneNumber}</p>
@@ -207,7 +207,90 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                     ${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.city}
                 </p>
             </div>
-        </c:forEach>                 
+          </c:forEach>                 
+        </div> --%>
+        <div class="col-md-9" style="min-height: 700px;">
+          <button type="button" id="addAddressBtn" class="btn btn-success mb-3">+ Thêm địa chỉ</button>
+
+          <!-- Form thêm địa chỉ mới, ẩn mặc định -->
+          <form id="newAddressForm" class="address-card card p-3 mb-3 d-none" method="post" action="/user/address/add">
+            <div class="mb-2">
+              <label>Người nhận</label>
+              <input type="text" class="form-control" name="recipientName" required />
+            </div>
+            <div class="mb-2">
+              <label>Số điện thoại</label>
+              <input type="text" class="form-control" name="phoneNumber" required />
+            </div>
+            <div class="mb-2">
+              <label>Địa chỉ chi tiết</label>
+              <input type="text" class="form-control" name="addressDetail" required />
+            </div>
+            <div class="mb-2">
+              <label>Phường/Xã</label>
+              <input type="text" class="form-control" name="communeWard" required />
+            </div>
+            <div class="mb-2">
+              <label>Quận/Huyện</label>
+              <input type="text" class="form-control" name="district" required />
+            </div>
+            <div class="mb-2">
+              <label>Tỉnh/Thành phố</label>
+              <input type="text" class="form-control" name="city" required />
+            </div>
+            <div class="mt-2">
+              <button type="submit" class="btn btn-success">Lưu</button>
+              <button type="button" id="cancelAddBtn" class="btn btn-secondary">Hủy</button>
+            </div>
+          </form>
+
+          <!-- Danh sách địa chỉ -->
+          <c:forEach var="addr" items="${addressList}" varStatus="status">
+            <form class="address-card card p-3 mb-3 address-form" method="post" action="/user/address/update">
+              <input type="hidden" name="id" value="${addr.id}" />
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-bold mb-1">Địa chỉ nhận hàng thứ ${status.index + 1}:</div>
+                  <div class="address-summary">
+                    <strong>${addr.recipientName}</strong> - ${addr.phoneNumber}<br>
+                    ${addr.addressDetail}, ${addr.communeWard}, ${addr.district}, ${addr.city}
+                  </div>
+                  <div class="address-edit-fields d-none">
+                    <div class="mb-2">
+                      <div class="mb-2">
+                        <label>Người nhận</label>
+                        <input type="text" class="form-control" name="recipientName" value="${addr.recipientName}" required />
+                      </div>
+                      <div class="mb-2">
+                        <label>Số điện thoại</label>
+                        <input type="text" class="form-control" name="phoneNumber" value="${addr.phoneNumber}" required />
+                      </div>
+                      <label>Địa chỉ chi tiết</label>
+                      <input type="text" class="form-control" name="addressDetail" value="${addr.addressDetail}" required />
+                    </div>
+                    <div class="mb-2">
+                      <label>Phường/Xã</label>
+                      <input type="text" class="form-control" name="communeWard" value="${addr.communeWard}" required />
+                    </div>
+                    <div class="mb-2">
+                      <label>Quận/Huyện</label>
+                      <input type="text" class="form-control" name="district" value="${addr.district}" required />
+                    </div>
+                    <div class="mb-2">
+                      <label>Tỉnh/Thành phố</label>
+                      <input type="text" class="form-control" name="city" value="${addr.city}" required />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-primary editAddressBtn me-2">Sửa</button>
+                  <button type="submit" class="btn btn-success saveAddressBtn d-none me-2">Lưu</button>
+                  <button type="button" class="btn btn-secondary cancelEditBtn d-none me-2">Hủy</button>
+                  <a href="/user/address/delete?id=${addr.id}" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
+                </div>
+              </div>
+            </form>
+          </c:forEach>
         </div>
         </div>
       </div>
@@ -380,5 +463,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script src="/js/user/cart.js"></script>
     <script src="/js/user/toast.js"></script>
     <script src="/js/user/user.js"></script>
+    <script src="/js/user/address.js"></script>
+
   </body>
 </html>

@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "addresses")
@@ -17,6 +18,8 @@ public class Address extends BaseEntity {
     String district;
     String communeWard;
     String addressDetail;
+    String recipientName;
+    String phoneNumber;
 
     @Column(columnDefinition = "boolean")
     boolean isDefault;
@@ -24,4 +27,6 @@ public class Address extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User user;
+
+    
 }
