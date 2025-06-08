@@ -13,12 +13,25 @@ $(document).ready(function () {
   // Ensure search form has position relative for proper dropdown positioning
   $searchForm.css("position", "relative");
 
-  // Handle input in search box
-  $searchInput.on("input", function () {
-    const inputValue = $(this).val();
+  // Debounce function
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 
-    // Don't show dropdown if input is empty
-    if (inputValue.trim() === "") {
+  // Search function
+  const performSearch = function (inputValue) {
+    console.log("Performing search with value:", inputValue); // Debug log
+
+    // Don't show dropdown if input is empty or less than 3 characters
+    if (inputValue.trim() === "" || inputValue.trim().length < 3) {
       $autocompleteList.hide();
       return;
     }
@@ -28,6 +41,7 @@ $(document).ready(function () {
       url: `http://localhost:6969/api/search-products?keys=${inputValue}`,
       method: "GET",
       success: function (response) {
+        console.log("Search API response:", response); // Debug log
         $autocompleteList.empty();
 
         // Process response data
@@ -88,6 +102,21 @@ $(document).ready(function () {
         $autocompleteList.show();
       },
     });
+  };
+
+  // Create debounced search function with 500ms delay
+  const debouncedSearch = debounce(function (inputValue) {
+    performSearch(inputValue);
+  }, 500);
+
+  // Remove any existing event handlers before adding new ones
+  $searchInput.off("input");
+
+  // Handle input in search box
+  $searchInput.on("input", function (e) {
+    console.log("Input event triggered"); // Debug log
+    const inputValue = $(this).val();
+    debouncedSearch(inputValue);
   });
 
   // Hide results when clicking outside
