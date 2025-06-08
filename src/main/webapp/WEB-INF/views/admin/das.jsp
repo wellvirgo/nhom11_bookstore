@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +9,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Dashboard</title>
+    <title>Dashboard - BookStore Admin</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -17,709 +18,407 @@
     <link href="/images/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet">
 </head>
 
 <body>
-
-<!-- ======= Header ======= -->
+<!-- Header Placeholder -->
 <jsp:include page="layout/header.jsp"/>
-<!-- End Header -->
 
-<!-- ======= Sidebar ======= -->
+<!-- Sidebar Placeholder -->
 <jsp:include page="layout/sidebar.jsp"/>
-<!-- End Sidebar-->
 
+<!-- Main Content -->
 <main id="main" class="main">
-
     <div class="pagetitle">
         <h1>Dashboard</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/admin/das">Trang chủ</a></li>
                 <li class="breadcrumb-item active">Dashboard</li>
             </ol>
         </nav>
-    </div><!-- End Page Title -->
+    </div>
 
     <section class="section dashboard">
         <div class="row">
-
             <!-- Left side columns -->
-            <div class="col-lg-8">
+            <div class="col-lg-8 order-2 order-md-1">
                 <div class="row">
-
-                    <!-- Sales Card -->
-                    <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card sales-card">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Sales <span>| Today</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-cart"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>145</h6>
-                                        <span class="text-success small pt-1 fw-bold">12%</span> <span
-                                            class="text-muted small pt-2 ps-1">increase</span>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div><!-- End Sales Card -->
-
-                    <!-- Revenue Card -->
-                    <div class="col-xxl-4 col-md-6">
-                        <div class="card info-card revenue-card">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Revenue <span>| This Month</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-currency-dollar"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>$3,264</h6>
-                                        <span class="text-success small pt-1 fw-bold">8%</span> <span
-                                            class="text-muted small pt-2 ps-1">increase</span>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div><!-- End Revenue Card -->
-
-                    <!-- Customers Card -->
-                    <div class="col-xxl-4 col-xl-12">
-
-                        <div class="card info-card customers-card">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Customers <span>| This Year</span></h5>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>1244</h6>
-                                        <span class="text-danger small pt-1 fw-bold">12%</span> <span
-                                            class="text-muted small pt-2 ps-1">decrease</span>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div><!-- End Customers Card -->
-
                     <!-- Reports -->
                     <div class="col-12">
                         <div class="card">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
                             <div class="card-body">
-                                <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                                <!-- Line Chart -->
+                                <h5 class="card-title">Báo cáo doanh thu & số lượng đơn</h5>
                                 <div id="reportsChart"></div>
-
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        new ApexCharts(document.querySelector("#reportsChart"), {
-                                            series: [{
-                                                name: 'Sales',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
-                                            }, {
-                                                name: 'Revenue',
-                                                data: [11, 32, 45, 32, 34, 52, 41]
-                                            }, {
-                                                name: 'Customers',
-                                                data: [15, 11, 32, 18, 9, 24, 11]
-                                            }],
-                                            chart: {
-                                                height: 350,
-                                                type: 'area',
-                                                toolbar: {
-                                                    show: false
-                                                },
-                                            },
-                                            markers: {
-                                                size: 4
-                                            },
-                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                            fill: {
-                                                type: "gradient",
-                                                gradient: {
-                                                    shadeIntensity: 1,
-                                                    opacityFrom: 0.3,
-                                                    opacityTo: 0.4,
-                                                    stops: [0, 90, 100]
-                                                }
-                                            },
-                                            dataLabels: {
-                                                enabled: false
-                                            },
-                                            stroke: {
-                                                curve: 'smooth',
-                                                width: 2
-                                            },
-                                            xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                            },
-                                            tooltip: {
-                                                x: {
-                                                    format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
-                                        }).render();
-                                    });
-                                </script>
-                                <!-- End Line Chart -->
-
                             </div>
-
                         </div>
-                    </div><!-- End Reports -->
+                    </div>
 
-                    <!-- Recent Sales -->
                     <div class="col-12">
-                        <div class="card recent-sales overflow-auto">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
+                        <!-- Order status -->
+                        <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-
-                                <table class="table table-borderless datatable">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Customer</th>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2457</a></th>
-                                        <td>Brandon Jacob</td>
-                                        <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                                        <td>$64</td>
-                                        <td><span class="badge bg-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2147</a></th>
-                                        <td>Bridie Kessler</td>
-                                        <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                        <td>$47</td>
-                                        <td><span class="badge bg-warning">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2049</a></th>
-                                        <td>Ashleigh Langosh</td>
-                                        <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                                        <td>$147</td>
-                                        <td><span class="badge bg-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Angus Grady</td>
-                                        <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                                        <td>$67</td>
-                                        <td><span class="badge bg-danger">Rejected</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Raheem Lehner</td>
-                                        <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                                        <td>$165</td>
-                                        <td><span class="badge bg-success">Approved</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
+                                <h5 class="card-title">Trạng thái đơn hàng <span>| Tháng</span></h5>
+                                <div id="pieChart"></div>
                             </div>
-
                         </div>
-                    </div><!-- End Recent Sales -->
+                    </div>
 
                     <!-- Top Selling -->
                     <div class="col-12">
                         <div class="card top-selling overflow-auto">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
                             <div class="card-body pb-0">
-                                <h5 class="card-title">Top Selling <span>| Today</span></h5>
+                                <h5 class="card-title">Top bán chạy</h5>
 
                                 <table class="table table-borderless">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Preview</th>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Sold</th>
-                                        <th scope="col">Revenue</th>
+                                        <th scope="col">Hình ảnh</th>
+                                        <th scope="col">Tên sản phẩm</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">Số lượng</th>
+                                        <th scope="col">Doanh thu</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <th scope="row"><a href="#"><img src="/images/product-1.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas
-                                            nulla</a></td>
-                                        <td>$64</td>
-                                        <td class="fw-bold">124</td>
-                                        <td>$5,828</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#"><img src="/images/product-2.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique
-                                            doloremque</a></td>
-                                        <td>$46</td>
-                                        <td class="fw-bold">98</td>
-                                        <td>$4,508</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#"><img src="/images/product-3.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a>
-                                        </td>
-                                        <td>$59</td>
-                                        <td class="fw-bold">74</td>
-                                        <td>$4,366</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#"><img src="/images/product-4.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum
-                                            error</a></td>
-                                        <td>$32</td>
-                                        <td class="fw-bold">63</td>
-                                        <td>$2,016</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#"><img src="/images/product-5.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus
-                                            repellendus</a></td>
-                                        <td>$79</td>
-                                        <td class="fw-bold">41</td>
-                                        <td>$3,239</td>
-                                    </tr>
+                                    <c:forEach var="item" items="${top5Selling}">
+                                        <tr>
+                                            <th scope="row"><a href="#"><img
+                                                    src="${item.getImgUrl()}"
+                                                    alt=""></a></th>
+                                            <td><a href="#" class="text-primary fw-bold">${item.getName()}</a></td>
+                                            <td><fmt:formatNumber value="${item.getPrice()}" type="number" groupingUsed="true"/></td>
+                                            <td class="fw-bold text-center">${item.getQuantity()}</td>
+                                            <td><fmt:formatNumber value="${item.getPrice() * item.getQuantity()}" type="number" groupingUsed="true"/></td>
+                                        </tr>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
-
                             </div>
-
                         </div>
-                    </div><!-- End Top Selling -->
-
+                    </div>
                 </div>
-            </div><!-- End Left side columns -->
+            </div>
 
             <!-- Right side columns -->
-            <div class="col-lg-4">
-
-                <!-- Recent Activity -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body">
-                        <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-                        <div class="activity">
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">32 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                <div class="activity-content">
-                                    Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">56 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                <div class="activity-content">
-                                    Voluptatem blanditiis blanditiis eveniet
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">2 hrs</div>
-                                <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                <div class="activity-content">
-                                    Voluptates corrupti molestias voluptatem
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">1 day</div>
-                                <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                                <div class="activity-content">
-                                    Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a>
-                                    tempore
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">2 days</div>
-                                <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                <div class="activity-content">
-                                    Est sit eum reiciendis exercitationem
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">4 weeks</div>
-                                <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                <div class="activity-content">
-                                    Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-                                </div>
-                            </div><!-- End activity item-->
-
+            <div class="col-md-4 order-1 order-md-2">
+                <!-- Sales Card -->
+                <div class="col-xxl-4 col-12">
+                    <div class="card info-card sales-card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Thời gian</h6>
+                                </li>
+                                <li><a data-type="orderDay" class="dropdown-item order-time-count-filter" href="#">Ngày</a>
+                                </li>
+                                <li><a data-type="orderMonth" class="dropdown-item order-time-count-filter"
+                                       href="#">Tháng</a>
+                                </li>
+                                <li><a data-type="orderYear" class="dropdown-item order-time-count-filter" href="#">Năm</a>
+                                </li>
+                            </ul>
                         </div>
 
-                    </div>
-                </div><!-- End Recent Activity -->
+                        <div class="card-body">
+                            <h5 class="card-title">Đơn hàng <span id="orderCountFilterCriteria">| Ngày</span></h5>
 
-                <!-- Budget Report -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Budget Report <span>| This Month</span></h5>
-
-                        <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                                var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                                    legend: {
-                                        data: ['Allocated Budget', 'Actual Spending']
-                                    },
-                                    radar: {
-                                        // shape: 'circle',
-                                        indicator: [{
-                                            name: 'Sales',
-                                            max: 6500
-                                        },
-                                            {
-                                                name: 'Administration',
-                                                max: 16000
-                                            },
-                                            {
-                                                name: 'Information Technology',
-                                                max: 30000
-                                            },
-                                            {
-                                                name: 'Customer Support',
-                                                max: 38000
-                                            },
-                                            {
-                                                name: 'Development',
-                                                max: 52000
-                                            },
-                                            {
-                                                name: 'Marketing',
-                                                max: 25000
-                                            }
-                                        ]
-                                    },
-                                    series: [{
-                                        name: 'Budget vs spending',
-                                        type: 'radar',
-                                        data: [{
-                                            value: [4200, 3000, 20000, 35000, 50000, 18000],
-                                            name: 'Allocated Budget'
-                                        },
-                                            {
-                                                value: [5000, 14000, 28000, 26000, 42000, 21000],
-                                                name: 'Actual Spending'
-                                            }
-                                        ]
-                                    }]
-                                });
-                            });
-                        </script>
-
-                    </div>
-                </div><!-- End Budget Report -->
-
-                <!-- Website Traffic -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Website Traffic <span>| Today</span></h5>
-
-                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                                echarts.init(document.querySelector("#trafficChart")).setOption({
-                                    tooltip: {
-                                        trigger: 'item'
-                                    },
-                                    legend: {
-                                        top: '5%',
-                                        left: 'center'
-                                    },
-                                    series: [{
-                                        name: 'Access From',
-                                        type: 'pie',
-                                        radius: ['40%', '70%'],
-                                        avoidLabelOverlap: false,
-                                        label: {
-                                            show: false,
-                                            position: 'center'
-                                        },
-                                        emphasis: {
-                                            label: {
-                                                show: true,
-                                                fontSize: '18',
-                                                fontWeight: 'bold'
-                                            }
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        },
-                                        data: [{
-                                            value: 1048,
-                                            name: 'Search Engine'
-                                        },
-                                            {
-                                                value: 735,
-                                                name: 'Direct'
-                                            },
-                                            {
-                                                value: 580,
-                                                name: 'Email'
-                                            },
-                                            {
-                                                value: 484,
-                                                name: 'Union Ads'
-                                            },
-                                            {
-                                                value: 300,
-                                                name: 'Video Ads'
-                                            }
-                                        ]
-                                    }]
-                                });
-                            });
-                        </script>
-
-                    </div>
-                </div><!-- End Website Traffic -->
-
-                <!-- News & Updates Traffic -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
-
-                        <div class="news">
-                            <div class="post-item clearfix">
-                                <img src="/images/news-1.jpg" alt="">
-                                <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
-                                <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-cart"></i>
+                                </div>
+                                <div id="orderCountStat" class="ps-3">
+                                    <h6>
+                                        <fmt:formatNumber value="${dayOrderCount}"
+                                                          type="number" maxFractionDigits="0"/>
+                                    </h6>
+                                    <c:choose>
+                                        <c:when test="${changeDay < 0}">
+                                            <span class="text-danger small pt-1 fw-bold">${Math.abs(changeDay)}%</span>
+                                            <span class="text-muted small pt-2 ps-1">giảm</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-success small pt-1 fw-bold">${changeDay}%</span>
+                                            <span class="text-muted small pt-2 ps-1">tăng</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
-
-                            <div class="post-item clearfix">
-                                <img src="/images/news-2.jpg" alt="">
-                                <h4><a href="#">Quidem autem et impedit</a></h4>
-                                <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="/images/news-3.jpg" alt="">
-                                <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-                                <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="/images/news-4.jpg" alt="">
-                                <h4><a href="#">Laborum corporis quo dara net para</a></h4>
-                                <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-                            </div>
-
-                            <div class="post-item clearfix">
-                                <img src="/images/news-5.jpg" alt="">
-                                <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
-                                <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos
-                                    eius...</p>
-                            </div>
-
-                        </div><!-- End sidebar recent posts-->
-
+                        </div>
                     </div>
-                </div><!-- End News & Updates -->
+                </div>
 
-            </div><!-- End Right side columns -->
+                <!-- Revenue Card -->
+                <div class="col-xxl-4 col-12">
+                    <div class="card info-card revenue-card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Thời gian</h6>
+                                </li>
+                                <li><a data-type="orderDay" class="dropdown-item order-time-revenue-filter"
+                                       href="#">Ngày</a></li>
+                                <li><a data-type="orderMonth" class="dropdown-item order-time-revenue-filter"
+                                       href="#">Tháng</a></li>
+                                <li><a data-type="orderYear" class="dropdown-item order-time-revenue-filter"
+                                       href="#">Năm</a></li>
+                            </ul>
+                        </div>
 
+                        <div class="card-body">
+                            <h5 class="card-title">Doanh thu <span id="orderRevenueFilterCriteria">| Ngày</span>
+                            </h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                                <div id="orderRevenueStat" class="ps-3">
+                                    <h6>
+                                        <fmt:formatNumber value="${dayRevenue}"
+                                                          type="number" groupingUsed="true"/>
+                                    </h6>
+                                    <c:choose>
+                                        <c:when test="${changeDayRevenue < 0}">
+                                            <span class="text-danger small pt-1 fw-bold">${Math.abs(changeDayRevenue)}%</span>
+                                            <span class="text-muted small pt-2 ps-1">giảm</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-success small pt-1 fw-bold">${changeDayRevenue}%</span>
+                                            <span class="text-muted small pt-2 ps-1">tăng</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+</main>
 
-</main><!-- End #main -->
-
-<!-- ======= Footer ======= -->
+<!-- Footer Placeholder -->
 <jsp:include page="layout/footer.jsp"/>
-<!-- End Footer -->
-
 
 <!-- Vendor JS Files -->
 <script src="/vendor/apexcharts/apexcharts.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/vendor/chart.js/chart.umd.js"></script>
-<script src="/vendor/echarts/echarts.min.js"></script>
-<script src="/vendor/quill/quill.js"></script>
-<script src="/vendor/simple-datatables/simple-datatables.js"></script>
 <script src="/vendor/tinymce/tinymce.min.js"></script>
-<script src="/vendor/php-email-form/validate.js"></script>
 
-<!-- Template Main JS File -->
+<!-- Template JS Files -->
 <script src="/js/admin/main.js"></script>
-
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Reports Chart
+        const reportsChart = new ApexCharts(document.querySelector("#reportsChart"), {
+            series: [
+                {
+                    name: 'Doanh thu',
+                    type: 'column',
+                    data: ${orderTotalAmountJson}
+                },
+                {
+                    name: 'Đơn hàng',
+                    type: 'line',
+                    data: ${orderCountJson}
+                }
+            ],
+            chart: {
+                height: 350,
+                type: 'line',
+                toolbar: {
+                    show: false
+                }
+            },
+            stroke: {
+                width: [0, 4]
+            },
+            colors: ['#2eca6a', '#4154f1'],
+            dataLabels: {
+                enabled: false
+            },
+            labels: [
+                "2025-01-01", "2025-02-01", "2025-03-01", "2025-04-01", "2025-05-01", "2025-06-01",
+                "2025-07-01", "2025-08-01", "2025-09-01", "2025-10-01", "2025-11-01", "2025-12-01"
+            ],
+            xaxis: {
+                type: 'datetime'
+            },
+            yaxis: [
+                {
+                    title: {
+                        text: 'Doanh thu'
+                    },
+                    labels: {
+                        formatter: function (val) {
+                            return val.toLocaleString('vi-VN');
+                        }
+                    }
+                },
+                {
+                    opposite: true,
+                    title: {
+                        text: 'Đơn hàng'
+                    }
+                }
+            ],
+            tooltip: {
+                shared: true,
+                intersect: false,
+                x: {
+                    format: 'dd/MM/yy'
+                },
+            },
+        });
+        reportsChart.render();
+
+        // Pie chart
+        const pieChart = new ApexCharts(document.querySelector("#pieChart"), {
+            series: [${paramDelivered}, ${paramDelivering}, ${paramProcessing}, ${paramCancelled}, ${paramShipped}],
+            chart: {
+                height: 350,
+                type: 'pie',
+            },
+            labels: ['Đã giao', 'Đang giao', 'Đang xử lý', 'Đã hủy', 'Chuyển ship'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        });
+        pieChart.render();
+
+        document.querySelectorAll('.order-time-count-filter').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.getElementById('orderCountFilterCriteria').innerText = "| " + item.innerText;
+
+                const type = this.getAttribute('data-type');
+                if (type === 'orderDay') {
+                    document.getElementById('orderCountStat').innerHTML = `<h6><fmt:formatNumber value="${dayOrderCount}"
+                                                              type="number" maxFractionDigits="0"/></h6>
+                                        <c:choose>
+                                            <c:when test="${changeDay < 0}">
+                                                <span class="text-danger small pt-1 fw-bold">${Math.abs(changeDay)}%</span>
+                                                <span class="text-muted small pt-2 ps-1">giảm</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-success small pt-1 fw-bold">${changeDay}%</span>
+                                                <span class="text-muted small pt-2 ps-1">tăng</span>
+                                            </c:otherwise>
+                                        </c:choose>`;
+                } else if (type === 'orderMonth') {
+                    document.getElementById('orderCountStat').innerHTML = `<h6><fmt:formatNumber value="${monthOrderCount}"
+                                                              type="number" maxFractionDigits="0"/></h6>
+                                        <c:choose>
+                                            <c:when test="${changeMonth < 0}">
+                                                <span class="text-danger small pt-1 fw-bold">${Math.abs(changeMonth)}%</span>
+                                                <span class="text-muted small pt-2 ps-1">giảm</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-success small pt-1 fw-bold">${changeMonth}%</span>
+                                                <span class="text-muted small pt-2 ps-1">tăng</span>
+                                            </c:otherwise>
+                                        </c:choose>`;
+                } else {
+                    document.getElementById('orderCountStat').innerHTML = `<h6><fmt:formatNumber value="${yearOrderCount}"
+                                                              type="number" maxFractionDigits="0"/></h6>
+                                        <c:choose>
+                                            <c:when test="${changeYear < 0}">
+                                                <span class="text-danger small pt-1 fw-bold">${Math.abs(changeYear)}%</span>
+                                                <span class="text-muted small pt-2 ps-1">giảm</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-success small pt-1 fw-bold">${changeYear}%</span>
+                                                <span class="text-muted small pt-2 ps-1">tăng</span>
+                                            </c:otherwise>
+                                        </c:choose>`;
+                }
+
+            });
+        });
+
+        document.querySelectorAll('.order-time-revenue-filter').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.getElementById('orderRevenueFilterCriteria').innerText = "| " + item.innerText;
+
+                const type = this.getAttribute('data-type');
+                if (type === 'orderDay') {
+                    document.getElementById('orderRevenueStat').innerHTML = `<h6>
+                                            <fmt:formatNumber value="${dayRevenue}"
+                                                              type="number" groupingUsed="true"/>
+                                        </h6>
+                                        <c:choose>
+                                            <c:when test="${changeDayRevenue < 0}">
+                                                <span class="text-danger small pt-1 fw-bold">${Math.abs(changeDayRevenue)}%</span>
+                                                <span class="text-muted small pt-2 ps-1">giảm</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-success small pt-1 fw-bold">${changeDayRevenue}%</span>
+                                                <span class="text-muted small pt-2 ps-1">tăng</span>
+                                            </c:otherwise>
+                                        </c:choose>`;
+                } else if (type === 'orderMonth') {
+                    document.getElementById('orderRevenueStat').innerHTML = `<h6>
+                                            <fmt:formatNumber value="${monthRevenue}"
+                                                              type="number" groupingUsed="true"/>
+                                        </h6>
+                                        <c:choose>
+                                            <c:when test="${changeMonthRevenue < 0}">
+                                                <span class="text-danger small pt-1 fw-bold">${Math.abs(changeMonthRevenue)}%</span>
+                                                <span class="text-muted small pt-2 ps-1">giảm</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-success small pt-1 fw-bold">${changeMonthRevenue}%</span>
+                                                <span class="text-muted small pt-2 ps-1">tăng</span>
+                                            </c:otherwise>
+                                        </c:choose>`;
+                } else {
+                    document.getElementById('orderRevenueStat').innerHTML = `<h6>
+                                            <fmt:formatNumber value="${yearRevenue}"
+                                                              type="number" groupingUsed="true"/>
+                                        </h6>
+                                        <c:choose>
+                                            <c:when test="${changeYearRevenue < 0}">
+                                                <span class="text-danger small pt-1 fw-bold">${Math.abs(changeYearRevenue)}%</span>
+                                                <span class="text-muted small pt-2 ps-1">giảm</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-success small pt-1 fw-bold">${changeYearRevenue}%</span>
+                                                <span class="text-muted small pt-2 ps-1">tăng</span>
+                                            </c:otherwise>
+                                        </c:choose>`;
+                }
+
+            });
+        });
+    });
+</script>
 
 </html>

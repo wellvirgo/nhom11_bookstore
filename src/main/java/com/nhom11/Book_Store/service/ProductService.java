@@ -1,13 +1,14 @@
 package com.nhom11.Book_Store.service;
 
+import com.nhom11.Book_Store.dto.ImageDTO;
 import com.nhom11.Book_Store.dto.ProductCreation;
 import com.nhom11.Book_Store.dto.ProductInTrash;
+import com.nhom11.Book_Store.dto.TopSellingProduct;
 import com.nhom11.Book_Store.mapper.ProductMapper;
 import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Image;
 import com.nhom11.Book_Store.model.Product;
 import com.nhom11.Book_Store.repository.GenreRepository;
-import com.nhom11.Book_Store.repository.ImageRepository;
 import com.nhom11.Book_Store.repository.ProductRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,7 +35,7 @@ public class ProductService {
     GenreRepository genreRepository;
     ProductMapper productMapper;
     FileUploadService fileUploadService;
-    ImageRepository imageRepository;
+    ImageService imageService;
 
     public Page<Product> findAllWithPageable(
             Optional<String> pageOptional,
@@ -158,6 +157,16 @@ public class ProductService {
                 .imgOrder(order)
                 .product(product)
                 .build();
-        imageRepository.save(img);
+        imageService.save(img);
+    }
+
+    public List<TopSellingProduct> findTopSellingProducts(int limit) {
+        List<TopSellingProduct> topSellingProducts = productRepository.findTopSellingProducts(PageRequest.of(0, limit));
+        List<ImageDTO> imageDTOList = imageService.getAllPrimaryImageDTO();
+        Map<Long, String> bookPrimaryImageMap = imageDTOList.stream()
+                .collect(Collectors.toMap(ImageDTO::getBookId, ImageDTO::getUrl, (v1, v2) -> v1));
+        topSellingProducts.forEach(product -> product.setImgUrl(bookPrimaryImageMap.get(product.getId())));
+
+        return topSellingProducts;
     }
 }

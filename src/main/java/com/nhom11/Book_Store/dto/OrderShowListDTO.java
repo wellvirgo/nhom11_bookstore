@@ -18,4 +18,12 @@ public class OrderShowListDTO {
     long totalAmount;
     String customerName;
     String customerPhone;
+
+    public OrderShowListDTO(Long id, LocalDateTime orderDate, String status, String paymentStatus, long totalAmount) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.paymentStatus = paymentStatus;
+        this.totalAmount = totalAmount;
+    }
 }

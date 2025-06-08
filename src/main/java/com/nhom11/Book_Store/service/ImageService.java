@@ -1,6 +1,7 @@
 package com.nhom11.Book_Store.service;
 
 import com.nhom11.Book_Store.dto.ImageDTO;
+import com.nhom11.Book_Store.model.Image;
 import com.nhom11.Book_Store.repository.ImageRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,10 @@ import java.util.List;
 @Service
 public class ImageService {
     ImageRepository imageRepository;
+
+    public Image save(Image image) {
+        return imageRepository.save(image);
+    }
 
     public List<ImageDTO> getAllPrimaryImageDTO() {
         List<ImageDTO> imageDTOList = new ArrayList<>();
