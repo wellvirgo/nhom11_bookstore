@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,10 +96,16 @@ public class UserController {
         // Map<productId, imageUrl> cho ảnh chính
         Map<Long, String> productImageMap = new HashMap<>();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         for (Order order : orders) {
             List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
             
             orderItemsMap.put(order.getId(), orderItems);
+
+            // Set orderDateStr cho từng order
+            if (order.getOrderDate() != null) {
+                order.setOrderDateStr(order.getOrderDate().format(formatter));
+            }
 
             // Lấy ảnh chính cho từng sản phẩm trong order item
             for (OrderItem item : orderItems) {
@@ -110,7 +117,7 @@ public class UserController {
                 }
             }
         }
-
+        orders.sort((o1, o2) -> Long.compare(o2.getId(), o1.getId())); // Sắp xếp giảm dần theo id
         model.addAttribute("orders", orders);
         model.addAttribute("orderItemsMap", orderItemsMap); 
         model.addAttribute("productImageMap", productImageMap); 

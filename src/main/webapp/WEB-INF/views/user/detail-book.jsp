@@ -82,7 +82,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </div>
           <div class="product-price pt-3 pb-3">
             <strong class="text-primary display-6 fw-bold">
-              <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ 
+              <fmt:formatNumber value="${priceNew}" type="number" groupingUsed="true" />đ 
             </strong>
             <del class="ms-2">
               <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />đ
@@ -92,7 +92,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           <!-- Chọn loại bìa, số lượng, nút mua -->
           <div class="cart-wrap py-5">
             <div class="color-options product-select">
-              <div class="color-toggle">
+              <!-- <div class="color-toggle">
                 <h6 class="item-title text-uppercase text-dark">Phân loại</h6>
                 <ul class="select-list list-unstyled d-flex">
                   <li value="soft" class="select-item pe-3">
@@ -102,7 +102,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                     <a href="#" class="btn btn-light">Bìa cứng</a>
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <div class="product-quantity pt-3">
               <div class="stock-number text-dark">
@@ -122,7 +122,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               </div>
             </div>
             <div class="qty-button d-flex flex-wrap pt-3">
-              <button type="submit" class="btn btn-primary py-3 px-4 text-uppercase me-3 mt-3">Mua ngay</button>
+              <button type="submit" class="btn muangay btn-primary py-3 px-4 text-uppercase me-3 mt-3">Mua ngay</button>
               <button  onclick="addToCart('${product.id}')" type="submit" class="btn btn-dark py-3 px-4 text-uppercase mt-3">Thêm vào giỏ hàng</button>
             </div>
           </div>
@@ -224,7 +224,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     </div>
 
     <!-- Sản phẩm liên quan (carousel) -->
-    <div class="container-fluid">
+    <%-- <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
           <div class="section-header d-flex justify-content-between my-5">
@@ -248,7 +248,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </div>
         </div>
       </div>
-    </div>
+    </div> --%>
   </div>
 </section>
   

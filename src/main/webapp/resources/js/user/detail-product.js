@@ -464,3 +464,15 @@ function addToCart(productId){
     }
   });
 }
+document.querySelector('.muangay').addEventListener('click', function () {
+  const productId = document.querySelector('.quantity-right-plus').getAttribute('data-id');
+  const quantity = document.getElementById(`quantity-${productId}`).value;
+
+  if (quantity < 1) {
+    alert('Vui lòng chọn số lượng hợp lệ');
+    return;
+  }
+
+  // Chuyển hướng đến trang thanh toán với ID sản phẩm và số lượng
+  window.location.href = `/user/payments?ids=${productId}&quantity=${quantity}`;
+});

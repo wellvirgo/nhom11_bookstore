@@ -77,7 +77,6 @@ document.querySelectorAll('.product-checkbox').forEach(cb => {
   });
 });
 
-// Hàm cập nhật tổng tiền (không cần truyền tham số)
 function updatePrice() {
   const checkboxes = document.querySelectorAll(".product-checkbox");
   let total = 0;
@@ -89,8 +88,22 @@ function updatePrice() {
       }
     }
   });
-  let tongtien = document.getElementById("totalValue");
-  tongtien.innerText = total.toLocaleString('vi-VN') + " đ";
+  // Cập nhật giá gốc
+  let giaGoc = document.getElementById("cart-total-origin");
+  giaGoc.innerText = total.toLocaleString('vi-VN') + "đ";
+  giaGoc.dataset.origin = total;
+
+  if (typeof updateVoucherEnable === 'function') {
+    updateVoucherEnable();
+  }
+  // Nếu đã chọn voucher thì cập nhật lại giảm giá và tổng
+  if (typeof selectedVoucher !== 'undefined' && selectedVoucher) {
+    updateVoucherDiscount();
+  } else {
+    // Nếu chưa chọn voucher, reset giảm giá và tổng
+    document.getElementById('discountValue').innerText = "0 đ";
+    document.getElementById('totalValue').innerText = total.toLocaleString('vi-VN') + " đ";
+  }
 }
 
 function animateBadge($el, newVal) {
@@ -167,8 +180,12 @@ document.getElementById('checkout-button').addEventListener('click',function(){
     alert('Vui lòng chọn sản phẩm để thanh toán');
     return;
   }
-  window.location.href = '/user/payment?ids=' + checkedIds.join(',');
+  const total = document.getElementById('totalValue').innerText.replace(/\D/g, '');
+  window.location.href = '/user/payment?ids=' + checkedIds.join(',') + '&total=' + total;
 });
+
+
+
 
 // const emptyCart = `
 //     <div className="d-flex">

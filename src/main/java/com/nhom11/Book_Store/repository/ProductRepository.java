@@ -39,6 +39,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findById(Long id);
     List<Product> findAll();
     List<Product> findByNameContainingIgnoreCase(String keyword);
+    // Trong ProductRepository
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.vouchers v WHERE v.discountType = 'PERCENT' AND v.discountValue = :percent")
+    List<Product> findProductsWithVoucherPercent(@Param("percent") int percent);
+    @Query("SELECT p FROM Product p WHERE p.genre.category.name = :categoryName")
+    List<Product> findByCategoryName(@Param("categoryName") String categoryName);
     @NonNull
     @Query("select p from Product p where p.isDeleted=false")
     Page<Product> findAll(@NonNull Pageable pageable);

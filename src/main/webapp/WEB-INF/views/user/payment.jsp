@@ -65,7 +65,7 @@
                     ${addr.addressDetail}, ${addr.communeWard}, ${addr.district}, ${addr.city}
                 </div>
                 </c:forEach>
-                <button id="setDefaultBtn" class="btn btn-primary mt-3 w-100" disabled >Đặt làm mặc định</button>
+                <button id="setDefaultBtn" class="btn btn-primary mt-3 w-100" disabled >Chọn Làm Địa Chỉ Nhận Hàng</button>
             </div>
             </div>
         </div>
@@ -123,14 +123,14 @@
                             </label>
                         </div>
                     </div>
-                    <div class="payment-method">
+                    <!-- <div class="payment-method">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="paymentMethod" id="bank" disabled>
                             <label class="form-check-label" for="bank">
                                 <i class="fas fa-university me-2"></i>Chuyển khoản ngân hàng
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="payment-section">
                     <h4 class="mb-3">Tổng đơn hàng</h4>
@@ -145,7 +145,7 @@
                     <hr>
                     <div class="d-flex justify-content-between mb-3">
                         <strong>Tổng cộng:</strong>
-                        <strong class="text-danger">
+                        <strong class="">
                             <fmt:formatNumber value="${total}" type="currency" currencySymbol="₫"/>
                         </strong>
                     </div>
@@ -158,7 +158,6 @@
                         <!-- listImg là Map<Long, String>, chuyển sang JSON -->
                         <input type="hidden" id="listImg" value='${fn:escapeXml(listImgJson)}' />
                         <button class="btn btn-primary btn-lg" id="orderBtn">Đặt hàng</button>
-                        <a href="/cart" class="btn btn-outline-secondary">Quay lại giỏ hàng</a>
                     </div>
                 </div> 
             </div>

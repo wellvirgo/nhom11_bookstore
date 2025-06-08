@@ -252,12 +252,34 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                         </span>
                       </td>
                     </tr> -->
+                    <tr>
+                      <th>Voucher</th>
+                      <td>
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                          Chọn voucher
+                        </button>
+                        <span id="selectedVoucherName" class="ms-2 text-success"></span>
+                        <input type="hidden" id="selectedVoucherId" name="selectedVoucherId" value="" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Giá gốc</th>
+                      <td>
+                        <span id="cart-total-origin" data-origin="${totalPrice}">
+                          0 đ
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Giảm giá</th>
+                      <td><span id="discountValue">0 đ</span></td>
+                    </tr>
                     <tr class="order-total pt-2 pb-2 border-bottom">
                       <th>Total</th>
                       <td data-title="Total">
-                       <span class="price-amount amount text-dark ps-5" id="totalValue">
-                        0 đ
-                      </span>
+                        <span class="price-amount amount text-dark ps-5" id="totalValue">
+                          0 đ
+                        </span>
                       </td>
                     </tr>
                   </tbody>
@@ -489,6 +511,49 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
       </div>
       <div id="toast-container"></div>
     </div>
+    <!-- Modal chọn voucher -->
+    <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="voucherModalLabel">Chọn voucher</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group" id="voucher-list">
+              <c:forEach var="voucher" items="${allVouchers}">
+                <li class="list-group-item">
+                  <input type="radio" name="voucherRadio"
+                        value="${voucher.id}"
+                        id="voucher-${voucher.id}"
+                        data-type="${voucher.discount_type}"
+                        data-value="${voucher.discount_value}"
+                        data-code="${voucher.code}"
+                        data-minorder="${voucher.minOrderValue}">
+                  <label for="voucher-${voucher.id}">
+                    <strong>${voucher.code}</strong> - ${voucher.description}
+                    <span class="badge bg-info ms-2">
+                      <c:choose>
+                        <c:when test="${voucher.discount_type eq 'PERCENT'}">
+                          ${voucher.discount_value}%
+                        </c:when>
+                        <c:otherwise>
+                          <fmt:formatNumber value="${voucher.discount_value}" type="number" groupingUsed="true"/>đ
+                        </c:otherwise>
+                      </c:choose>
+                    </span>
+                  </label>
+                </li>
+              </c:forEach>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary" id="applyVoucherBtn" disabled>Áp dụng</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="/js/user/jquery-3.7.1.min.js"></script>
     <script src="/js/user/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
@@ -500,6 +565,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <script src="/js/user/cart.js"></script>
     <script src="/js/user/plugins.js"></script>
     <script src="/js/user/script.js"></script>
+    <script src="/js/user/cart-voucher.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   </body>
 </html>

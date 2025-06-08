@@ -7,6 +7,7 @@ import com.nhom11.Book_Store.mapper.ProductMapper;
 import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Image;
 import com.nhom11.Book_Store.model.Product;
+import com.nhom11.Book_Store.model.Voucher;
 import com.nhom11.Book_Store.repository.GenreRepository;
 import com.nhom11.Book_Store.repository.ImageRepository;
 import com.nhom11.Book_Store.repository.ProductRepository;
@@ -49,7 +50,19 @@ public class ProductService {
     public List<Product> searchProduct(String keyword) {
        return productRepository.findByNameContainingIgnoreCase(keyword);
     }
-
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findByCategoryName(category);
+    }
+    public List<String> getAllSuppliers() {
+        return productRepository.findAll()
+            .stream()
+            .map(Product::getSupplier)
+            .distinct()
+            .toList();
+    }
+    public Page<Product> getTrendingProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
     public Page<Product> findAllWithPageable(
             Optional<String> pageOptional,
             Optional<String> limitOptional,
@@ -142,6 +155,9 @@ public class ProductService {
     }
 
 
+    public List<Product> getProductsWithVoucherPercent(int percent) {
+    return productRepository.findProductsWithVoucherPercent(percent);
+}
     public List<ProductInTrash> findAllInTrash() {
 
         return productRepository.findAllInTrash()
@@ -171,6 +187,27 @@ public class ProductService {
                 .product(product)
                 .build();
         imageRepository.save(img);
+    }
+    public long getBestDiscountedPrice(Product product) {
+        long originalPrice = product.getPrice();
+        long bestPrice = originalPrice;
+
+        if (product.getVouchers() != null && !product.getVouchers().isEmpty()) {
+            for (Voucher voucher : product.getVouchers()) {
+                long discountedPrice = originalPrice;
+                if (voucher.isActive()) {
+                    if ("PERCENT".equalsIgnoreCase(voucher.getDiscountType())) {
+                        discountedPrice = originalPrice - (originalPrice * voucher.getDiscountValue() / 100);
+                    } else if ("AMOUNT".equalsIgnoreCase(voucher.getDiscountType())) {
+                        discountedPrice = originalPrice - voucher.getDiscountValue();
+                    }
+                    if (discountedPrice < bestPrice) {
+                        bestPrice = discountedPrice;
+                    }
+                }
+            }
+        }
+        return bestPrice;
     }
 }
 // package com.nhom11.Book_Store.service;

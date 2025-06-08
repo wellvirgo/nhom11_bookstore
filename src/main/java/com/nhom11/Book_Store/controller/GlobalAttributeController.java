@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.nhom11.Book_Store.model.Cart;
 import com.nhom11.Book_Store.model.CartItem;
+import com.nhom11.Book_Store.model.Notification;
 import com.nhom11.Book_Store.model.User;
 import com.nhom11.Book_Store.service.CartService;
 import com.nhom11.Book_Store.service.ImageService;
+import com.nhom11.Book_Store.service.NotificationService;
+import com.nhom11.Book_Store.service.ProductService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +28,10 @@ public class GlobalAttributeController {
 
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private NotificationService notificationSerivce;
+    @Autowired
+    private ProductService productService;
 
     @ModelAttribute
     public void addCartInfoToModel(HttpSession session, Model model) {
@@ -35,15 +42,20 @@ public class GlobalAttributeController {
                 List<CartItem> cartItems = cartService.getCartItemsByCartId(cart.getId());
                 if (!cartItems.isEmpty()) {
                     Map<Long, String> proImg = new HashMap<>();
+                    Map<Long, Long> cartItemBestPrices = new HashMap<>();
+
                     for (CartItem item : cartItems) {
                         String url = imageService.getImagebyID(item.getProduct().getId());
                         proImg.put(item.getProduct().getId(), url);
+                        long bestPrice = productService.getBestDiscountedPrice(item.getProduct());
+                         cartItemBestPrices.put(item.getProduct().getId(), bestPrice);
                     }
                     long totalPrice = cartService.calculateTotalPrice(cart.getId());
 
                     model.addAttribute("cartItems", cartItems);
                     model.addAttribute("proImg", proImg);
                     model.addAttribute("totalPrice", totalPrice);
+                    model.addAttribute("cartItemBestPrices", cartItemBestPrices);
 
                 }
             }

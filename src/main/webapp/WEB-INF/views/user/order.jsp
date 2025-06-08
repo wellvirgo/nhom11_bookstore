@@ -317,7 +317,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                               </c:otherwise>
                                           </c:choose>
                                     </div>
-                                    <span class="text-muted">${order.orderDate}</span>
+                                    <span class="text-muted">${order.orderDateStr}</span>
                                 </div>
                                 <div class=""><hr> </div>
                                 <div class="row">
