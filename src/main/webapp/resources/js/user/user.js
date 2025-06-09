@@ -39,7 +39,7 @@ function handleLogout() {
   localStorage.removeItem("token");
   localStorage.removeItem("tokenExpiration");
   showToast("success", "Đăng xuất thành công");
-  window.location.href = "login.html"; // Điều hướng về trang đăng nhập
+  window.location.href = "/login"; // Điều hướng về trang đăng nhập
 }
 document.querySelector("form").addEventListener("submit", function (e) {
   e.preventDefault(); // Ngăn gửi form ngay
