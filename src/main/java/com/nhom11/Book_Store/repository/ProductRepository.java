@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
+import java.util.List;
+
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @NonNull
     Page<Product> findAll(@NonNull  Pageable pageable);
@@ -49,4 +51,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @NonNull
     Page<Product> findAllByCategoryNameAndIsDeleted(
             @NonNull @Param("categoryName") String categoryName, Pageable pageable);
+
+    List<Product> findAllByIsDeletedFalse();
+
+    List<Product> id(Long id);
 }

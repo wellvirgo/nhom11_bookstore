@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.4 # Thay đổi phiên bản nếu cần
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node # Quan trọng cho môi trường single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m # Giới hạn RAM cho Elasticsearch (điều chỉnh nếu cần)
+      - xpack.security.enabled=false # Tắt security cho môi trường dev (KHÔNG DÙNG CHO PRODUCTION)
+      - "DISABLE_SECURITY_PLUGIN=true" # Một cách khác để tắt security cho phiên bản cũ hơn hoặc một số trường hợp
+      - "TAKE_FILE_OWNERSHIP=true" # Đảm bảo quyền ghi vào volume
+    volumes:
+      - esdata:/usr/share/elasticsearch/data # Volume để lưu trữ dữ liệu
+    ports:
+      - "9200:9200" # Cổng HTTP của Elasticsearch
+      - "9300:9300" # Cổng Transport của Elasticsearch (nếu cần)
+    ulimits: # Giới hạn tài nguyên cho Elasticsearch
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - elastic-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.4 # PHẢI CÙNG PHIÊN BẢN MAJOR.MINOR với Elasticsearch
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200 # Kibana kết nối tới Elasticsearch qua tên service
+    ports:
+      - "5601:5601" # Cổng của Kibana
+    depends_on:
+      elasticsearch:
+        condition: service_healthy # Chỉ khởi động Kibana khi Elasticsearch đã healthy
+    networks:
+      - elastic-net
+
+volumes:
+  esdata: # Định nghĩa named volume cho Elasticsearch
+    driver: local
+
+networks:
+  elastic-net: # Định nghĩa network tùy chỉnh
+    driver: bridge

@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,6 +17,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     String status;
     LocalDateTime orderDate;
     LocalDateTime deliveryDate;
@@ -31,4 +37,7 @@ public class Order extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> items = new ArrayList<>();
 }
