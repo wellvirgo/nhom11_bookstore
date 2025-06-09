@@ -43,6 +43,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       rel="stylesheet"
     />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -210,6 +211,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       id="offcanvasCart"
       aria-labelledby="My Cart"
     >
+      <!-- dấu x  -->
       <div class="offcanvas-header justify-content-center">
         <button
           type="button"
@@ -218,40 +220,40 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           aria-label="Close"
         ></button>
       </div>
+
       <div class="offcanvas-body">
         <div class="order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-primary">Giỏ hàng của tôi</span>
-            <span
-              class="badge bg-primary rounded-pill"
-              id="cart-quantity"
-            >2</span>
+            <span class="badge bg-primary rounded-pill" id="cart-quantity-header">${fn:length(cartItems)}</span>
           </h4>
+
           <ul class="list-group mb-3" id="offcanvas-cart">
             <c:forEach var="item" items="${cartItems}">
                 <li class="list-group-item d-flex justify-content-between lh-sm">
                     <div class="d-flex flex-column justify-content-between">
-                        <h6 class="my-0 item-name">${item.name}</h6>
+                        <h6 class="my-0 item-name">${item.product.name}</h6>
                         <div class="d-flex justify-centent-between align-items-center">
                             <small class="text-body-secondary">
-                                <fmt:formatNumber value="${item.price}" type="number" groupingUsed="true"/>đ
+                                <fmt:formatNumber value="${item.product.price}" type="number" groupingUsed="true"/>đ
                             </small>
                             <small class="text-body-secondary text-decoration-line-through ms-1" style="font-size:12px">
-                                <fmt:formatNumber value="${item.originalPrice}" type="number" groupingUsed="true"/>đ
+                                <fmt:formatNumber value="${item.product.price}" type="number" groupingUsed="true"/>đ
                             </small>
                         </div>
                     </div>
-                    <img src="${item.image}" class="img-fluid" style="height:100px">
+                    <img src="${proImg[item.product.id]}" class="img-fluid" style="height:100px">
                 </li>
             </c:forEach>
-            
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$20</strong>
-            </li>
           </ul>
+                      
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Tổng</span>
+            <strong id="cart-total">${totalPrice}</strong>
+          </li>
+
           <button class="w-100 btn btn-primary btn-lg" type="submit">
-            <a href="<c:url value='/cart'/>" class="nav-link"
+            <a href="<c:url value='/user/viewCart'/>" class="nav-link"
               >Xem giỏ hàng</a
             >
           </button>
@@ -306,7 +308,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             class="col-sm-4 col-lg-3 text-center text-sm-start d-flex justify-content-sm-start justify-content-center"
           >
             <div class="main-logo d-flex align-items-center">
-              <a href="<c:url value='/home'/>">
+              <a href="<c:url value='/user/home'/>">
                 <img
                   src="<c:url value='/images/logo.png'/>"
                   alt="logo"
@@ -334,13 +336,14 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                 <form
                   id="search-form"
                   class="text-center"
-                  action="<c:url value='/user'/>"
-                  method="post"
+                  action="<c:url value='/user/search'/>"
+                  method="get"
                 >
                   <input
                     type="text"
                     class="form-control border-0 bg-transparent"
                     id="menusearch"
+                    name="keyword"
                     placeholder="Search for more than 20,000 products"
                   />
                 </form>
@@ -416,19 +419,14 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                     style="background-color: #ffc43f"
                     id="cart-quantity-header"
                   >
-                    <%-- Có thể lấy từ session hoặc request attribute --%>
-                    <c:set
-                      var="cartQuantity"
-                      value="${sessionScope.cartQuantity != null ? sessionScope.cartQuantity : 0}"
-                    />
-                    <c:out value="${cartQuantity}" />
+                    ${fn:length(cartItems)}
                     <span class="visually-hidden">unread messages</span>
                   </span>
                 </a>
               </li>
               <li>
                 <a
-                  href="<c:url value='/user'/>"
+                    href="<c:url value='/user-control?param=profile'/>"
                   class="rounded-circle bg-light p-2 mx-1"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24">
@@ -465,10 +463,9 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-      crossorigin="anonymous"
-    ></script>
-    <script src="js/user/plugins.js"></script>
-    <script src="js/user/script.js"></script>
+      crossorigin="anonymous"></script>
+    <script src="/js/user/plugins.js"></script>
+    <script src="/js/user/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/js/user/cart.js"></script>
   </body>

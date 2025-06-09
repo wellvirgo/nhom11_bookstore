@@ -34,7 +34,11 @@ public class SecurityConfig {
             "/css/user/**",
             "/vendor/**",
             "/images/**",
-            "/js/user/**"};
+            "/js/user/**",
+            // "/product/**",
+            // "/product/add-to-card"
+
+        };
 
     private static final String[] PUBLIC_GET_URLS = {
             "/favicon.ico",
@@ -70,6 +74,7 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
 
                         .requestMatchers(PUBLIC_URLS).permitAll()
 
@@ -78,7 +83,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, PUBLIC_POST_URLS).permitAll()
 
                         .anyRequest().authenticated())
-
+                .csrf(csrf -> csrf.disable()) 
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(authenticationSuccessHandler())
@@ -95,5 +100,12 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         return http.build();
+        // http
+        // .authorizeHttpRequests(auth -> auth
+        //     .anyRequest().permitAll()  // Cho phép tất cả các request
+        // )
+        // .csrf(csrf -> csrf.disable());  // Tắt bảo vệ CSRF
+
+        // return http.build();
     }
 }

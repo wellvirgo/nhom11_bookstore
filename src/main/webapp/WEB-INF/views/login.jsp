@@ -25,10 +25,7 @@
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet">
@@ -63,7 +60,7 @@
                                     <p class="text-center small">Nhập email và mật khẩu để đăng nhập</p>
                                 </div>
 
-                                <form class="row g-3 needs-validation" novalidate action="/login" method="post">
+                                <form id="loginForm" class="row g-3 needs-validation" novalidate action="/login" method="post">
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                     <c:if test="${param.logout!=null}">
                                         <div class="my-2" id="logoutId" style="color: green;">
@@ -82,7 +79,7 @@
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                                             <input type="text" name="username" class="form-control" id="yourUsername"
                                                    required>
-                                            <div class="invalid-feedback">Vui lòng nhập email!</div>
+                                            <!-- <div class="invalid-feedback">Vui lòng nhập email!</div> -->
                                         </div>
                                     </div>
 
@@ -90,7 +87,7 @@
                                         <label for="yourPassword" class="form-label">Mật khẩu</label>
                                         <input type="password" name="password" class="form-control" id="yourPassword"
                                                required>
-                                        <div class="invalid-feedback">Vui lòng nhập mật khẩu!</div>
+                                        <!-- <div class="invalid-feedback">Vui lòng nhập mật khẩu!</div> -->
                                     </div>
 
                                     <%--<div class="col-12">
@@ -113,7 +110,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
 
     </div>
@@ -124,7 +120,6 @@
 
 <!-- /vendor JS Files -->
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/vendor/quill/quill.js"></script>
 <script src="/vendor/tinymce/tinymce.min.js"></script>
 
 <!-- Template Main JS File -->

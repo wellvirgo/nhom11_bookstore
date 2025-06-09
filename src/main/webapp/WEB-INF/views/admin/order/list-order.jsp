@@ -1,7 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> <%@
 taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib
 prefix="form" uri="http://www.springframework.org/tags/form" %> <%@ taglib
-uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <%@ page
+import="com.fasterxml.jackson.databind.ObjectMapper" %> <%@ page
+import="com.fasterxml.jackson.datatype.jsr310.JavaTimeModule" %> <%@ page
+import="java.time.LocalDateTime" %> <%@ page
+import="com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer" %>
+<%@ page import="java.time.format.DateTimeFormatter" %> <%@ page
+import="com.fasterxml.jackson.databind.SerializationFeature" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,13 +30,16 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
-    <link href="/vendor/quill/quill.snow.css" rel="stylesheet" />
-    <link href="/vendor/quill/quill.bubble.css" rel="stylesheet" />
-    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet" />
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet" />
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet" />
     <link href="/css/admin/order.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
   </head>
 
   <body>
@@ -45,7 +54,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         <h1>Danh sách đơn hàng</h1>
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/admin/das">Dashboard</a></li>
             <li class="breadcrumb-item active">Danh sách đơn hàng</li>
           </ol>
         </nav>
@@ -55,24 +64,13 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
           <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center">
               <div class="flex-shrink-0 me-3">
-                <i class="bi bi-cash-coin fs-2 text-primary"></i>
+                <i class="bi bi-arrow-repeat fs-2 text-primary"></i>
               </div>
               <div>
-                <div class="text-muted small">Payment Refund</div>
-                <div class="fs-4 fw-bold">490</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
-              <div class="flex-shrink-0 me-3">
-                <i class="bi bi-x-octagon fs-2 text-danger"></i>
-              </div>
-              <div>
-                <div class="text-muted small">Order Cancel</div>
-                <div class="fs-4 fw-bold">241</div>
+                <div class="text-muted small">Đang xử lý</div>
+                <div class="fs-4 fw-bold">
+                  ${orderStatistics.get("Processing")}
+                </div>
               </div>
             </div>
           </div>
@@ -84,8 +82,10 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                 <i class="bi bi-box-seam fs-2 text-success"></i>
               </div>
               <div>
-                <div class="text-muted small">Order Shipped</div>
-                <div class="fs-4 fw-bold">630</div>
+                <div class="text-muted small">Đã chuyển ship</div>
+                <div class="fs-4 fw-bold">
+                  ${orderStatistics.get("Shipped")}
+                </div>
               </div>
             </div>
           </div>
@@ -97,34 +97,10 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                 <i class="bi bi-truck fs-2 text-info"></i>
               </div>
               <div>
-                <div class="text-muted small">Order Delivering</div>
-                <div class="fs-4 fw-bold">170</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
-              <div class="flex-shrink-0 me-3">
-                <i class="bi bi-hourglass-split fs-2 text-warning"></i>
-              </div>
-              <div>
-                <div class="text-muted small">Pending Review</div>
-                <div class="fs-4 fw-bold">210</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
-              <div class="flex-shrink-0 me-3">
-                <i class="bi bi-clock-history fs-2 text-secondary"></i>
-              </div>
-              <div>
-                <div class="text-muted small">Pending Payment</div>
-                <div class="fs-4 fw-bold">608</div>
+                <div class="text-muted small">Đang giao</div>
+                <div class="fs-4 fw-bold">
+                  ${orderStatistics.get("Delivering")}
+                </div>
               </div>
             </div>
           </div>
@@ -136,8 +112,10 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                 <i class="bi bi-bag-check fs-2 text-success"></i>
               </div>
               <div>
-                <div class="text-muted small">Delivered</div>
-                <div class="fs-4 fw-bold">200</div>
+                <div class="text-muted small">Đã giao</div>
+                <div class="fs-4 fw-bold">
+                  ${orderStatistics.get("Delivered")}
+                </div>
               </div>
             </div>
           </div>
@@ -146,11 +124,26 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
           <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center">
               <div class="flex-shrink-0 me-3">
-                <i class="bi bi-arrow-repeat fs-2 text-primary"></i>
+                <i class="bi bi-x-octagon fs-2 text-danger"></i>
               </div>
               <div>
-                <div class="text-muted small">In Progress</div>
-                <div class="fs-4 fw-bold">656</div>
+                <div class="text-muted small">Đã hủy</div>
+                <div class="fs-4 fw-bold">
+                  ${orderStatistics.get("Cancelled")}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow-sm border-0">
+            <div class="card-body d-flex align-items-center">
+              <div class="flex-shrink-0 me-3">
+                <i class="bi bi-clock-history fs-2 text-secondary"></i>
+              </div>
+              <div>
+                <div class="text-muted small">Đã thanh toán</div>
+                <div class="fs-4 fw-bold">${orderStatistics.get("Paid")}</div>
               </div>
             </div>
           </div>
@@ -160,40 +153,25 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="card-title mb-0">Danh sách đơn hàng</h5>
-            <div class="d-flex align-items-center">
-              <input
-                id="order-search"
-                type="text"
-                class="form-control form-control-sm me-2"
-                style="width: 180px"
-                placeholder="Tìm Order ID..."
-              />
-              <select class="form-control-sm me-2" style="width: auto">
-                <option value="1" selected="">Hôm nay</option>
-                <option value="2">Tuần này</option>
-                <option value="3">Tháng này</option>
-              </select>
-            </div>
           </div>
           <div class="table-responsive">
-            <table class="table table-hover align-middle">
+            <table
+              id="orderTable"
+              class="table table-hover align-middle datatable table-striped"
+            >
               <thead class="table-light">
                 <tr>
-                  <th>Order ID</th>
-                  <th>Created at</th>
-                  <th>Customer</th>
-                  <th>Priority</th>
-                  <th>Total</th>
-                  <th>Payment Status</th>
-                  <th>Items</th>
-                  <th>Delivery Number</th>
-                  <th>Order Status</th>
-                  <th>Action</th>
+                  <th class="text-center">Mã đơn hàng</th>
+                  <th class="text-center">Ngày đặt</th>
+                  <th class="text-center">Khách hàng</th>
+                  <th class="text-center">Tổng tiền</th>
+                  <th class="text-center">TT thanh toán</th>
+                  <th class="text-center">SĐT nhận</th>
+                  <th class="text-center">TT đơn</th>
+                  <th class="text-center">Hành động</th>
                 </tr>
               </thead>
-              <tbody id="orders-tbody">
-                <!-- Dữ liệu đơn hàng sẽ được sinh động bằng JS -->
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
           <div id="orders-pagination" class="mt-3"></div>
@@ -204,15 +182,52 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <!-- Footer Placeholder -->
     <jsp:include page="../layout/footer.jsp" />
     <!-- Vendor JS Files -->
-    <script src="/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/vendor/chart.js/chart.umd.js"></script>
-    <script src="/vendor/echarts/echarts.min.js"></script>
-    <script src="/vendor/quill/quill.js"></script>
-    <script src="/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="/vendor/tinymce/tinymce.min.js"></script>
     <!-- Template JS Files -->
     <script src="/js/admin/main.js"></script>
-    <script src="/js/admin/order.js"></script>
+    <% ObjectMapper mapper = new ObjectMapper(); JavaTimeModule timeModule = new
+    JavaTimeModule(); timeModule.addSerializer(LocalDateTime.class, new
+    LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+    mapper.registerModule(timeModule);
+    mapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS); String
+    ordersJson = mapper.writeValueAsString(request.getAttribute("orders")); %>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const tbody = document.getElementsByTagName('tbody').item(0);
+          const orders =<%= ordersJson %>;
+          orders.forEach(order => {
+              const row = document.createElement('tr');
+              row.innerHTML =
+                  '<td class="text-center">' + order.id + '</td>' +
+                  '<td class="text-center">' + order.orderDate + '</td>' +
+                  '<td class="text-center">' + order.customerName + '</td>' +
+                  '<td class="text-center">' + order.totalAmount + '</td>' +
+                  '<td class="text-center">' + order.paymentStatus + '</td>' +
+                  '<td class="text-center">' + order.customerPhone + '</td>' +
+                  '<td class="text-center">' + order.status + '</td>' +
+                  '<td class="text-center">' + 'Action' + '</td>';
+              tbody.appendChild(row);
+          });
+          $('.datatable').DataTable({
+              lengthMenu: [
+                  [5, 10, 15, -1],
+                  [5, 10, 15, 'All']
+              ],
+              columnDefs: [
+                  {
+                      targets: 2,
+                      orderSequence: ['desc', 'asc']
+                  },
+                  {
+                      targets: 3,
+                      orderSequence: ['desc', 'asc']
+                  },
+              ],
+              headerCallback: function (thead, data, start, end, display) {
+                  $(thead).find('th').eq(4).addClass('red');
+              }
+          });
+      })
+    </script>
   </body>
 </html>

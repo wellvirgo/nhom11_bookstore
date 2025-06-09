@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  // Add autocomplete container after search input
   const $searchInput = $("#menusearch");
   const $searchForm = $("#search-form");
 
@@ -9,8 +8,6 @@ $(document).ready(function () {
   }
 
   const $autocompleteList = $(".autocomplete-list");
-
-  // Ensure search form has position relative for proper dropdown positioning
   $searchForm.css("position", "relative");
 
   // Debounce function
@@ -36,50 +33,40 @@ $(document).ready(function () {
       return;
     }
 
-    // Make API call to get search results
+    // Gọi đúng endpoint trả về JSON cho autocomplete
     $.ajax({
-      url: `http://localhost:6969/api/search-products?keys=${inputValue}`,
+      url: `/user/search-json?keyword=${encodeURIComponent(inputValue)}`,
       method: "GET",
       success: function (response) {
         console.log("Search API response:", response); // Debug log
         $autocompleteList.empty();
 
-        // Process response data
-        if (response.data && response.data.length > 0) {
-          // Display each result
-          response.data.forEach(function (item) {
-            // Extract product info (adjust these based on your API response structure)
-            const title = item.name || item.title || item;
-            const price = item.price
-              ? `${item.price.toLocaleString("vi-VN")}đ`
-              : "";
+        // response là mảng ProductforJsonDTO
+        if (response && response.length > 0) {
+          response.forEach(function (item) {
+            const title = item.name;
             const image = item.image || "";
 
             let itemHtml = `
-            <div class="autocomplete-item" data-id="${
-              item.id
-            }" data-title="${title}">
-              ${
-                image
-                  ? `<img src="${image}" alt="${title}" width="30" height="40">`
-                  : ""
-              }
-              <div class="item-details">
-                <div class="item-title">${title}</div>
-                ${price ? `<div class="item-price">${price}</div>` : ""}
+              <div class="autocomplete-item" data-id="${
+                item.id
+              }" data-title="${title}">
+                ${
+                  image
+                    ? `<img src="${image}" alt="${title}" width="30" height="40">`
+                    : ""
+                }
+                <div class="item-details">
+                  <div class="item-title">${title}</div>
+                </div>
               </div>
-            </div>
             `;
 
             const $item = $(itemHtml);
 
-            // Handle click on autocomplete item
+            // Khi click vào item, chuyển đến trang chi tiết sản phẩm
             $item.on("click", function () {
-              // Extract just the text title for the search input
-              $searchInput.val(title);
-              $autocompleteList.hide();
-              // Navigate to product detail page
-              window.location.href = `detail-product.html?id=${item.id}`;
+              window.location.href = `/user/detail/${item.id}`;
             });
 
             $autocompleteList.append($item);
@@ -87,9 +74,8 @@ $(document).ready(function () {
 
           $autocompleteList.show();
         } else {
-          // No results found
           $autocompleteList.html(
-            '<div class="autocomplete-empty">No results found</div>'
+            '<div class="autocomplete-empty">Không tìm thấy sản phẩm</div>'
           );
           $autocompleteList.show();
         }
@@ -97,7 +83,7 @@ $(document).ready(function () {
       error: function (error) {
         console.error("Search API error:", error);
         $autocompleteList.html(
-          '<div class="autocomplete-empty">Error searching</div>'
+          '<div class="autocomplete-empty">Lỗi khi tìm kiếm</div>'
         );
         $autocompleteList.show();
       },
@@ -141,15 +127,10 @@ $(document).ready(function () {
       e.preventDefault();
 
       if ($highlighted.length === 0) {
-        // No item is highlighted, select the first one
         $items.first().addClass("highlighted");
       } else {
-        // Get the next item
         const $next = $highlighted.next(".autocomplete-item");
-
         $highlighted.removeClass("highlighted");
-
-        // If there's a next item, highlight it, otherwise go back to the first item
         if ($next.length > 0) {
           $next.addClass("highlighted");
         } else {
@@ -157,21 +138,15 @@ $(document).ready(function () {
         }
       }
     }
-
     // Up arrow
     else if (e.keyCode === 38) {
       e.preventDefault();
 
       if ($highlighted.length === 0) {
-        // No item is highlighted, select the last one
         $items.last().addClass("highlighted");
       } else {
-        // Get the previous item
         const $prev = $highlighted.prev(".autocomplete-item");
-
         $highlighted.removeClass("highlighted");
-
-        // If there's a previous item, highlight it, otherwise go to the last item
         if ($prev.length > 0) {
           $prev.addClass("highlighted");
         } else {
@@ -179,18 +154,16 @@ $(document).ready(function () {
         }
       }
     }
-
     // Enter key
     else if (e.keyCode === 13 && $highlighted.length > 0) {
       e.preventDefault();
-      // Navigate to the product detail page
       const id = $highlighted.data("id");
       const title = $highlighted.data("title");
 
       $searchInput.val(title);
       $autocompleteList.hide();
 
-      window.location.href = `detail-product.html?id=${id}`;
+      window.location.href = `/user/detail/${id}`;
     }
   });
 });

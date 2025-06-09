@@ -35,6 +35,8 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       rel="stylesheet"
     />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
     <style>
       .order-tabs .nav-link {
         color: #666;
@@ -170,7 +172,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
               <div class="profile-menu card border-0 p-4">
                 <div class="nav flex-column">
                   <a
-                    href="<c:url value='/user'/>"
+                    href="<c:url value='/user-control'/>"
                     class="nav-item d-flex align-items-center mb-3"
                   >
                     <svg
@@ -188,7 +190,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                     Hồ sơ cá nhân
                   </a>
                   <a
-                    href="<c:url value='/user/address'/>"
+                    href="<c:url value='/user-address'/>"
                     class="nav-item d-flex align-items-center mb-3"
                   >
                     <svg
@@ -209,7 +211,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                     Sổ địa chỉ
                   </a>
                   <a
-                    href="#"
+                    href="<c:url value='/user-orders'/>"
                     class="nav-item d-flex align-items-center mb-3 active"
                   >
                     <svg
@@ -255,155 +257,185 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
               </div>
             </div>
             <div class="col-md-9">
-              <ul class="nav nav-pills order-tabs mb-4">
+              <ul class="nav nav-pills order-tabs mb-4" id="orderStatusTabs">
                 <li class="nav-item">
-                  <a class="nav-link active" href="#">Tất cả</a>
+                  <a class="nav-link active" href="#" data-status="all">Tất cả</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Đang xử lí</a>
+                  <a class="nav-link" href="#" data-status="Processing">Đang xử lí</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Đang vận chuyển</a>
+                  <a class="nav-link" href="#" data-status="Delivering">Đang vận chuyển</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Đã hủy</a>
+                  <a class="nav-link" href="#" data-status="Shipped">Đã Gửi Hàng</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-status="Delivered">Hoàn Thành</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-status="Cancelled">Đã hủy</a>
                 </li>
               </ul>
 
               <div id="orderList">
                 <!-- Orders will be loaded here -->
                  <c:forEach var="order" items="${orders}">
-                                <div class="order-item">
-                                    <div class="card border-0 shadow-sm order-card">
-                                        <div class="card-body py-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <div>
-                                                    <span class="text-muted">Đơn hàng #${order.orderCode}</span>
-                                                    <span class="mx-2">|</span>
-                                                    <c:choose>
-                                                        <c:when test="${order.status == 'pending'}">
-                                                            <span class="order-status pending">Chờ xác nhận</span>
-                                                        </c:when>
-                                                        <c:when test="${order.status == 'processing'}">
-                                                            <span class="order-status processing">Đang xử lí</span>
-                                                        </c:when>
-                                                        <c:when test="${order.status == 'shipping'}">
-                                                            <span class="order-status shipping">Đang vận chuyển</span>
-                                                        </c:when>
-                                                        <c:when test="${order.status == 'completed'}">
-                                                            <span class="order-status completed">Hoàn thành</span>
-                                                        </c:when>
-                                                        <c:when test="${order.status == 'returned'}">
-                                                            <span class="order-status cancelled">Đã hủy</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="order-status">Không xác định</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                                <span class="text-muted">
-                                                    <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy - HH:mm"/>
-                                                </span>
-                                            </div>
-                                            <div class=""><hr> </div>
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <!-- Nếu có ảnh sản phẩm thì render ở đây -->
-                                                    <img src="${order.product.image}" alt="image" class="img-fluid">
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <h6>${order.product.name}</h6>
-                                                    <small class="text-muted">và ... sản phẩm khác</small>
-                                                </div>
-                                                <div class="py-2"><hr> </div>
-                                                <div class="d-flex justify-content-between text-end">
-                                                    <p class="text-muted">${order.itemCount} sản phẩm</p>
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="text-muted mb-0">Tổng tiền:</p>
-                                                        <h6 class="text-muted mb-0" style="margin-top:4px">
-                                                            <fmt:formatNumber value="${order.total}" type="currency" currencySymbol="₫"/>
-                                                        </h6>
-                                                    </div>
-                                                </div>
-                                            </div>
+                    <c:set var="orderItems" value="${orderItemsMap[order.id]}"/>
+                    <c:set var="firstOrderItem" value="${orderItems[0]}"/>
+                    <c:set var="idProduct" value="${firstOrderItem.product.id}"/>
+
+                    <div class="order-item"
+                          data-status="${order.status}"
+                          data-bs-toggle="modal"
+                          data-bs-target="#orderModal-${order.id}"
+                          style="cursor:pointer;">
+                        <div class="card border-0 shadow-sm order-card">
+                            <div class="card-body py-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="text-muted">Đơn hàng #${order.id}</span>
+                                        <span class="mx-2">|</span>
+                                          <c:choose>
+                                              <c:when test="${order.status == 'Processing'}">
+                                                  <span class="order-status processing">Đang xử lí</span>
+                                              </c:when>
+                                              <c:when test="${order.status == 'Delivering'}">
+                                                  <span class="order-status shipping">Đang vận chuyển</span>
+                                              </c:when>
+                                              <c:when test="${order.status == 'Shipped'}">
+                                                  <span class="order-status shipping">Đã gửi hàng</span>
+                                              </c:when>
+                                              <c:when test="${order.status == 'Delivered'}">
+                                                  <span class="order-status completed">Hoàn thành</span>
+                                              </c:when>
+                                              <c:when test="${order.status == 'Cancelled'}">
+                                                  <span class="order-status cancelled">Đã hủy</span>
+                                              </c:when>
+                                              <c:otherwise>
+                                                  <span class="order-status">Không xác định</span>
+                                              </c:otherwise>
+                                          </c:choose>
+                                    </div>
+                                    <span class="text-muted">${order.orderDate}</span>
+                                </div>
+                                <div class=""><hr> </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <!-- Nếu có ảnh sản phẩm thì render ở đây -->
+                                        <img src="${productImageMap[idProduct]}" alt="image" class="img-fluid">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <h6>${firstOrderItem.product.name}</h6>
+                                        <c:if test = "${fn:length(orderItems) > 1}">
+                                          <small class="text-muted">và ${fn:length(orderItems)-1} sản phẩm khác</small>
+                                        </c:if>
+                                    </div>
+                                    <div class="py-2"><hr>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-end">
+                                        <div class="d-flex align-items-center">
+                                            <p class="text-muted mb-0">Tổng tiền:</p>
+                                            <h6 class="text-muted mb-0" style="margin-top:4px">
+                                                <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/>
+                                            </h6>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
                                 <!-- Modal chi tiết đơn hàng -->
-    <div class="modal fade" id="orderModal-${order.orderCode}" tabindex="-1" aria-labelledby="orderModalLabel-${order.orderCode}" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderModalLabel-${order.orderCode}">
-                        Chi tiết đơn hàng #${order.orderCode}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h6 class="mb-3">Thông tin người nhận</h6>
-                            <p class="mb-1">Tên: Cường</p>
-                            <p class="mb-1">Tel: 032424</p>
-                            <p class="mb-3">Địa chỉ: Số nhà 123, Phượng Sơn, Lục Ngạn, Bắc Giang</p>
-                            <h6 class="mb-3">Phương thức thanh toán</h6>
-                            <p>
-                                <c:choose>
-                                    <c:when test="${order.paymentMethod == 'cash_on_delivery'}">Thanh toán khi nhận hàng</c:when>
-                                    <c:when test="${order.paymentMethod == 'bank_transfer'}">Chuyển khoản</c:when>
-                                    <c:otherwise>Khác</c:otherwise>
-                                </c:choose>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <h6 class="mb-3">Tổng tiền</h6>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Tạm tính:</span>
-                                <span><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/></span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Phí vận chuyển:</span>
-                                <span><fmt:formatNumber value="${order.shippingFee}" type="currency" currencySymbol="₫"/></span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="fw-bold">Tổng tiền:</span>
-                                <span class="fw-bold"><fmt:formatNumber value="${order.total}" type="currency" currencySymbol="₫"/></span>
+                    <div class="modal fade" id="orderModal-${order.id}" tabindex="-1" aria-labelledby="orderModalLabel-${order.id}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="orderModalLabel-${order.id}">
+                                        Chi tiết đơn hàng #${order.id}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                      <div class="col-md-8">
+                                          <h6 class="mb-3">Thông tin người nhận</h6>
+                                          <p class="mb-1">Tên: ${order.address.recipientName}</p>
+                                          <p class="mb-1">Tel: ${order.address.phoneNumber}</p>
+                                          <p class="mb-3">
+                                              Địa chỉ: 
+                                              ${order.address.addressDetail}, 
+                                              ${order.address.communeWard}, 
+                                              ${order.address.district}, 
+                                              ${order.address.city}
+                                          </p>
+                                          <h6 class="mb-3">Phương thức thanh toán</h6>
+                                          <p>
+                                              <c:choose>
+                                                  <c:when test="${order.paymentMethod == 'cod'}">Thanh toán khi nhận hàng</c:when>
+                                                  <c:when test="${order.paymentMethod == 'bank'}">Chuyển khoản</c:when>
+                                                  <c:otherwise>Khác</c:otherwise>
+                                              </c:choose>
+                                          </p>
+                                      </div>
+                                        <div class="col-md-4">
+                                            <h6 class="mb-3">Tổng tiền</h6>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Tạm tính:</span>
+                                                <span><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/></span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Phí vận chuyển:</span>
+                                                <span><fmt:formatNumber value="${order.shippingFee}" type="currency" currencySymbol="₫"/></span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="fw-bold">Tổng tiền:</span>
+                                                <span class="fw-bold"><fmt:formatNumber value="${order.totalAmount + order.shippingFee}" type="currency" currencySymbol="₫"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h6 class="mb-3">Sản phẩm</h6>
+                                        <div class="table-responsive">
+                                            <table class="table align-middle">
+                                                <tbody>
+                                                    <c:forEach var="item" items="${orderItemsMap[order.id]}">
+                                                        <tr>
+                                                            <td style="width: 80px">
+                                                                <img src="${productImageMap[item.product.id]}" alt="Product" class="img-fluid rounded">
+                                                            </td>
+                                                            <td>
+                                                                <h6 class="mb-0">${item.product.name}</h6>
+                                                                <small class="text-muted">Số lượng: ${item.quantity}</small>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <fmt:formatNumber value="${item.price * item.quantity}" type="currency" currencySymbol="₫"/>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <c:if test="${order.status == 'Processing'}">
+                                        <form action="/user-orders/cancel" method="post" style="display:inline;">
+                                            <input type="hidden" name="orderId" value="${order.id}" />
+                                            <button type="submit" class="btn btn-danger">
+                                                Hủy đơn hàng
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${not empty order.note}">
+                                        <div class="mt-3">
+                                            <strong>Ghi chú:</strong> ${order.note}
+                                        </div>
+                                    </c:if>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <h6 class="mb-3">Sản phẩm</h6>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 80px">
-                                            <img src="${order.product.image}" alt="Product" class="img-fluid rounded">
-                                        </td>
-                                        <td>
-                                            <h6 class="mb-0">${order.product.name}</h6>
-                                            <small class="text-muted">Số lượng: ${order.product.quantity}</small>
-                                        </td>
-                                        <td class="text-end">
-                                            <fmt:formatNumber value="${order.product.price}" type="currency" currencySymbol="₫"/>
-                                        </td>
-                                    </tr>
-                                    <!-- Nếu có nhiều sản phẩm, lặp qua order.products -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <c:if test="${not empty order.note}">
-                        <div class="mt-3">
-                            <strong>Ghi chú:</strong> ${order.note}
-                        </div>
-                    </c:if>
-                </div>
-            </div>
-        </div>
-    </div>
-                            </c:forEach>
+                  </c:forEach>
               </div>
+
             </div>
           </div>
         </div>
@@ -414,7 +446,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="footer-menu">
-              <img src="images/logo.png" alt="logo" />
+              <img src="/images/logo.png" alt="logo" style="max-width:120px; height:auto; display:block;" />
               <div class="social-links mt-5">
                 <ul class="d-flex list-unstyled gap-2">
                   <li>
@@ -673,5 +705,6 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <script src="/js/user/cart.js"></script>
     <script src="/js/user/toast.js"></script>
     <script src="/js/user/user.js"></script>
+    <script src="/js/user/order.js"></script>
   </body>
 </html>

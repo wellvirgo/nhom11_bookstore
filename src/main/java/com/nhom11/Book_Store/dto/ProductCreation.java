@@ -40,7 +40,7 @@ public class ProductCreation {
     @Min(value = 1, message = "Số trang sách không thể nhỏ hơn hoặc bằng 0")
     int quantityPage;
 
-    @Min(value = 0, message = "Số lượng sách không thể nhỏ hơn 0")
+    @Min(value = 1, message = "Số lượng sách không thể nhỏ hơn hoặc bằng 0")
     int quantityAvailable;
     String description;
 

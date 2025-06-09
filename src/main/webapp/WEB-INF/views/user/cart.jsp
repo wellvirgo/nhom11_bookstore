@@ -46,7 +46,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <section
       class="py-3"
       style="
-        background-image: url('images/background-pattern.jpg');
+        background-image: url('/images/background-pattern.jpg');
         background-repeat: no-repeat;
         background-size: cover;
       "
@@ -83,6 +83,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                               id="checkAll"
                               class="pointer form-check-input"
                               style="border: 1px solid #545759"
+                              onchange="toggleAllCheckboxes(this)"
                             />
                           </div>
                         </th>
@@ -119,8 +120,12 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                           >
                             <input
                               type="checkbox"
-                              class="pointer form-check-input"
+                              class="product-checkbox pointer form-check-input"
                               style="border: 1px solid #545759"
+                              data-price="${item.product.price * item.quantity}"
+                              data-id="${item.id}"
+                              data-thanhtien="${item.product.price * item.quantity}"
+                              onchange="updatePrice(this, '${item.product.price*item.quantity}')"
                             />
                           </div>
                         </td>
@@ -133,22 +138,23 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                                 <img
                                   class="img-fluid"
                                   alt="cloth"
-                                  src="${item.image}"
+                                  src="${proImg[item.product.id]}"
                                 />
                               </div>
                             </div>
                             <div class="col-lg-8 flex-column">
                               <div class="card-detail ps-3">
                                 <h5 class="card-title">
-                                  <a href="#" class="text-decoration-none fs-6"
-                                    >${item.name}</a
-                                  >
+                                  <a href="#" class="text-decoration-none fs-6">${item.product.name}</a>
                                 </h5>
                                 <div class="total-price">
-                                  <span class="money text-dark"
-                                    ><fmt:formatNumber
-                                      value="${item.price}"
-                                      type="currency"
+                                  <fmt:setLocale value="vi_VN" />
+                                  <span class="money text-dark">
+                                    <fmt:formatNumber 
+                                      value="${item.product.price}" 
+                                      type="currency" 
+                                      currencySymbol="₫" 
+                                      maxFractionDigits="0"
                                     />
                                   </span>
                                 </div>
@@ -165,19 +171,23 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                               <span class="input-group-btn">
                                 <button
                                   class="quantity-left-minus btn btn-light btn-number"
+                                  data-id="${item.product.id}"
                                 >
                                   <svg width="16" height="16">
                                     <use xlink:href="#minus"></use>
                                   </svg>
                                 </button>
                               </span>
-                              <input
-                                class="form-control input-number text-center"
-                                value="${item.quantity}"
-                              />
+                              <input id="quantity-${item.product.id}" name="quantity" class="form-control input-number text-center"
+                               value="${item.quantity}" max="${item.product.quantityAvailable}" min="1" 
+                               onchange = "submitQuantity('${item.id}', '${item.product.id}')"
+                               />
+                  
                               <span class="input-group-btn">
                                 <button
-                                  class="quantity-left-plus btn btn-light btn-number"
+                                  class="quantity-right-plus btn btn-light btn-number"
+                                  data-id="${item.product.id}"
+                                  data-avail ="${item.product.quantityAvailable}" 
                                 >
                                   <svg width="16" height="16">
                                     <use xlink:href="#plus"></use>
@@ -192,11 +202,15 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                             class="total-price d-flex align-items-center"
                             style="height: 120px"
                           >
-                            <span class="money text-dark"
-                              ><fmt:formatNumber
-                                value="${item.price}"
+                          <fmt:setLocale value="vi_VN" />
+                          <span class="money text-dark">
+                            <fmt:formatNumber
+                                value="${item.product.price * item.quantity}"
                                 type="currency"
-                            /></span>
+                                currencySymbol="₫"
+                                maxFractionDigits="0"
+                            />
+                          </span>
                           </div>
                         </td>
                         <td class="py-4">
@@ -204,7 +218,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                             class="cart-remove d-flex align-items-center"
                             style="height: 120px"
                           >
-                            <a href="#">
+                            <a href="javascript:void(0);" onclick="removeCartItem('${item.id}')">
                               <svg width="24" height="24">
                                 <use xlink:href="#trash"></use>
                               </svg>
@@ -224,7 +238,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
               <div class="total-price pb-5">
                 <table cellspacing="0" class="table text-uppercase">
                   <tbody>
-                    <tr class="subtotal pt-2 pb-2 border-top border-bottom">
+                    <!-- <tr class="subtotal pt-2 pb-2 border-top border-bottom">
                       <th>Subtotal</th>
                       <td data-title="Subtotal">
                         <span class="price-amount amount text-dark ps-5">
@@ -232,21 +246,18 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                             <span
                               class="price-currency-symbol"
                               id="total-amount"
-                            ></span
+                            >44444444</span
                             >đ
                           </bdi>
                         </span>
                       </td>
-                    </tr>
+                    </tr> -->
                     <tr class="order-total pt-2 pb-2 border-bottom">
                       <th>Total</th>
                       <td data-title="Total">
-                        <span class="price-amount amount text-dark ps-5">
-                          <bdi>
-                            <span class="price-currency-symbol">$</span
-                            >2,370.00</bdi
-                          >
-                        </span>
+                       <span class="price-amount amount text-dark ps-5" id="totalValue">
+                        0 đ
+                      </span>
                       </td>
                     </tr>
                   </tbody>
@@ -255,19 +266,15 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
               <div class="button-wrap row g-2">
                 <div class="col-md-6">
                   <a
-                    href="/list-books"
+                    href="javascript:history.back()"
                     class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100"
                   >
                     Tiếp tục mua hàng
                   </a>
                 </div>
                 <div class="col-md-6">
-                  <a
-                    href="/payment"
-                    class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100"
-                  >
-                    Thanh toán
-                  </a>
+                  <button id="checkout-button" class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100" disabled style="opacity: 0.5; pointer-events: none;" data-id="${item.id}">
+                    Thanh Toán</button>
                 </div>
               </div>
             </div>
@@ -281,7 +288,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="footer-menu">
-              <img src="images/logo.png" alt="logo" style="height: 200px" />
+              <img src="/images/logo.png" alt="logo" style="height: 200px" />
               <div class="social-links mt-5">
                 <ul class="d-flex list-unstyled gap-2">
                   <li>
@@ -490,9 +497,9 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
       integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
       crossorigin="anonymous"
     ></script>
+    <script src="/js/user/cart.js"></script>
     <script src="/js/user/plugins.js"></script>
     <script src="/js/user/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="/js/user/cart.js"></script>
   </body>
 </html>

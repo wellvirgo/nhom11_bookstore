@@ -364,3 +364,23 @@ function filterOrders(status) {
       console.error("Error:", error);
     });
 }
+
+document.querySelectorAll('#orderStatusTabs .nav-link').forEach(function(tab) {
+  tab.addEventListener('click', function(e) {
+    e.preventDefault();
+    // Active tab
+    document.querySelectorAll('#orderStatusTabs .nav-link').forEach(function(t) {
+      t.classList.remove('active');
+    });
+    this.classList.add('active');
+    // Lọc order
+    var status = this.getAttribute('data-status');
+    document.querySelectorAll('.order-item').forEach(function(item) {
+      if (status === 'all' || item.getAttribute('data-status') === status) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});

@@ -8,6 +8,8 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="_csrf" content="${_csrf.token}">
+    <meta name="_csrf_header" content="${_csrf.headerName}">
 
     <title>Kho sách - BookStore Admin</title>
     <meta content="" name="description">
@@ -28,10 +30,7 @@
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="/css/admin/style.css" rel="stylesheet">
@@ -59,12 +58,88 @@
         </nav>
     </div>
 
+    <!-- Toast when delete a book -->
+    <c:if test="${isDeleted == 1}">
+        <div
+                class="toast align-items-center text-bg-success border-0 position-fixed top-2 end-0 z-3 fade"
+                role="alert" aria-live="assertive" aria-atomic="true"
+                data-bs-autohide="true" data-bs-delay="4000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Đã chuyển sách vào thùng rác!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let toastEl = document.querySelector('.toast');
+                if (toastEl) {
+                    let toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                }
+            });
+        </script>
+    </c:if>
+    <c:if test="${isDeleted == 0}">
+        <div
+                class="toast align-items-center text-bg-danger border-0 position-fixed top-2 end-0 z-3 fade"
+                role="alert" aria-live="assertive" aria-atomic="true"
+                data-bs-autohide="true" data-bs-delay="4000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Thực hiện chuyển sách vào thùng rác không thành công, vui lòng kiểm tra lại!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let toastEl = document.querySelector('.toast');
+                if (toastEl) {
+                    let toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                }
+            });
+        </script>
+    </c:if>
+
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body pt-3">
-                        <h5 class="card-title">Kho sách</h5>
+                        <h5 class="card-title">Quản lý kho sách</h5>
+
+                        <!-- Modal deletion -->
+                        <div id="delModalConfirm" class="modal fade">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Xác nhận chuyển vào thùng rác</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body"></div>
+
+                                    <div class="modal-footer">
+                                        <form id="form-confirm-del" method="post">
+                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                            <button id="btn-confirm" type="submit" class="btn btn-primary">
+                                                Xác nhận
+                                            </button>
+                                        </form>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                            Hủy
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Toolbar -->
                         <div class="d-flex justify-content-between mb-4">
@@ -72,8 +147,8 @@
                                 <a href="/admin/add-book" type="button" class="btn btn-success ms-2">
                                     <i class="bi bi-plus-lg"></i> Thêm sách mới
                                 </a>
-                                <button type="button" class="btn btn-secondary ms-2">
-                                    <i class="bi bi-printer"></i> In
+                                <button id="btnTrash" type="button" class="btn btn-secondary ms-2">
+                                    <i class="bi bi-trash"></i> Thùng rác
                                 </button>
                             </div>
                             <div class="d-flex align-items-center">
@@ -93,10 +168,18 @@
                                 <label>
                                     <select id="status-select" class="form-select me-2" style="width: auto;">
                                         <option value="">-- Trạng thái --</option>
-                                        <option id="Còn hàng" value="Còn hàng" class="status">Còn hàng</option>
-                                        <option id="Hết hàng" value="Hết hàng" class="status">Hết hàng</option>
-                                        <option id="Sắp hết" value="Sắp hết" class="status">Sắp hết</option>
-                                        <option id="Ngừng kinh doanh" value="Ngừng kinh doanh" class="status">Ngừng kinh
+                                        <option id="Còn hàng" value="Còn hàng"
+                                                class="status" ${status eq "Còn hàng" ? 'selected' : ''}>Còn hàng
+                                        </option>
+                                        <option id="Hết hàng" value="Hết hàng"
+                                                class="status" ${status eq "Hết hàng" ? 'selected' : ''}>Hết hàng
+                                        </option>
+                                        <option id="Sắp hết" value="Sắp hết"
+                                                class="status" ${status eq "Sắp hết" ? 'selected' : ''}>Sắp hết
+                                        </option>
+                                        <option id="Ngừng kinh doanh" value="Ngừng kinh doanh"
+                                                class="status" ${status eq "Ngừng kinh doanh" ? 'selected' : ''}>Ngừng
+                                            kinh
                                             doanh
                                         </option>
                                     </select>
@@ -129,8 +212,8 @@
                                                 <td><img
                                                         src="/images/book/${product.getImageUrl()}"
                                                         height="60" style="object-fit: contain;" alt=""></td>
-                                                <td><span
-                                                        class="product-name"><strong>${product.getName()}</strong></span>
+                                                <td>
+                                                    <span class="product-name"><strong>${product.getName()}</strong></span>
                                                 </td>
                                                 <td>${product.getAuthor()}</td>
                                                 <td>
@@ -142,9 +225,9 @@
                                                 <td>${product.getQuantityAvailable()}</td>
                                                 <td>
                                                     <c:set var="quantity" value="${product.getQuantityAvailable()}"/>
-                                                    <c:set var="isDeleted" value="${product.isDeleted()}"/>
+                                                    <c:set var="inActive" value="${product.isInActive()}"/>
                                                     <c:choose>
-                                                        <c:when test="${isDeleted}">
+                                                        <c:when test="${inActive}">
                                                             <span class="badge bg-secondary">Ngừng kinh doanh</span>
                                                         </c:when>
                                                         <c:when test="${quantity ge 10}">
@@ -159,10 +242,16 @@
                                                     </c:choose>
                                                 </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-sm btn-primary" title="Chỉnh sửa"
+                                                    <button id="btnUpdate" class="btn btn-sm btn-primary mb-1"
+                                                            title="Chỉnh sửa"
                                                             onclick="event.stopPropagation()"><i
                                                             class="bi bi-pencil-square"></i></button>
-                                                    <button class="btn btn-sm btn-danger" title="Xóa"
+                                                    <button class="btn btn-sm btn-danger btn-del"
+                                                            type="button" title="Xóa"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delModalConfirm"
+                                                            data-id="${product.getId()}"
+                                                            data-product-name="${product.getName()}"
                                                             onclick="event.stopPropagation()"><i
                                                             class="bi bi-trash"></i></button>
                                                 </td>
@@ -322,8 +411,6 @@
 
 <!-- Vendor JS Files -->
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/vendor/quill/quill.js"></script>
-<script src="/vendor/simple-datatables/simple-datatables.js"></script>
 <script src="/vendor/tinymce/tinymce.min.js"></script>
 
 <!-- Template Main JS File -->
@@ -350,10 +437,52 @@
                 window.location.href = this.dataset.href;
             });
         });
+    });
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const specificParam = urlParams.get('status');
-        document.getElementById(specificParam).setAttribute('selected', 'true');
+    // Xử lý modal xác nhận xóa
+    let currentDelId = null;
+    document.querySelectorAll('.btn-del').forEach(button => button.addEventListener('click', function () {
+        currentDelId = button.getAttribute('data-id');
+        const productName = button.getAttribute('data-product-name');
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = 'Bạn chắc chắn muốn chuyển sách ' + productName + ' vào thùng rác?<br/>'
+            + 'Sách sẽ bị xóa vĩnh viễn sau 30 ngày!';
+    }));
+
+    document.getElementById('form-confirm-del').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const form = this;
+        const path = window.location.pathname;
+        const queryString = window.location.search;
+
+        const parts = path.split('/');
+        const categoryName = parts.length > 3 ? decodeURIComponent(parts[parts.length - 1]) : "";
+
+        const params = new URLSearchParams(queryString);
+        const status = params.get('status');
+
+        const inputCategory = document.createElement('input');
+        inputCategory.type = 'hidden';
+        inputCategory.name = 'category';
+        inputCategory.value = categoryName;
+        form.appendChild(inputCategory);
+
+        const inputStatus = document.createElement('input');
+        inputStatus.type = 'hidden';
+        inputStatus.name = 'status';
+        inputStatus.value = status;
+        form.appendChild(inputStatus);
+
+        form.setAttribute('action', '/admin/del-book/' + currentDelId);
+        form.submit();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let toastEl = document.querySelector('.toast');
+        if (toastEl) {
+            let toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
     });
 
     document.querySelector('#category-select').addEventListener('change', function () {
@@ -371,6 +500,10 @@
             const currentPath = window.location.pathname;
             window.location.href = currentPath + '?status=' + selectedOptionValue;
         }
+    });
+
+    document.getElementById('btnTrash').addEventListener('click', function () {
+        window.location.href = '/admin/book/trash';
     });
 </script>
 </body>

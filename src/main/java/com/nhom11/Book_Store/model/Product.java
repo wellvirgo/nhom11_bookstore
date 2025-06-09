@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,6 +36,10 @@ public class Product extends BaseEntity {
 
     @Column(columnDefinition = "boolean default false")
     boolean isDeleted;
+    LocalDate deletedOn;
+
+    @Column(columnDefinition = "boolean default false")
+    boolean inActive;
 
     @ManyToOne
     @JoinColumn(name = "genre_id")
@@ -40,4 +47,7 @@ public class Product extends BaseEntity {
 
     @ManyToMany(mappedBy = "products")
     Set<Voucher> vouchers = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Image> images;
 }

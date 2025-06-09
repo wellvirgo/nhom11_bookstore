@@ -98,3 +98,31 @@ document.querySelector("form").addEventListener("submit", function (e) {
   // Thêm vào cuối form
   this.appendChild(alertDiv);
 });
+
+function initProfileEditForm() {
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const inputs = document.querySelectorAll('#profileForm input');
+  const genderSelect = document.getElementById('genderSelect');
+
+  if (!editBtn || !saveBtn || !cancelBtn) return;
+
+  editBtn.onclick = function() {
+    inputs.forEach(i => i.removeAttribute('readonly'));
+    if (genderSelect) genderSelect.removeAttribute('disabled');
+    editBtn.classList.add('d-none');
+    saveBtn.classList.remove('d-none');
+    cancelBtn.classList.remove('d-none');
+  };
+
+  cancelBtn.onclick = function() {
+    location.reload();
+  };
+
+  saveBtn.onclick = function() {
+    document.getElementById('profileForm').submit();
+  };
+}
+
+document.addEventListener('DOMContentLoaded', initProfileEditForm);
