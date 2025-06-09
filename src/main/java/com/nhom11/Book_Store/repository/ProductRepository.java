@@ -84,17 +84,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Modifying
     @Transactional
     @Query("update Product p set p.isDeleted=true, p.deletedOn=:deletionDate where p.id=:id")
-    int softDelete(@NonNull @Param("id") long id, LocalDate deletionDate);
+    int softDelete(@Param("id") long id, LocalDate deletionDate);
 
     @Modifying
     @Transactional
     @Query("update Product p set p.deletedOn=null where p.id=:id")
-    int deletePermanently(@NonNull @Param("id") long id);
+    int deletePermanently(@Param("id") long id);
 
     @Modifying
     @Transactional
     @Query("update Product p set p.isDeleted=false, p.deletedOn=null where p.id=:id")
-    int restoreDeletedProduct(@NonNull @Param("id") long id);
+    int restoreDeletedProduct(@Param("id") long id);
 
     @Query("select new com.nhom11.Book_Store.dto.ProductInTrash(" +
             "p.id, p.name, p.deletedOn) " +
