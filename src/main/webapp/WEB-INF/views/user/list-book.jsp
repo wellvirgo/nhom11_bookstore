@@ -28,7 +28,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
   </head>
-  <body>
+  <body class="${pageName}">
     <%-- <div class="preloader-wrapper">
       <div class="preloader">
       </div>
@@ -40,8 +40,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         <div class="d-flex justify-content-between">
           <h1 class="page-title pb-2">Sản phẩm</h1>
           <nav class="breadcrumb fs-6">
-            <a class="breadcrumb-item nav-link" href="index.html">Home</a>
-            <span class="breadcrumb-item active" href="list-book.html">Sản phẩm</span>
+            <a class="breadcrumb-item nav-link" href="/user/home">Home</a>
+            <span class="breadcrumb-item active" href="#">Sản phẩm</span>
           </nav>
         </div>
       </div>
@@ -95,14 +95,17 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             <main class="col-md-10">
               <div class="bootstrap-tabs product-tabs">
                 <div class="filter-shop d-flex justify-content-between">
-                  <c:choose>
-                    <c:when test="${sale50}">
-                      <p>Danh sách sản phẩm có voucher giảm 50%</p>
-                    </c:when>
-                    <c:otherwise>
-                       <p>Đã tìm thấy ${fn:length(listSP)} sản phẩm</p>
-                    </c:otherwise>
-                  </c:choose>
+                  <c:if test="${not isWishlistPage}">
+                    <c:choose>
+                      <c:when test="${sale50}">
+                        <p>Danh sách sản phẩm có voucher giảm 50%</p>
+                      </c:when>
+                      <c:otherwise>
+                        <p>Đã tìm thấy ${fn:length(listSP)} sản phẩm</p>
+                      </c:otherwise>
+                    </c:choose>
+                  </c:if>
+
                   <div class="sort-by">
                     <select id="input-sort" class="form-control">
                       <option value="default">Default sorting</option>
@@ -128,11 +131,16 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                           <div class="product-item position-relative border rounded p-3 h-100 d-flex flex-column">
 
                             <!-- Khuyến mãi -->
-                            <span class="badge bg-success position-absolute top-0 start-0 m-3">-30%</span>
+                            <!-- <span class="badge bg-success position-absolute top-0 start-0 m-3">-30%</span> -->
 
                             <!-- Trái tim yêu thích -->
-                            <a href="#" class="btn-wishlist position-absolute top-0 end-0 m-3" title="Thêm vào yêu thích">
-                              <svg width="24" height="24"><use xlink:href="#heart"></use></svg>
+                            <a href="#" 
+                              class="btn-wishlist position-absolute end-0 m-2 ${wishlistProductIds.contains(item.id) ? 'added' : ''}" 
+                              data-product-id="${item.id}" 
+                              title="Thêm vào wishlist">
+                              <svg width="24" height="24">
+                                <use xlink:href="#heart"></use> <!-- Nếu dùng SVG sprite -->
+                              </svg>
                             </a>
 
                             <!-- Ảnh sản phẩm -->
@@ -148,14 +156,14 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                             <!-- Giá sản phẩm -->
                             <div class="d-flex align-items-center mb-3 gap-2">
                               <span class="price fs-5 fw-bold " style="color: #dc3545; font-weight: 700; opacity: 1;">
-                                <fmt:formatNumber value="${item.price * 0.7}" type="number" groupingUsed="true"/>đ
+                                <fmt:formatNumber value="${productBestPrices[item.id]}" type="number" groupingUsed="true"/>đ
                               </span>
                               <span class="price text-muted text-decoration-line-through" style="font-size: 0.95rem; color: #999;">
                                 <fmt:formatNumber value="${item.price}" type="number" groupingUsed="true"/>đ
                               </span>
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
-                                                          <!-- Bộ tăng giảm số lượng -->
+                              <!-- Bộ tăng giảm số lượng -->
                               <div class="input-group product-qty" style="max-width: 110px;">
                                 <button type="button" class="btn btn-light btn-sm quantity-left-minus"  data-id="${item.id}" data-avail="${item.quantityAvailable}">
                                   <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
@@ -169,7 +177,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                               <button type="button" class="btn btn-dark btn-sm ms-2 add-to-cart-btn" data-id="${item.id}" onclick="addToCart('${item.id}')">
                                 <svg width="24" height="24"><use xlink:href="#cart"></use></svg>
                               </button>
-
                             </div>
 
 
@@ -340,5 +347,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script src="/js/user/detail-product.js"></script>
     <script src="/js/user/toast.js"></script>
     <script src="/js/user/cart.js"></script>
+    <script src="/js/user/wishlist.js"></script>
   </body>
 </html>

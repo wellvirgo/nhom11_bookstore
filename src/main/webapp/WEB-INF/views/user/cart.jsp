@@ -526,19 +526,19 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                   <input type="radio" name="voucherRadio"
                         value="${voucher.id}"
                         id="voucher-${voucher.id}"
-                        data-type="${voucher.discount_type}"
-                        data-value="${voucher.discount_value}"
+                        data-type="${voucher.discountType}"
+                        data-value="${voucher.discountValue}"
                         data-code="${voucher.code}"
                         data-minorder="${voucher.minOrderValue}">
                   <label for="voucher-${voucher.id}">
                     <strong>${voucher.code}</strong> - ${voucher.description}
                     <span class="badge bg-info ms-2">
                       <c:choose>
-                        <c:when test="${voucher.discount_type eq 'PERCENT'}">
-                          ${voucher.discount_value}%
+                        <c:when test="${voucher.discountType eq 'PERCENT'}">
+                          ${voucher.discountValue}%
                         </c:when>
                         <c:otherwise>
-                          <fmt:formatNumber value="${voucher.discount_value}" type="number" groupingUsed="true"/>đ
+                          <fmt:formatNumber value="${voucher.discountValue}" type="number" groupingUsed="true"/>đ
                         </c:otherwise>
                       </c:choose>
                     </span>

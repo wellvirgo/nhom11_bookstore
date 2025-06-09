@@ -109,6 +109,12 @@ public class ProductController {
         List<String> categoryNames = categoryService.getCategoryNames();
         List<String> suppliers = productService.getAllSuppliers();
         List<String> priceRanges = List.of("Dưới 50.000đ", "50.000đ - 100.000đ", "100.000đ - 200.000đ", "Trên 200.000đ");
+        Map<Long, Long> productBestPrices = new HashMap<>();
+        for (Product p : products) {
+            productBestPrices.put(p.getId(), productService.getBestDiscountedPrice(p));
+        }
+
+        model.addAttribute("productBestPrices", productBestPrices);
         model.addAttribute("listSP", products);
         model.addAttribute("productImages", productImages);
         model.addAttribute("selectedCategory", category);
@@ -121,7 +127,7 @@ public class ProductController {
     @GetMapping("/search")
     public String searchProduct(@RequestParam("keyword") String keyword, Model model){
         List<Product> listP = productService.searchProduct(keyword);
-        model.addAttribute("listSP", listP);
+        
         Map<Long, String> productImages = new HashMap<>();
         for (Product p : listP) {
             String imageUrl = imageService.getImagebyID(p.getId());
@@ -130,6 +136,12 @@ public class ProductController {
         List<String> categoryNames = categoryService.getCategoryNames();
         List<String> suppliers = productService.getAllSuppliers();
         List<String> priceRanges = List.of("Dưới 50.000đ", "50.000đ - 100.000đ", "100.000đ - 200.000đ", "Trên 200.000đ");
+        Map<Long, Long> productBestPrices = new HashMap<>();
+        for (Product p : listP) {
+            productBestPrices.put(p.getId(), productService.getBestDiscountedPrice(p));
+        }
+        model.addAttribute("productBestPrices", productBestPrices);
+        model.addAttribute("listSP", listP);
         model.addAttribute("productImages", productImages);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryNames", categoryNames);
@@ -145,6 +157,13 @@ public class ProductController {
         List<String> categoryNames = categoryService.getCategoryNames();
         List<String> suppliers = productService.getAllSuppliers();
         List<String> priceRanges = List.of("Dưới 50.000đ", "50.000đ - 100.000đ", "100.000đ - 200.000đ", "Trên 200.000đ");
+
+        Map<Long, Long> productBestPrices = new HashMap<>();
+        for (Product p : products) {
+            productBestPrices.put(p.getId(), productService.getBestDiscountedPrice(p));
+        }
+
+        model.addAttribute("productBestPrices", productBestPrices);
         model.addAttribute("listSP", products);
         model.addAttribute("productImages", productImages);
         model.addAttribute("categoryNames", categoryNames);

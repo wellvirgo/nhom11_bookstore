@@ -1012,3 +1012,13 @@ h6 {
   from { opacity: 0; transform: translateY(-10px);}
   to { opacity: 1; transform: translateY(0);}
 }
+.btn-wishlist.added {
+  background-color: white; /* Giữ nền trắng */
+  border-radius: 50%;
+  color: red; /* Đảm bảo màu viền/biểu tượng */
+}
+
+/* Đổi màu trái tim (SVG) khi đã thêm */
+.btn-wishlist.added svg use {
+  fill: red;
+}

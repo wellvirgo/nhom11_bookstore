@@ -188,7 +188,7 @@ public class UserController {
         return "redirect:/user-orders";
     }
  
-
+}
 
     // //Trang chủ
     // @GetMapping({"/", "/home"})
@@ -226,59 +226,59 @@ public class UserController {
     //     return "user/home";
     // }
 
-    //Giỏ hàng
-    @GetMapping("/cart")
-    public String cart(Model model) {
-        List<Map<String, Object>> cartItems = new ArrayList<>();
+    // //Giỏ hàng
+    // @GetMapping("/cart")
+    // public String cart(Model model) {
+    //     List<Map<String, Object>> cartItems = new ArrayList<>();
     
-        //Fake dữ liệu giở hàng
-    Map<String, Object> item1 = new HashMap<>();
-    item1.put("cartItemId", 34);
-    item1.put("productId", 2);
-    item1.put("name", "Nghi Giau & Lam Giau (Tai Ban 2020)");
-    item1.put("price", 88000);
-    item1.put("originalPrice", 110000);
-    item1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
-    item1.put("quantity", 13);
-    item1.put("totalPrice", 88000 * 13);
-    item1.put("isChecked", false);
-    item1.put("isCheckedOut", false);
+    //     //Fake dữ liệu giở hàng
+    // Map<String, Object> item1 = new HashMap<>();
+    // item1.put("cartItemId", 34);
+    // item1.put("productId", 2);
+    // item1.put("name", "Nghi Giau & Lam Giau (Tai Ban 2020)");
+    // item1.put("price", 88000);
+    // item1.put("originalPrice", 110000);
+    // item1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
+    // item1.put("quantity", 13);
+    // item1.put("totalPrice", 88000 * 13);
+    // item1.put("isChecked", false);
+    // item1.put("isCheckedOut", false);
 
-    Map<String, Object> item2 = new HashMap<>();
-    item2.put("cartItemId", 35);
-    item2.put("productId", 1);
-    item2.put("name", "Nha Gia Kim (Tai Ban 2020)");
-    item2.put("price", 638300);
-    item2.put("originalPrice", 79000);
-    item2.put("image", "https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg");
-    item2.put("quantity", 1);
-    item2.put("totalPrice", 638300);
-    item2.put("isChecked", false);
-    item2.put("isCheckedOut", false);
+    // Map<String, Object> item2 = new HashMap<>();
+    // item2.put("cartItemId", 35);
+    // item2.put("productId", 1);
+    // item2.put("name", "Nha Gia Kim (Tai Ban 2020)");
+    // item2.put("price", 638300);
+    // item2.put("originalPrice", 79000);
+    // item2.put("image", "https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg");
+    // item2.put("quantity", 1);
+    // item2.put("totalPrice", 638300);
+    // item2.put("isChecked", false);
+    // item2.put("isCheckedOut", false);
 
-    cartItems.add(item1);
-    cartItems.add(item2);
+    // cartItems.add(item1);
+    // cartItems.add(item2);
 
-    model.addAttribute("cartItems", cartItems);
-        return "user/cart";
-    }
-    //QL Người dùng
-    @GetMapping("/user")
-    public String user(Model model) {
+    // model.addAttribute("cartItems", cartItems);
+    //     return "user/cart";
+    // }
+    // //QL Người dùng
+    // @GetMapping("/user")
+    // public String user(Model model) {
 
-        //Fake dữ liệu người dùng
-        Map<String, Object> user = new HashMap<>();
-        user.put("id", 4);
-        user.put("firstName", "Trần");
-        user.put("lastName", "Cường");
-        user.put("gender", false);
-        user.put("phoneNumber", "012233456678");
-        user.put("profileImage", null);
-        user.put("isLogin", true);
+    //     //Fake dữ liệu người dùng
+    //     Map<String, Object> user = new HashMap<>();
+    //     user.put("id", 4);
+    //     user.put("firstName", "Trần");
+    //     user.put("lastName", "Cường");
+    //     user.put("gender", false);
+    //     user.put("phoneNumber", "012233456678");
+    //     user.put("profileImage", null);
+    //     user.put("isLogin", true);
     
-        model.addAttribute("user", user);
-        return "user/user";
-    }
+    //     model.addAttribute("user", user);
+    //     return "user/user";
+    // }
 
 //     //QL Địa chỉ
 //     @GetMapping("/user/address")
@@ -312,89 +312,89 @@ public class UserController {
 //     return "user/address"; // address.jsp
 // }
 
-    //Quản lý đơn hàng
-    @GetMapping("/user/orders")
-public String orders(Model model) {
+//     //Quản lý đơn hàng
+//     @GetMapping("/user/orders")
+// public String orders(Model model) {
     
-    //Fake dữ liệu đơn hàng
-    List<Map<String, Object>> orders = new ArrayList<>();
+//     //Fake dữ liệu đơn hàng
+//     List<Map<String, Object>> orders = new ArrayList<>();
 
-    // Đơn hàng completed
-    Map<String, Object> product1 = new HashMap<>();
-    product1.put("id", 2);
-    product1.put("name", "Nghi Giau & Lam Giau (Tái Bản 2020)");
-    product1.put("price", 88000);
-    product1.put("originalPrice", 110000);
-    product1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
-    product1.put("quantity", 1);
-    product1.put("totalPrice", 88000);
+//     // Đơn hàng completed
+//     Map<String, Object> product1 = new HashMap<>();
+//     product1.put("id", 2);
+//     product1.put("name", "Nghi Giau & Lam Giau (Tái Bản 2020)");
+//     product1.put("price", 88000);
+//     product1.put("originalPrice", 110000);
+//     product1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
+//     product1.put("quantity", 1);
+//     product1.put("totalPrice", 88000);
 
-    Map<String, Object> order1 = new HashMap<>();
-    order1.put("orderCode", 54);
-    order1.put("status", "completed");
-    order1.put("orderDate", new java.util.Date());
-    order1.put("paymentMethod", "cash_on_delivery");
-    order1.put("paymentStatus", "unpaid");
-    order1.put("note", null);
-    order1.put("product", product1);
-    order1.put("shippingFee", 50000);
-    order1.put("totalAmount", 768800);
-    order1.put("total", 818800);
-    order1.put("totalProducts", 3);
-    orders.add(order1);
+//     Map<String, Object> order1 = new HashMap<>();
+//     order1.put("orderCode", 54);
+//     order1.put("status", "completed");
+//     order1.put("orderDate", new java.util.Date());
+//     order1.put("paymentMethod", "cash_on_delivery");
+//     order1.put("paymentStatus", "unpaid");
+//     order1.put("note", null);
+//     order1.put("product", product1);
+//     order1.put("shippingFee", 50000);
+//     order1.put("totalAmount", 768800);
+//     order1.put("total", 818800);
+//     order1.put("totalProducts", 3);
+//     orders.add(order1);
 
-    // Đơn hàng processing
-    Map<String, Object> product2 = new HashMap<>();
-    product2.put("id", 3);
-    product2.put("name", "Đắc Nhân Tâm");
-    product2.put("price", 60000);
-    product2.put("originalPrice", 80000);
-    product2.put("image", "https://cdn0.fahasa.com/media/catalog/product/s/u/suoi-am-mat-troi-01-_1_.jpg");
-    product2.put("quantity", 2);
-    product2.put("totalPrice", 120000);
+//     // Đơn hàng processing
+//     Map<String, Object> product2 = new HashMap<>();
+//     product2.put("id", 3);
+//     product2.put("name", "Đắc Nhân Tâm");
+//     product2.put("price", 60000);
+//     product2.put("originalPrice", 80000);
+//     product2.put("image", "https://cdn0.fahasa.com/media/catalog/product/s/u/suoi-am-mat-troi-01-_1_.jpg");
+//     product2.put("quantity", 2);
+//     product2.put("totalPrice", 120000);
 
-    Map<String, Object> order2 = new HashMap<>();
-    order2.put("orderCode", 55);
-    order2.put("status", "processing");
-    order2.put("orderDate", new java.util.Date());
-    order2.put("paymentMethod", "bank_transfer");
-    order2.put("paymentStatus", "paid");
-    order2.put("note", "Giao giờ hành chính");
-    order2.put("product", product2);
-    order2.put("shippingFee", 30000);
-    order2.put("totalAmount", 120000);
-    order2.put("total", 150000);
-    order2.put("totalProducts", 2);
-    orders.add(order2);
+//     Map<String, Object> order2 = new HashMap<>();
+//     order2.put("orderCode", 55);
+//     order2.put("status", "processing");
+//     order2.put("orderDate", new java.util.Date());
+//     order2.put("paymentMethod", "bank_transfer");
+//     order2.put("paymentStatus", "paid");
+//     order2.put("note", "Giao giờ hành chính");
+//     order2.put("product", product2);
+//     order2.put("shippingFee", 30000);
+//     order2.put("totalAmount", 120000);
+//     order2.put("total", 150000);
+//     order2.put("totalProducts", 2);
+//     orders.add(order2);
 
-    // Đơn hàng returned
-    Map<String, Object> product3 = new HashMap<>();
-    product3.put("id", 4);
-    product3.put("name", "Harry Potter và Hòn Đá Phù Thủy");
-    product3.put("price", 150000);
-    product3.put("originalPrice", 180000);
-    product3.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/e/nexus-b_a-m_m_1.jpg");
-    product3.put("quantity", 1);
-    product3.put("totalPrice", 150000);
+//     // Đơn hàng returned
+//     Map<String, Object> product3 = new HashMap<>();
+//     product3.put("id", 4);
+//     product3.put("name", "Harry Potter và Hòn Đá Phù Thủy");
+//     product3.put("price", 150000);
+//     product3.put("originalPrice", 180000);
+//     product3.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/e/nexus-b_a-m_m_1.jpg");
+//     product3.put("quantity", 1);
+//     product3.put("totalPrice", 150000);
 
-    Map<String, Object> order3 = new HashMap<>();
-    order3.put("orderCode", 56);
-    order3.put("status", "returned");
-    order3.put("orderDate", new java.util.Date());
-    order3.put("paymentMethod", "cash_on_delivery");
-    order3.put("paymentStatus", "refunded");
-    order3.put("note", "Sách bị rách");
-    order3.put("product", product3);
-    order3.put("shippingFee", 20000);
-    order3.put("totalAmount", 150000);
-    order3.put("total", 170000);
-    order3.put("totalProducts", 1);
-    orders.add(order3);
+//     Map<String, Object> order3 = new HashMap<>();
+//     order3.put("orderCode", 56);
+//     order3.put("status", "returned");
+//     order3.put("orderDate", new java.util.Date());
+//     order3.put("paymentMethod", "cash_on_delivery");
+//     order3.put("paymentStatus", "refunded");
+//     order3.put("note", "Sách bị rách");
+//     order3.put("product", product3);
+//     order3.put("shippingFee", 20000);
+//     order3.put("totalAmount", 150000);
+//     order3.put("total", 170000);
+//     order3.put("totalProducts", 1);
+//     orders.add(order3);
 
-    model.addAttribute("orders", orders);
-    return "user/order"; // orders.jsp
-}
-//Danh sách
+//     model.addAttribute("orders", orders);
+//     return "user/order"; // orders.jsp
+// }
+// //Danh sách
 // @GetMapping("/list-books")
 // public String bookList(Model model) {
 //     List<Map<String, Object>> books = new ArrayList<>();
@@ -517,69 +517,69 @@ public String orders(Model model) {
 //     model.addAttribute("product", product);
 
 //     return "user/detail-book"; // detail-book.jsp
-// }
-    @PostMapping("/register")
-    public String register(@ModelAttribute(name = "userCreation") @Valid UserCreation userCreation,
-                           BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "user/register";
+// // }
+//     @PostMapping("/register")
+//     public String register(@ModelAttribute(name = "userCreation") @Valid UserCreation userCreation,
+//                            BindingResult bindingResult) {
+//         if (bindingResult.hasErrors())
+//             return "user/register";
 
-        userService.create(userCreation);
-        return "redirect:/login";
-    }
+//         userService.create(userCreation);
+//         return "redirect:/login";
+//     }
 
-    @GetMapping("/payment")
-    public String payment(Model model) {
-        // Fake cart items data
-        List<Map<String, Object>> cartItems = new ArrayList<>();
+//     @GetMapping("/payment")
+//     public String payment(Model model) {
+//         // Fake cart items data
+//         List<Map<String, Object>> cartItems = new ArrayList<>();
         
-        Map<String, Object> item1 = new HashMap<>();
-        item1.put("cartItemId", 34);
-        item1.put("productId", 2);
-        item1.put("name", "Nghi Giau & Lam Giau (Tai Ban 2020)");
-        item1.put("price", 88000);
-        item1.put("originalPrice", 110000);
-        item1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
-        item1.put("quantity", 13);
-        item1.put("totalPrice", 88000 * 13);
+//         Map<String, Object> item1 = new HashMap<>();
+//         item1.put("cartItemId", 34);
+//         item1.put("productId", 2);
+//         item1.put("name", "Nghi Giau & Lam Giau (Tai Ban 2020)");
+//         item1.put("price", 88000);
+//         item1.put("originalPrice", 110000);
+//         item1.put("image", "https://cdn0.fahasa.com/media/catalog/product/n/g/nghigiaulamgiau_110k-01_bia-1.jpg");
+//         item1.put("quantity", 13);
+//         item1.put("totalPrice", 88000 * 13);
 
-        Map<String, Object> item2 = new HashMap<>();
-        item2.put("cartItemId", 35);
-        item2.put("productId", 1);
-        item2.put("name", "Nha Gia Kim (Tai Ban 2020)");
-        item2.put("price", 638300);
-        item2.put("originalPrice", 79000);
-        item2.put("image", "https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg");
-        item2.put("quantity", 1);
-        item2.put("totalPrice", 638300);
+//         Map<String, Object> item2 = new HashMap<>();
+//         item2.put("cartItemId", 35);
+//         item2.put("productId", 1);
+//         item2.put("name", "Nha Gia Kim (Tai Ban 2020)");
+//         item2.put("price", 638300);
+//         item2.put("originalPrice", 79000);
+//         item2.put("image", "https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg");
+//         item2.put("quantity", 1);
+//         item2.put("totalPrice", 638300);
 
-        cartItems.add(item1);
-        cartItems.add(item2);
+//         cartItems.add(item1);
+//         cartItems.add(item2);
 
-        // Fake shipping address
-        Map<String, Object> shippingAddress = new HashMap<>();
-        shippingAddress.put("id", 16);
-        shippingAddress.put("recipientName", "Cường");
-        shippingAddress.put("phoneNumber", "032424");
-        shippingAddress.put("city", "Bắc Giang");
-        shippingAddress.put("district", "Lục Ngạn");
-        shippingAddress.put("ward", "Phượng Sơn");
-        shippingAddress.put("detail", "Số nhà 123");
+//         // Fake shipping address
+//         Map<String, Object> shippingAddress = new HashMap<>();
+//         shippingAddress.put("id", 16);
+//         shippingAddress.put("recipientName", "Cường");
+//         shippingAddress.put("phoneNumber", "032424");
+//         shippingAddress.put("city", "Bắc Giang");
+//         shippingAddress.put("district", "Lục Ngạn");
+//         shippingAddress.put("ward", "Phượng Sơn");
+//         shippingAddress.put("detail", "Số nhà 123");
 
-        // Calculate totals
-        double subtotal = cartItems.stream()
-        .mapToDouble(item -> ((Number) item.get("totalPrice")).doubleValue())
-        .sum();
+//         // Calculate totals
+//         double subtotal = cartItems.stream()
+//         .mapToDouble(item -> ((Number) item.get("totalPrice")).doubleValue())
+//         .sum();
     
-    double shippingFee = 50000;
-    double total = subtotal + shippingFee;
+//     double shippingFee = 50000;
+//     double total = subtotal + shippingFee;
 
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("shippingAddress", shippingAddress);
-        model.addAttribute("subtotal", subtotal);
-        model.addAttribute("shippingFee", shippingFee);
-        model.addAttribute("total", total);
+//         model.addAttribute("cartItems", cartItems);
+//         model.addAttribute("shippingAddress", shippingAddress);
+//         model.addAttribute("subtotal", subtotal);
+//         model.addAttribute("shippingFee", shippingFee);
+//         model.addAttribute("total", total);
 
-        return "user/payment";
-    }
-}
+//         return "user/payment";
+//     }
+// }

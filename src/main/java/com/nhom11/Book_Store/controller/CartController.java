@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhom11.Book_Store.dto.ImageDTO;
@@ -93,6 +94,44 @@ public class CartController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    @PostMapping("/add-to-cart-buy")
+    @ResponseBody
+    public Map<String, Object> addToCartBuyAjax(
+        @RequestParam("productId") Long productId, 
+        @RequestParam("quantity") int quantity, 
+        HttpSession session) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Product product = productService.getProductID(productId);
+            if (product == null) {
+                response.put("success", false);
+                response.put("message", "Sản phẩm không tồn tại");
+                return response;
+            }
+
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "Vui lòng đăng nhập để thêm vào giỏ hàng");
+                return response;
+            }
+
+            Long userId = user.getId();
+            Cart cart = cartService.getCartByUserId(userId);
+            cartService.addOrUpdateCartItem(cart, product, quantity);
+
+            response.put("success", true);
+            response.put("message", "Thêm vào giỏ hàng thành công");
+            response.put("redirectUrl", "/user/viewCart"); // thêm URL redirect
+
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Lỗi: " + e.getMessage());
+            return response;
+        }
+    }
 
     @GetMapping("/viewCart")
     public String viewCart(HttpSession session, Model model) {
@@ -112,7 +151,7 @@ public class CartController {
             model.addAttribute("message", "Giỏ hàng chưa thêm sản phẩm nào");
             return "user/cart"; // Trả về view giỏ hàng trống
         }
-                // 1. Voucher của sản phẩm trong giỏ
+        // 1. Voucher của sản phẩm trong giỏ
         Set<Voucher> productVouchers = new HashSet<>();
         for (CartItem item : cartItems) {
             if (item.getProduct().getVouchers() != null) {

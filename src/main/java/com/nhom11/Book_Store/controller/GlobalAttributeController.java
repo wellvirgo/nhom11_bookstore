@@ -1,8 +1,11 @@
 package com.nhom11.Book_Store.controller;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -13,10 +16,12 @@ import com.nhom11.Book_Store.model.Cart;
 import com.nhom11.Book_Store.model.CartItem;
 import com.nhom11.Book_Store.model.Notification;
 import com.nhom11.Book_Store.model.User;
+import com.nhom11.Book_Store.model.Wishlist;
 import com.nhom11.Book_Store.service.CartService;
 import com.nhom11.Book_Store.service.ImageService;
 import com.nhom11.Book_Store.service.NotificationService;
 import com.nhom11.Book_Store.service.ProductService;
+import com.nhom11.Book_Store.service.WishlistService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,6 +37,8 @@ public class GlobalAttributeController {
     private NotificationService notificationSerivce;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private WishlistService wishlistService;
 
     @ModelAttribute
     public void addCartInfoToModel(HttpSession session, Model model) {
@@ -59,6 +66,16 @@ public class GlobalAttributeController {
 
                 }
             }
+            Set<Long> wishlistProductIds = new HashSet<>();
+
+            if (user != null) {
+                Wishlist wishlist = wishlistService.getWishlistByUser(user);
+                wishlistProductIds = wishlist.getItems().stream()
+                    .map(item -> item.getProduct().getId())
+                    .collect(Collectors.toSet());
+            }
+
+            model.addAttribute("wishlistProductIds", wishlistProductIds);
         }
     }
 }

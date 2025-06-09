@@ -409,7 +409,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               </li>
               <!-- // yêu thích -->
               <li>
-                <a href="#" class="rounded-circle bg-light p-2 mx-1">
+                <a href="/user/wishlist" class="rounded-circle bg-light p-2 mx-1" title="Xem danh sách yêu thích">
                   <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#heart"></use>
                   </svg>

@@ -37,9 +37,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
   <div class="container-fluid">
     <!-- Breadcrumb -->
     <nav class="breadcrumb fs-6">
-      <a class="breadcrumb-item nav-link" href="#">Home</a>
-      <a class="breadcrumb-item nav-link" href="#">Home</a>
-      <span class="breadcrumb-item active" href="#">Checkout</span>
+      <a class="breadcrumb-item nav-link" href="/user/home">Home</a>
+      <span class="breadcrumb-item active" href="#">Detail</span>
     </nav>
 
     <div class="row g-5">
@@ -77,9 +76,19 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       <!-- Thông tin sản phẩm -->
       <div class="col-lg-5" id="detail-product">
         <div class="product-info">
-          <div class="element-header">
-            <h2 itemprop="name" class="display-6">${product.name}</h2>
+          <div class="element-header d-flex align-items-center">
+            <h2 itemprop="name" class="display-6 mb-0 me-2">${product.name}</h2>
+            <!-- Nút trái tim wishlist bên cạnh tên -->
+            <a href="#" 
+              class="btn-wishlist ${wishlistProductIds.contains(product.id) ? 'added' : ''}" 
+              data-product-id="${product.id}" 
+              title="Thêm vào wishlist">
+              <svg width="24" height="24">
+                <use xlink:href="#heart"></use>
+              </svg>
+            </a>
           </div>
+
           <div class="product-price pt-3 pb-3">
             <strong class="text-primary display-6 fw-bold">
               <fmt:formatNumber value="${priceNew}" type="number" groupingUsed="true" />đ 
@@ -122,7 +131,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               </div>
             </div>
             <div class="qty-button d-flex flex-wrap pt-3">
-              <button type="submit" class="btn muangay btn-primary py-3 px-4 text-uppercase me-3 mt-3">Mua ngay</button>
+              <button onclick="addToCartBuy('${product.id}')" type="submit" class="btn muangay btn-primary py-3 px-4 text-uppercase me-3 mt-3">Mua ngay</button>
               <button  onclick="addToCart('${product.id}')" type="submit" class="btn btn-dark py-3 px-4 text-uppercase mt-3">Thêm vào giỏ hàng</button>
             </div>
           </div>
@@ -171,7 +180,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                           <div class="meta-item d-flex align-items-baseline">
                             <h6 class="item-title no-margin pe-2">Tên nhà cung cấp:</h6>
                             <ul class="select-list list-unstyled d-flex">
-                              <li class="select-item"><a href="#">${product.supplier}</a></li>
+                              <li class="select-item">${product.supplier}</li>
                             </ul>
                           </div>
                           <div class="meta-item d-flex align-items-baseline">
@@ -405,6 +414,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
   <script src="/js/user/toast.js"></script>
   <script src="/js/user/cart.js"></script>
   <script src="/js/user/list-book.js"></script>
+  <script src="/js/user/wishlist.js"></script>
   <!-- Alpine Plugins -->
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <!-- Alpine Core -->
