@@ -22,8 +22,8 @@ public class Voucher extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     String description;
-    String discount_type;
-    int discount_value;
+    String discountType;
+    int discountValue;
     long minOrderValue;
     LocalDateTime startDate;
     LocalDateTime endDate;

@@ -5,11 +5,12 @@ import lombok.Getter;
 @Getter
 public enum PaymentStatus {
     PAID("Paid"),
-    NOT_PAID("Not Paid");
+    UNPAID("Unpaid");
 
 
     private final String value;
-    PaymentStatus(String value){
+
+    PaymentStatus(String value) {
         this.value = value;
     }
 }

@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,10 +36,15 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Controller
 public class AdminBookController {
+    @Autowired
     ProductService productService;
+    @Autowired
     CategoryService categoryService;
+    @Autowired
     GenreService genreService;
+    @Autowired
     ImageService imageService;
+    @Autowired
     ProductMapper productMapper;
 
     @GetMapping("/admin/list-books")

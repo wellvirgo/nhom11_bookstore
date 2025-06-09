@@ -1,9 +1,11 @@
 package com.nhom11.Book_Store.controller;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhom11.Book_Store.dto.ImageDTO;
@@ -27,7 +30,9 @@ import com.nhom11.Book_Store.model.Cart;
 import com.nhom11.Book_Store.model.CartItem;
 import com.nhom11.Book_Store.model.Product;
 import com.nhom11.Book_Store.model.User;
+import com.nhom11.Book_Store.model.Voucher;
 import com.nhom11.Book_Store.repository.CartItemRepository;
+import com.nhom11.Book_Store.repository.UserRepository;
 import com.nhom11.Book_Store.service.AddressService;
 import com.nhom11.Book_Store.service.CartService;
 import com.nhom11.Book_Store.service.ImageService;
@@ -48,6 +53,8 @@ public class CartController {
     private CartItemRepository cartItemRepository;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @PostMapping("/add-to-cart")
@@ -87,13 +94,53 @@ public class CartController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    @PostMapping("/add-to-cart-buy")
+    @ResponseBody
+    public Map<String, Object> addToCartBuyAjax(
+        @RequestParam("productId") Long productId, 
+        @RequestParam("quantity") int quantity, 
+        HttpSession session) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Product product = productService.getProductID(productId);
+            if (product == null) {
+                response.put("success", false);
+                response.put("message", "Sản phẩm không tồn tại");
+                return response;
+            }
+
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "Vui lòng đăng nhập để thêm vào giỏ hàng");
+                return response;
+            }
+
+            Long userId = user.getId();
+            Cart cart = cartService.getCartByUserId(userId);
+            cartService.addOrUpdateCartItem(cart, product, quantity);
+
+            response.put("success", true);
+            response.put("message", "Thêm vào giỏ hàng thành công");
+            response.put("redirectUrl", "/user/viewCart"); // thêm URL redirect
+
+            return response;
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Lỗi: " + e.getMessage());
+            return response;
+        }
+    }
 
     @GetMapping("/viewCart")
     public String viewCart(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser == null) {
             return "login";
         }
+        // Lấy user từ DB với vouchers đã fetch join
+        User user = userRepository.findByIdWithVouchers(sessionUser.getId());
         Cart cart = cartService.getCartByUserId(user.getId());
         if (cart == null) {
             model.addAttribute("message", "Giỏ hàng của bạn đang trống.");
@@ -104,6 +151,26 @@ public class CartController {
             model.addAttribute("message", "Giỏ hàng chưa thêm sản phẩm nào");
             return "user/cart"; // Trả về view giỏ hàng trống
         }
+        // 1. Voucher của sản phẩm trong giỏ
+        Set<Voucher> productVouchers = new HashSet<>();
+        for (CartItem item : cartItems) {
+            if (item.getProduct().getVouchers() != null) {
+                productVouchers.addAll(item.getProduct().getVouchers());
+            }
+        }
+
+        // 2. Voucher của người dùng
+        Set<Voucher> userVouchers = user.getVouchers() != null ? user.getVouchers() : new HashSet<>();
+
+        // Gộp voucher chung (không trùng lặp)
+        Set<Voucher> allVouchers = new HashSet<>();
+        allVouchers.addAll(productVouchers);
+        allVouchers.addAll(userVouchers);
+
+        // Truyền sang JSP (nên convert sang JSON nếu dùng JS để render modal)
+        model.addAttribute("productVouchers", productVouchers);
+        model.addAttribute("userVouchers", userVouchers);
+        model.addAttribute("allVouchers", allVouchers);
         return "user/cart"; // Trả về view giỏ hàng
     }
     @PostMapping("/updateQuantity")
@@ -138,14 +205,14 @@ public class CartController {
         return ResponseEntity.ok("Đã xóa");
     }
     @GetMapping("/payment")
-    public String paymentPage(@RequestParam("ids") String ids, Model model, HttpSession session){
+    public String paymentPage(@RequestParam("ids") String ids, @RequestParam("total") String totalStr, Model model, HttpSession session){
         List<Long> selectedIds = Arrays.stream(ids.split(","))
                                 .map(Long::parseLong)
                                 .collect(Collectors.toList());
         List<CartItem> selectedItems = cartItemRepository.findAllById(selectedIds);
         Map<Long, String> listImg = new HashMap<>();
         for (CartItem i : selectedItems){
-            String url = imageService.getImagebyID(i.getProduct().getId());
+            String url = productService.getImagebyID(i.getProduct().getId());
             listImg.put(i.getProduct().getId(), url);
         }
 
@@ -154,6 +221,7 @@ public class CartController {
             .mapToLong(item -> item.getProduct().getPrice() * item.getQuantity())
             .sum();
 
+            
         long shippingFee = 50000L;
         long total = subtotal + shippingFee;
 
@@ -167,14 +235,21 @@ public class CartController {
             e.printStackTrace();
             listImgJson = "{}";
         }
+        long totalFromClient = 0L;
+        try {
+            totalFromClient = Long.parseLong(totalStr);
+        } catch (Exception e) {
+            totalFromClient = subtotal + shippingFee; // fallback
+        }
         model.addAttribute("listImgJson", listImgJson);
         model.addAttribute("listImg", listImg);
         model.addAttribute("cartItemsPay", selectedItems);
         model.addAttribute("addressDefault", address);
         model.addAttribute("addressList", addressList);
-        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("subtotal", Long.parseLong(totalStr));
         model.addAttribute("shippingFee", shippingFee);
-        model.addAttribute("total", total);
+        model.addAttribute("total", totalFromClient + shippingFee);
+
 
         return "user/payment";
     }

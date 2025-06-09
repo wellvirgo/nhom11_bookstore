@@ -17,15 +17,18 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/user/vendor.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/user/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/user/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/css/user/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/user/home.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap&subset=vietnamese" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
   </head>
-  <body>
+  <body class="${pageName}">
     <%-- <div class="preloader-wrapper">
       <div class="preloader">
       </div>
@@ -37,8 +40,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         <div class="d-flex justify-content-between">
           <h1 class="page-title pb-2">Sản phẩm</h1>
           <nav class="breadcrumb fs-6">
-            <a class="breadcrumb-item nav-link" href="index.html">Home</a>
-            <span class="breadcrumb-item active" href="list-book.html">Sản phẩm</span>
+            <a class="breadcrumb-item nav-link" href="/user/home">Home</a>
+            <span class="breadcrumb-item active" href="#">Sản phẩm</span>
           </nav>
         </div>
       </div>
@@ -51,61 +54,66 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             <%-- phần khung trái  --%>
             <aside class="col-md-2">
               <div class="sidebar">
-                <div class="widget-menu">
-                  <div class="widget-search-bar">
-                    <form role="search" method="get" class="d-flex position-relative">
-                      <input class="form-control form-control-lg rounded-2 bg-light" type="email" placeholder="search here" >
-                      <button class="btn bg-transparent position-absolute end-0"></button>
-                    </form>
-                  </div>
-                </div>
-                <div class="widget-product-categories pt-5">
+                <!-- <div class="widget-product-categories pt-5">
                   <h5 class="widget-title">Thể loại</h5>
-                  <ul class="product-categories sidebar-list list-unstyled">
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                  </ul>
-                </div>
+                    <ul class="product-categories sidebar-list list-unstyled">
+                      <c:forEach var="cat" items="${categoryNames}">
+                        <c:set var="found" value="false" />
+                        <c:forEach var="item" items="${listSP}">
+                          <c:if test="${not found and item.genre.category.name == cat}">
+                            <li class="cat-item">
+                              <a href="#" class="nav-link" data-category="${cat}">${cat}</a>
+                            </li>
+                            <c:set var="found" value="true" />
+                          </c:if>
+                        </c:forEach>
+                      </c:forEach>
+                    </ul>
+                </div> -->
                 <div class="widget-product-categories pt-3">
                   <h5 class="widget-title">Nhà cung cấp</h5>
-                  <ul class="product-categories sidebar-list list-unstyled">
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                  </ul>
+                    <ul class="product-categories sidebar-list list-unstyled">
+                      <c:forEach var="sup" items="${suppliers}">
+                        <li class="cat-item">
+                          <a href="#" class="nav-link filter-supplier" data-supplier="${sup}">${sup}</a>
+                        </li>
+                      </c:forEach>
+                    </ul>
                 </div>
                 <div class="widget-product-categories pt-3">
                   <h5 class="widget-title">Giá</h5>
-                  <ul class="product-categories sidebar-list list-unstyled">
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                    <li class="cat-item">ALL</li>
-                  </ul>
+                      <ul class="product-categories sidebar-list list-unstyled">
+                        <c:forEach var="range" items="${priceRanges}">
+                          <li class="cat-item">
+                            <a href="#" class="nav-link filter-price" data-price="${range}">${range}</a>
+                          </li>
+                        </c:forEach>
+                      </ul>
                 </div>
               </div>
             </aside>
             <main class="col-md-10">
               <div class="bootstrap-tabs product-tabs">
                 <div class="filter-shop d-flex justify-content-between">
-                  <div class="showing-product">
-                    <p>Showing 1-9 of 55 results</p>
-                  </div>
+                  <c:if test="${not isWishlistPage}">
+                    <c:choose>
+                      <c:when test="${sale50}">
+                        <p>Danh sách sản phẩm có voucher giảm 50%</p>
+                      </c:when>
+                      <c:otherwise>
+                        <p>Đã tìm thấy ${fn:length(listSP)} sản phẩm</p>
+                      </c:otherwise>
+                    </c:choose>
+                  </c:if>
+
                   <div class="sort-by">
                     <select id="input-sort" class="form-control">
-                      <option>Default sorting</option>
-                      <option>Name (A - Z)</option>
-                      <option>Name (Z - A)</option>
-                      <option>Price (Low-High)</option>
-                      <option>Price (High-Low)</option>
-                      <option>Rating (Highest)</option>
-                      <option>Rating (Lowest)</option>
+                      <option value="default">Default sorting</option>
+                      <option value="name-asc">Name (A - Z)</option>
+                      <option value="name-desc">Name (Z - A)</option>
+                      <option value="price-asc">Price (Low-High)</option>
+                      <option value="price-desc">Price (High-Low)</option>
+                      <!-- Nếu muốn sorting theo rating, bạn cần bổ sung JS xử lý -->
                     </select>
                   </div>
                 </div>
@@ -115,66 +123,70 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                     <div id="empty-item" class="d-flex justify-content-center"></div>
                     <div class="product-grid row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4" id="product-item"> 
                       <c:forEach var="item" items="${listSP}">
-                        <div class="col" data-aos="zoom-out" data-aos-delay="200">
-                          <div class="product-item">
-                            <span class="badge bg-success position-absolute m-3">-30%</span>
-                            <a href="#" class="btn-wishlist">
-                              <svg width="24" height="24"><use xlink:href="#heart"></use></svg>
+                        <div class="col mb-4" data-aos="zoom-out" data-aos-delay="200"
+                            data-category="${item.genre.category.name}"
+                            data-supplier="${item.supplier}"
+                            data-price="${item.price}">
+
+                          <div class="product-item position-relative border rounded p-3 h-100 d-flex flex-column">
+
+                            <!-- Khuyến mãi -->
+                            <!-- <span class="badge bg-success position-absolute top-0 start-0 m-3">-30%</span> -->
+
+                            <!-- Trái tim yêu thích -->
+                            <a href="#" 
+                              class="btn-wishlist position-absolute end-0 m-2 ${wishlistProductIds.contains(item.id) ? 'added' : ''}" 
+                              data-product-id="${item.id}" 
+                              title="Thêm vào wishlist">
+                              <svg width="24" height="24">
+                                <use xlink:href="#heart"></use> <!-- Nếu dùng SVG sprite -->
+                              </svg>
                             </a>
-                            <figure>
-                              <a href="<c:url value ='detail/${item.id}'/>" title="Product Title">
-                                <img src="${productImages[item.id]}" alt="${item.name}" class="tab-image">
+
+                            <!-- Ảnh sản phẩm -->
+                            <figure class="mb-3 flex-grow-1">
+                              <a href="<c:url value='detail/${item.id}'/>" title="${item.name}">
+                                <img src="${productImages[item.id]}" alt="${item.name}" class="img-fluid w-100" style="object-fit: contain; max-height: 200px;">
                               </a>
                             </figure>
-                            <h3 style="min-height: 50px;" class="item-name">${item.name}</h3>
-                            <span class="qty">1 Unit</span>
-                            <span class="rating">
-                              <svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 
-                            </span>
-                            <div class="d-flex">
-                              <span class="price">
+
+                            <!-- Tên sản phẩm -->
+                            <h3 class="item-name mb-2" style="min-height: 50px; font-weight: 600;">${item.name}</h3>
+
+                            <!-- Giá sản phẩm -->
+                            <div class="d-flex align-items-center mb-3 gap-2">
+                              <span class="price fs-5 fw-bold " style="color: #dc3545; font-weight: 700; opacity: 1;">
+                                <fmt:formatNumber value="${productBestPrices[item.id]}" type="number" groupingUsed="true"/>đ
+                              </span>
+                              <span class="price text-muted text-decoration-line-through" style="font-size: 0.95rem; color: #999;">
                                 <fmt:formatNumber value="${item.price}" type="number" groupingUsed="true"/>đ
                               </span>
-                              <span class="qty" style="text-decoration: line-through;">
-                                <fmt:formatNumber value="${item.price}" type="number" groupingUsed="true"/>
-                              </span>
                             </div>
-                            <div class="d-xxl-flex align-items-center justify-content-between">
-                              <div class="input-group product-qty">
-                                <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                                        <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                                </span>
-                                <input type="text" id="quantity-${item.id}" name="quantity"
-                                      class="form-control input-number" value="1">
-                                <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                                    <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                                </span>
+                            <div class="d-flex align-items-center justify-content-between">
+                              <!-- Bộ tăng giảm số lượng -->
+                              <div class="input-group product-qty" style="max-width: 110px;">
+                                <button type="button" class="btn btn-light btn-sm quantity-left-minus"  data-id="${item.id}" data-avail="${item.quantityAvailable}">
+                                  <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
+                                </button>
+                                <input type="text" id="quantity-${item.id}" name="quantity" class="form-control input-number text-center" value="1" min="1" max="${item.quantityAvailable}" style="width: 36px; font-size: 14px;">
+                                <button type="button" class="btn btn-light btn-sm quantity-right-plus" data-id="${item.id}" data-avail="${item.quantityAvailable}">
+                                  <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
+                                </button>
                               </div>
-                              <a href="#" class="nav-link"onclick="">Thêm vào giỏ hàng<iconify-icon icon="uil:shopping-cart"></iconify-icon>
-                              </a>
+                              <!-- Nút thêm vào giỏ hàng -->
+                              <button type="button" class="btn btn-dark btn-sm ms-2 add-to-cart-btn" data-id="${item.id}" onclick="addToCart('${item.id}')">
+                                <svg width="24" height="24"><use xlink:href="#cart"></use></svg>
+                              </button>
                             </div>
+
+
                           </div>
                         </div>
-                      </c:forEach>          
+                      </c:forEach>
+      
                     </div>
-                    <!-- / product-grid -->
-                    <nav class="text-center py-4">
-                      <ul class="pagination d-flex justify-content-center">
-                        <li class="page-item disabled">
-                          <a class="page-link bg-none border-0" href="#"><span>«</span></a>
-                        </li>
-                        <li class="page-item active"><a class="page-link border-0">1</a></li>
-                        <li class="page-item "><a class="page-link border-0">2</a></li>
-                        <li class="page-item "><a class="page-link border-0">3</a></li>
-                        <li class="page-item disabled">
-                          <a class="page-link bg-none border-0" href="#"><span>»</span></a>
-                        </li>
-                      </ul>
-                    </nav>
+
+
                   </div>
                 </div>
             </main>
@@ -328,11 +340,13 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script src="${pageContext.request.contextPath}/js/user/plugins.js"></script>
-    <script src="${pageContext.request.contextPath}/js/user/script.js"></script>
+    <script src="/js/user/plugins.js"></script>
+    <script src="/js/user/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="${pageContext.request.contextPath}/js/user/list-book.js"></script>
-    <script src="${pageContext.request.contextPath}/js/user/toast.js"></script>
-    <script src="${pageContext.request.contextPath}/js/user/cart.js"></script>
+    <script src="/js/user/list-book.js"></script>
+    <script src="/js/user/detail-product.js"></script>
+    <script src="/js/user/toast.js"></script>
+    <script src="/js/user/cart.js"></script>
+    <script src="/js/user/wishlist.js"></script>
   </body>
 </html>

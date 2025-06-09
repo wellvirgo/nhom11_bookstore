@@ -84,26 +84,35 @@ document.getElementById('orderBtn').onclick = function(e) {
     console.log('ma nono:', cartItemIds[0]);
     console.log('id dia chi day:', addressId);
 
-    fetch('/user/place-order', {
+        // Lấy quantity nếu là mua ngay
+    let quantity = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (cartItemIds.split(',').length === 1 && urlParams.has('quantity')) {
+        quantity = urlParams.get('quantity');
+    }
+    const payload = {
+        cartItemIds: cartItemIds,
+        addressId: addressId,
+        subtotal: subtotal,
+        shippingFee: shippingFee,
+        total: total,
+        listImg: listImg,
+        paymentMethod: paymentMethod
+    };
+    if (quantity) payload.quantity = quantity;
+
+   fetch('/user/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            cartItemIds: cartItemIds,
-            addressId: addressId,
-            subtotal: subtotal,
-            shippingFee: shippingFee,
-            total: total,
-            listImg: listImg,
-            paymentMethod: paymentMethod
-        })
+        body: JSON.stringify(payload)
     })
     .then(res => {
         if (!res.ok) throw new Error('Server error: ' + res.status);
         return res.text();
     })
     .then(data => {
-        alert('Đặt hàng thành công!');
-        // window.location.href = '/user/orders';
+        // alert('Đặt hàng thành công!');
+        window.location.href = '/user-orders';
     })
     .catch(err => alert('Có lỗi xảy ra: ' + err.message));
 };

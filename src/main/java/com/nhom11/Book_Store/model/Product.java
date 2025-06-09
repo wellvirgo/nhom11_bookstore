@@ -45,9 +45,14 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "genre_id")
     Genre genre;
 
-    @ManyToMany(mappedBy = "products")
-    Set<Voucher> vouchers = new HashSet<>();
-
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Image> images;
+
+    @ManyToMany
+    @JoinTable(
+        name = "product_voucher",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "voucher_id")
+    )
+    private List<Voucher> vouchers;
 }

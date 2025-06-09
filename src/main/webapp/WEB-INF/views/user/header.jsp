@@ -235,7 +235,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                         <h6 class="my-0 item-name">${item.product.name}</h6>
                         <div class="d-flex justify-centent-between align-items-center">
                             <small class="text-body-secondary">
-                                <fmt:formatNumber value="${item.product.price}" type="number" groupingUsed="true"/>đ
+                                <fmt:formatNumber value="${cartItemBestPrices[item.product.id]}" type="number" groupingUsed="true"/>đ
                             </small>
                             <small class="text-body-secondary text-decoration-line-through ms-1" style="font-size:12px">
                                 <fmt:formatNumber value="${item.product.price}" type="number" groupingUsed="true"/>đ
@@ -248,10 +248,11 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </ul>
                       
           <li class="list-group-item d-flex justify-content-between">
-            <span>Tổng</span>
-            <strong id="cart-total">${totalPrice}</strong>
+              <span>Tổng</span>
+              <strong id="cart-total">
+                  <fmt:formatNumber value="${totalPrice}" type="number" groupingUsed="true"/>đ
+              </strong>
           </li>
-
           <button class="w-100 btn btn-primary btn-lg" type="submit">
             <a href="<c:url value='/user/viewCart'/>" class="nav-link"
               >Xem giỏ hàng</a
@@ -368,41 +369,53 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end"
           >
             <ul class="d-flex justify-content-end list-unstyled m-0">
-              <li>
-                <a
-                  href="#"
-                  class="rounded-circle bg-light p-2 mx-1 position-relative"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    class="bi bi-bell"
-                    viewBox="0 0 16 16"
-                  >
+              <!-- thông báo  -->
+              <li class="position-relative" style="z-index: 20;">
+                <a href="#" id="notification-bell" class="rounded-circle bg-light p-2 mx-1 position-relative">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                    class="bi bi-bell" viewBox="0 0 16 16">
                     <path
                       d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"
                     />
                   </svg>
-                  <span
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
-                    style="background-color: #ffc43f"
-                  >
-                    <%-- Có thể thay thế bằng một biến động từ backend --%>
-                    <c:set var="notificationCount" value="4" />
-                    <c:out value="${notificationCount}" />
-                    <span class="visually-hidden">unread messages</span>
-                  </span>
+                  <c:if test="${unreadCount > 0}">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                          style="background-color: #ffc43f" id="notification-count">
+                      <c:out value="${unreadCount}" />
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  </c:if>
                 </a>
+                <!-- Modal thông báo nhỏ -->
+                <div id="notification-modal" class="notification-modal shadow" style="display:none; position:absolute; right:0; top:40px; z-index:9999; background:#fff; min-width:320px; border-radius:8px;">
+                  <div class="p-3 border-bottom fw-bold">Thông báo</div>
+                  <ul class="list-unstyled m-0" style="max-height:300px; overflow-y:auto;">
+                    <c:forEach var="noti" items="${notifiList}">
+                      <li class="p-3 border-bottom <c:if test='${noti.read}'>text-secondary opacity-50</c:if>">
+                        <a href="${noti.redirectUrl}" class="text-decoration-none text-dark d-block notification-link"
+                          data-id="${noti.id}">
+                          <span class="fw-bold">${noti.message}</span><br>
+                          <span class="text-muted small">
+                            <fmt:formatDate value="${noti.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
+                          </span>
+                        </a>
+                      </li>
+                    </c:forEach>
+                    <c:if test="${empty notifiList}">
+                      <li class="p-3 text-center small text-secondary">Không có thông báo chưa đọc nào.</li>
+                    </c:if>
+                  </ul>
+                </div>
               </li>
+              <!-- // yêu thích -->
               <li>
-                <a href="#" class="rounded-circle bg-light p-2 mx-1">
+                <a href="/user/wishlist" class="rounded-circle bg-light p-2 mx-1" title="Xem danh sách yêu thích">
                   <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#heart"></use>
                   </svg>
                 </a>
               </li>
+              <!-- giỏ hàng  -->
               <li class="">
                 <a
                   href="#"
@@ -424,6 +437,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                   </span>
                 </a>
               </li>
+              <!-- user  -->
               <li>
                 <a
                     href="<c:url value='/user-control?param=profile'/>"
@@ -468,5 +482,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script src="/js/user/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/js/user/cart.js"></script>
+    <script src="/js/user/notifi.js"></script>
   </body>
 </html>
