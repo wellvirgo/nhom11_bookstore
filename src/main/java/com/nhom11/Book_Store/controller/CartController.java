@@ -212,7 +212,7 @@ public class CartController {
         List<CartItem> selectedItems = cartItemRepository.findAllById(selectedIds);
         Map<Long, String> listImg = new HashMap<>();
         for (CartItem i : selectedItems){
-            String url = imageService.getImagebyID(i.getProduct().getId());
+            String url = productService.getImagebyID(i.getProduct().getId());
             listImg.put(i.getProduct().getId(), url);
         }
 

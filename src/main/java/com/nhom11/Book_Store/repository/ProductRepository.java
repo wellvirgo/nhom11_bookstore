@@ -17,6 +17,7 @@
 package com.nhom11.Book_Store.repository;
 
 import com.nhom11.Book_Store.dto.ProductInTrash;
+import com.nhom11.Book_Store.dto.TopSellingProduct;
 import com.nhom11.Book_Store.model.Product;
 
 import java.util.List;
@@ -37,6 +38,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
         
     Optional<Product> findById(Long id);
+    
     List<Product> findAll();
     List<Product> findByNameContainingIgnoreCase(String keyword);
     // Trong ProductRepository
@@ -107,4 +109,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<ProductInTrash> findAllInTrash();
 
     List<Product> findAllByDeletedOnBefore(@NonNull LocalDate threshold);
+
+    @Query("select new com.nhom11.Book_Store.dto.TopSellingProduct(" +
+            "p.id, p.name, p.price, sum(oi.quantity), null) " +
+            "from OrderItem oi join oi.product p " +
+            "group by p.id, p.name, p.price " +
+            "order by sum(oi.quantity) desc")
+    List<TopSellingProduct> findTopSellingProducts(Pageable pageable);
 }

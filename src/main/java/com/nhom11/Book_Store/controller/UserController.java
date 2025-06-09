@@ -10,6 +10,7 @@ import com.nhom11.Book_Store.repository.OrderItemRepository;
 import com.nhom11.Book_Store.repository.OrderRepository;
 import com.nhom11.Book_Store.repository.UserRepository;
 import com.nhom11.Book_Store.service.ImageService;
+import com.nhom11.Book_Store.service.ProductService;
 import com.nhom11.Book_Store.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -52,8 +53,7 @@ public class UserController {
     private OrderRepository orderRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
-    @Autowired
-    private ImageService imageService;
+    private ProductService productService;
 
     @GetMapping("/login")
     public String login() {
@@ -112,7 +112,7 @@ public class UserController {
                 Long productId = item.getProduct().getId();
                 // Nếu chưa có ảnh thì lấy, tránh gọi lại nhiều lần
                 if (!productImageMap.containsKey(productId)) {
-                    String imageUrl = imageService.getImagebyID(productId);
+                    String imageUrl = productService.getImagebyID(productId);
                     productImageMap.put(productId, imageUrl);
                 }
             }

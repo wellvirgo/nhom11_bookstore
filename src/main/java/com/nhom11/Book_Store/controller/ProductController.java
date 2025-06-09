@@ -130,7 +130,7 @@ public class ProductController {
         
         Map<Long, String> productImages = new HashMap<>();
         for (Product p : listP) {
-            String imageUrl = imageService.getImagebyID(p.getId());
+            String imageUrl = productService.getImagebyID(p.getId());
             productImages.put(p.getId(), imageUrl);
         }
         List<String> categoryNames = categoryService.getCategoryNames();
@@ -181,7 +181,7 @@ public class ProductController {
                 .map(product -> new ProductforJsonDTO(
                         product.getId(),
                         product.getName(),
-                        imageService.getImagebyID(product.getId())))
+                        productService.getImagebyID(product.getId())))
                 .collect(Collectors.toList());
     }
     

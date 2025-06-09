@@ -108,7 +108,7 @@ public class PaymentController {
         order.setTotalAmount(subtotal); 
         String paymentMethod = (String) payload.get("paymentMethod");
         order.setPaymentMethod(paymentMethod);
-        order.setPaymentStatus(PaymentStatus.NOT_PAID.getValue());
+        order.setPaymentStatus(PaymentStatus.UNPAID.getValue());
         order.setDeliveryDate(order.getOrderDate().plusDays(5));
 
         order = orderRepository.save(order);

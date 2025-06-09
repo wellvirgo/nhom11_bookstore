@@ -52,7 +52,7 @@ public class GlobalAttributeController {
                     Map<Long, Long> cartItemBestPrices = new HashMap<>();
 
                     for (CartItem item : cartItems) {
-                        String url = imageService.getImagebyID(item.getProduct().getId());
+                        String url = productService.getImagebyID(item.getProduct().getId());
                         proImg.put(item.getProduct().getId(), url);
                         long bestPrice = productService.getBestDiscountedPrice(item.getProduct());
                          cartItemBestPrices.put(item.getProduct().getId(), bestPrice);

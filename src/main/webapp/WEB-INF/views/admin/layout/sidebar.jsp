@@ -6,7 +6,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link" href="/admin/das">
+            <a class="nav-link ${sidebarSelected eq 'dashboard'?'':'collapsed'}" href="/admin/das">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
