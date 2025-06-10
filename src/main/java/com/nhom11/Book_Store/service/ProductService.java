@@ -234,6 +234,7 @@ public class ProductService {
 
         return topSellingProducts;
     }
+    
     public long getBestDiscountedPrice(Product product) {
         long originalPrice = product.getPrice();
         long bestPrice = originalPrice;

@@ -57,6 +57,7 @@ public class CartController {
     private UserRepository userRepository;
 
 
+    // Thêm sản phẩm vào giỏ hàng - QT - 8/6/2025
     @PostMapping("/add-to-cart")
     public ResponseEntity<Map<String, Object>> addToCart(
         @RequestParam("productId") Long productId, 
@@ -94,6 +95,8 @@ public class CartController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    
+    // Thêm sản phẩm vào giỏ hàng và chuyển đến trang thanh toán - QT - 8/6/2025
     @PostMapping("/add-to-cart-buy")
     @ResponseBody
     public Map<String, Object> addToCartBuyAjax(
@@ -133,6 +136,7 @@ public class CartController {
         }
     }
 
+    // Xem giỏ hàng - QT - 8/6/2025
     @GetMapping("/viewCart")
     public String viewCart(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("user");
@@ -173,6 +177,8 @@ public class CartController {
         model.addAttribute("allVouchers", allVouchers);
         return "user/cart"; // Trả về view giỏ hàng
     }
+    
+    // Cập nhật số lượng sản phẩm trong giỏ hàng khi ấn nút tăng giảm - QT - 8/6/2025
     @PostMapping("/updateQuantity")
     @ResponseBody
     public ResponseEntity<?> updateCartItemQuantity(@RequestBody Map<String, Object> payload, HttpSession session) {
@@ -194,6 +200,8 @@ public class CartController {
 
         return ResponseEntity.ok("Cập nhật thành công");
     }
+    
+    // Xóa sản phẩm khỏi giỏ hàng - QT - 8/6/2025
     @PostMapping("/remove-cart-item")
     @ResponseBody
     public ResponseEntity<?> removeCartItem(@RequestBody Map<String, Object> payload, HttpSession session) {
@@ -204,6 +212,8 @@ public class CartController {
         cartItemRepository.deleteById(cartItemId);
         return ResponseEntity.ok("Đã xóa");
     }
+    
+    // Trang thanh toán - QT - 8/6/2025
     @GetMapping("/payment")
     public String paymentPage(@RequestParam("ids") String ids, @RequestParam("total") String totalStr, Model model, HttpSession session){
         List<Long> selectedIds = Arrays.stream(ids.split(","))
@@ -249,7 +259,6 @@ public class CartController {
         model.addAttribute("subtotal", Long.parseLong(totalStr));
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("total", totalFromClient + shippingFee);
-
 
         return "user/payment";
     }

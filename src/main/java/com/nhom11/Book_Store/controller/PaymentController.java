@@ -2,6 +2,7 @@ package com.nhom11.Book_Store.controller;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class PaymentController {
     @Autowired
     private ProductRepository productRepository;
     
+    ///Hàm tạo sản phẩm ở trang thanh toán thành 1 đơn hàng order - QT- 8/6/2025
     @PostMapping("/place-order")
     @ResponseBody
     public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> payload, HttpSession session) {
@@ -56,7 +58,6 @@ public class PaymentController {
         if (user == null) {
             return ResponseEntity.status(401).body("Bạn chưa đăng nhập!");
         }
-
         // Lấy các giá trị từ payload
         String cartItemIdsStr = (String) payload.get("cartItemIds"); // dạng "1,2,3"
         Long addressId = Long.valueOf(payload.get("addressId").toString());
@@ -64,7 +65,6 @@ public class PaymentController {
         Long shippingFee = Long.valueOf(payload.get("shippingFee").toString());
         // Nếu cần lấy listImg:
         // Map<String, String> listImg = (Map<String, String>) payload.get("listImg");
-
             // Lấy quantity nếu có (mua ngay)
         Integer quantity = null;
         if (payload.containsKey("quantity")) {
@@ -72,8 +72,6 @@ public class PaymentController {
                 quantity = Integer.valueOf(payload.get("quantity").toString());
             } catch (Exception ignored) {}
         }
-
-
         // Chuyển cartItemIds thành List<Long>
         List<Long> cartItemIds = Arrays.stream(cartItemIdsStr.split(","))
                                     .map(Long::parseLong)
@@ -82,7 +80,7 @@ public class PaymentController {
         // Lấy các CartItem cần thanh toán
         List<CartItem> cartItemsPay = cartItemRepository.findAllById(cartItemIds);
 
-            // Nếu không có CartItem (mua ngay), tạo CartItem tạm từ Product
+        // Nếu không có CartItem (mua ngay), tạo CartItem tạm từ Product
         if (cartItemsPay.isEmpty() && cartItemIds.size() == 1 && quantity != null) {
             Long productId = cartItemIds.get(0);
             Product product = productRepository.findById(productId).orElse(null);
@@ -93,11 +91,8 @@ public class PaymentController {
                 cartItemsPay.add(tempItem);
             }
         }
-
-
         // Lấy địa chỉ giao hàng
         Address address = addressService.getAddressById(addressId);
-
         // Tạo Order
         Order order = new Order();
         order.setUser(user);
@@ -110,9 +105,7 @@ public class PaymentController {
         order.setPaymentMethod(paymentMethod);
         order.setPaymentStatus(PaymentStatus.UNPAID.getValue());
         order.setDeliveryDate(order.getOrderDate().plusDays(5));
-
         order = orderRepository.save(order);
-
         // Tạo OrderItem cho từng CartItem
         for (CartItem cartItem : cartItemsPay) {
             OrderItem orderItem = new OrderItem();
@@ -145,17 +138,16 @@ public class PaymentController {
     @GetMapping("/payments")
     public String paymentPage(@RequestParam("ids") String ids,
                             @RequestParam(value = "quantity", required = false) Integer quantity,
-                            Model model, HttpSession session) {
+                            Model model, HttpSession session) 
+    {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
         }
-
         List<Long> selectedIds = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
         List<CartItem> selectedItems = cartItemRepository.findAllById(selectedIds);
-
         // Nếu không có CartItem (mua ngay), tạo CartItem tạm từ Product
         if (selectedItems.isEmpty() && selectedIds.size() == 1 && quantity != null) {
             Long productId = selectedIds.get(0);
@@ -170,16 +162,13 @@ public class PaymentController {
             // Nếu có CartItem (chọn 1 sản phẩm trong giỏ), cập nhật lại số lượng
             selectedItems.get(0).setQuantity(quantity);
         }
-
         long subtotal = selectedItems.stream()
                 .mapToLong(item -> item.getProduct().getPrice() * item.getQuantity())
                 .sum();
         long shippingFee = 50000L;
         long total = subtotal + shippingFee;
-
         List<Address> addressList = addressService.getAllAddressByUserId(user.getId());
         Address addressDefault = addressService.getAddressDefaultByUser(user);
-
         // Xử lý hình ảnh sản phẩm (nếu cần)
         Map<Long, String> listImg = selectedItems.stream()
                 .collect(Collectors.toMap(
@@ -197,7 +186,6 @@ public class PaymentController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
         model.addAttribute("cartItemsPay", selectedItems);
         model.addAttribute("addressDefault", addressDefault);
         model.addAttribute("addressList", addressList);
@@ -206,7 +194,6 @@ public class PaymentController {
         model.addAttribute("total", total);
         model.addAttribute("listImg", listImg);
         model.addAttribute("listImgJson", listImgJson);
-
         return "user/payment";
     }
              
