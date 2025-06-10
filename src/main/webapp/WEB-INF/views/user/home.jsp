@@ -158,7 +158,7 @@
               </div>
               
               <!-- banner phụ  -->
-              <div class="banner-ad bg-success-subtle block-2" style="background:url('/images/ad-image-1.png') no-repeat;background-position: right bottom">
+              <div class="banner-ad bg-success-subtle block-2" style="background-color: '#EEF5E5' no-repeat;background-position: right bottom">
                 <div class="row banner-content p-5">
 
                   <div class="content-wrapper col-md-7">
@@ -168,7 +168,7 @@
                       Xem Thử <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg>
                     </a>                 
                   </div>
-
+                  <img src="/images/ad-image-1.jpg" height="140px" width="280px">
                 </div>
               </div>
 

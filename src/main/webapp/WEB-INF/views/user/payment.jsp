@@ -123,14 +123,14 @@
                             </label>
                         </div>
                     </div>
-                    <!-- <div class="payment-method">
+                    <div class="payment-method">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="paymentMethod" id="bank" disabled>
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="bank" >
                             <label class="form-check-label" for="bank">
                                 <i class="fas fa-university me-2"></i>Chuyển khoản ngân hàng
                             </label>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="payment-section">
                     <h4 class="mb-3">Tổng đơn hàng</h4>
@@ -155,6 +155,7 @@
                         <input type="hidden" id="subtotal" value="${subtotal}" />
                         <input type="hidden" id="shippingFee" value="${shippingFee}" />
                         <input type="hidden" id="total" value="${total}" />
+                        <input type="hidden" id="userId" value="${userId}" />
                         <!-- listImg là Map<Long, String>, chuyển sang JSON -->
                         <input type="hidden" id="listImg" value='${fn:escapeXml(listImgJson)}' />
                         <button class="btn btn-primary btn-lg" id="orderBtn">Đặt hàng</button>

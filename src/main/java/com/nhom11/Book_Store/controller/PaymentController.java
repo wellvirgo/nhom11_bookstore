@@ -206,7 +206,7 @@ public class PaymentController {
         model.addAttribute("total", total);
         model.addAttribute("listImg", listImg);
         model.addAttribute("listImgJson", listImgJson);
-
+        model.addAttribute("userId", user.getId());
         return "user/payment";
     }
              
