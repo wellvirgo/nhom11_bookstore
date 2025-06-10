@@ -8,7 +8,9 @@ import com.nhom11.Book_Store.mapper.ProductMapper;
 import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Image;
 import com.nhom11.Book_Store.model.Product;
+import com.nhom11.Book_Store.model.Voucher;
 import com.nhom11.Book_Store.repository.GenreRepository;
+import com.nhom11.Book_Store.repository.ImageRepository;
 import com.nhom11.Book_Store.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -42,6 +44,46 @@ public class ProductService {
     ImageService imageService;
     CloudinaryUploadMediaService cloudinaryUploadMediaService;
 
+
+
+    public Product getProductID(Long id){
+        return productRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("sản phẩm không tồn tại"));
+    }
+    public List<Product> getAllProduct(){
+        return productRepository.findAll();
+    }
+    public List<Product> searchProduct(String keyword) {
+       return productRepository.findByNameContainingIgnoreCase(keyword);
+    }
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findByCategoryName(category);
+    }
+    public List<String> getAllSuppliers() {
+        return productRepository.findAll()
+            .stream()
+            .map(Product::getSupplier)
+            .distinct()
+            .toList();
+    }
+        //Note: hàm trả về url ảnh chính của sản phẩm theo id - Quỳnh Trang - 2/5/2025
+    public String getImagebyID(Long id){
+        Product p = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Sản phẩm không tồn tại"));
+        if (p != null && p.getImages() != null ){
+            return p.getImages().stream()
+                    .filter(Image::isPrimary)
+                    .findFirst()
+                    .map(Image::getUrl)
+                    .orElse(
+                        p.getImages().isEmpty() ? null : p.getImages().get(0).getUrl()
+                    );
+        }
+        return null;
+    }
+    public Page<Product> getTrendingProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
     public Page<Product> findAllWithPageable(
             Optional<String> pageOptional,
             Optional<String> limitOptional,
@@ -136,8 +178,10 @@ public class ProductService {
     }
 
 
+    public List<Product> getProductsWithVoucherPercent(int percent) {
+        return productRepository.findProductsWithVoucherPercent(percent);
+    }
     public List<ProductInTrash> findAllInTrash() {
-
         return productRepository.findAllInTrash()
                 .stream()
                 .map(productInTrash -> {
@@ -189,5 +233,26 @@ public class ProductService {
         topSellingProducts.forEach(product -> product.setImgUrl(bookPrimaryImageMap.get(product.getId())));
 
         return topSellingProducts;
+    }
+    public long getBestDiscountedPrice(Product product) {
+        long originalPrice = product.getPrice();
+        long bestPrice = originalPrice;
+
+        if (product.getVouchers() != null && !product.getVouchers().isEmpty()) {
+            for (Voucher voucher : product.getVouchers()) {
+                long discountedPrice = originalPrice;
+                if (voucher.isActive()) {
+                    if ("PERCENT".equalsIgnoreCase(voucher.getDiscountType())) {
+                        discountedPrice = originalPrice - (originalPrice * voucher.getDiscountValue() / 100);
+                    } else if ("AMOUNT".equalsIgnoreCase(voucher.getDiscountType())) {
+                        discountedPrice = originalPrice - voucher.getDiscountValue();
+                    }
+                    if (discountedPrice < bestPrice) {
+                        bestPrice = discountedPrice;
+                    }
+                }
+            }
+        }
+        return bestPrice;
     }
 }

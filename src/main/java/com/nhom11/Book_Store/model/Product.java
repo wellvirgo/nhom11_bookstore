@@ -6,10 +6,12 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -45,6 +47,14 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "genre_id")
     Genre genre;
 
-    @ManyToMany(mappedBy = "products")
-    Set<Voucher> vouchers = new HashSet<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Image> images;
+
+    @ManyToMany
+    @JoinTable(
+        name = "product_voucher",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "voucher_id")
+    )
+    private List<Voucher> vouchers;
 }

@@ -264,19 +264,19 @@
     /**
      * Initiate Bootstrap validation check
      */
-    var needsValidation = document.querySelectorAll('.needs-validation')
+    // var needsValidation = document.querySelectorAll('.needs-validation')
 
-    Array.prototype.slice.call(needsValidation)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
+    // Array.prototype.slice.call(needsValidation)
+      //   .forEach(function (form) {
+        //     form.addEventListener('submit', function (event) {
+          //       if (!form.checkValidity()) {
+            //         event.preventDefault()
+            //         event.stopPropagation()
+          //       }
 
-                form.classList.add('was-validated')
-            }, false)
-        })
+          //       form.classList.add('was-validated')
+        //     }, false)
+      //   })
 
     /**
      * Initiate Datatables
@@ -295,4 +295,78 @@
             }).observe(mainContainer);
         }, 200);
     }
+  /**
+ * Xử lý thông báo đăng nhập thành công hoặc thất bại
+ */
+
+function showToast(type, message) {
+    const toast = document.createElement('div');
+    toast.className = `custom-toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+    loginForm.addEventListener("submit", function(event) {
+        const email = document.getElementById("yourUsername").value.trim();
+        const password = document.getElementById("yourPassword").value.trim();
+
+        // Kiểm tra email
+        if (!email) {
+            event.preventDefault();
+            showToast("error", "Vui lòng nhập email!");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            event.preventDefault();
+            showToast("error", "Email không hợp lệ!");
+            return;
+        }
+
+        // Kiểm tra mật khẩu
+        if (!password) {
+            event.preventDefault();
+            showToast("error", "Vui lòng nhập mật khẩu!");
+            return;
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("🔥 toast script loaded on", window.location.pathname);
+  const urlParams = new URLSearchParams(window.location.search);
+  const userType = urlParams.get("userType");
+
+  if (userType) {
+      if (userType === "ADMIN") {
+          localStorage.setItem("toastMessage", "Chào mừng bạn đến với trang quản trị!");
+          localStorage.setItem("toastType", "success");
+      } else if (userType === "USER") {
+          localStorage.setItem("toastMessage", "Chào mừng bạn đến với BookStore!");
+          localStorage.setItem("toastType", "success");
+      }
+      // Xóa userType khỏi URL để không hiển thị lại lần nữa
+      urlParams.delete("userType");
+      const newUrl = window.location.pathname + (urlParams.toString() ? "?" + urlParams.toString() : "");
+      window.history.replaceState({}, document.title, newUrl);
+  }
+
+  // Hiển thị thông báo nếu có trong localStorage
+  const toastMessage = localStorage.getItem("toastMessage");
+  const toastType = localStorage.getItem("toastType");
+  if (toastMessage && toastType) {
+      showToast(toastType, toastMessage);
+      localStorage.removeItem("toastMessage");
+      localStorage.removeItem("toastType");
+  }
+});
+
+
 })();

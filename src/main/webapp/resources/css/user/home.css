@@ -1,0 +1,23 @@
+/* Đảm bảo input-group không bị xuống dòng */
+.input-group.product-qty {
+  flex-wrap: nowrap !important;
+  align-items: center;
+}
+
+/* Giảm padding và width của input cho gọn */
+.input-group.product-qty .form-control.input-number {
+  min-width: 36px;
+  max-width: 40px;
+  padding: 0 4px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Đảm bảo nút không bị kéo dài */
+.input-group.product-qty .btn {
+  min-width: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

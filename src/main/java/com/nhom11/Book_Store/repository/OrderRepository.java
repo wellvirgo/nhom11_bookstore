@@ -4,14 +4,18 @@ import com.nhom11.Book_Store.dto.OrderInReportChart;
 import com.nhom11.Book_Store.dto.OrderShowListDTO;
 import com.nhom11.Book_Store.model.Order;
 import org.springframework.data.jpa.domain.Specification;
+import com.nhom11.Book_Store.model.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
+import java.lang.foreign.Linker.Option;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
@@ -38,4 +42,5 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
             "group by year(o.orderDate), month(o.orderDate)" +
             "order by month(o.orderDate)")
     List<OrderInReportChart> getTotalAmountPerMonthInThisYear(int year, String paymentStatus);
+    List<Order> findByUserId(Long userId);
 }

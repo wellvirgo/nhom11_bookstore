@@ -7,6 +7,8 @@ import com.nhom11.Book_Store.service.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +24,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/das")
 public class AdminController {
+    @Autowired
     OrderService orderService;
+    @Autowired
     ProductService productService;
 
     @GetMapping

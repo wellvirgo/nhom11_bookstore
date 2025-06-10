@@ -1,8 +1,28 @@
+// package com.nhom11.Book_Store.repository;
+
+// import java.util.List;
+// import java.util.Optional;
+
+// import org.springframework.data.jpa.repository.JpaRepository;
+// import org.springframework.stereotype.Repository;
+
+// import com.nhom11.Book_Store.model.Product;
+
+// @Repository
+// public interface ProductRepository extends JpaRepository<Product, Long> {
+//     Optional<Product> findById(Long id);
+//     List<Product> findAll();
+//     List<Product> findByNameContainingIgnoreCase(String keyword);
+// }
 package com.nhom11.Book_Store.repository;
 
 import com.nhom11.Book_Store.dto.ProductInTrash;
 import com.nhom11.Book_Store.dto.TopSellingProduct;
 import com.nhom11.Book_Store.model.Product;
+
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +36,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
+        
+    Optional<Product> findById(Long id);
+    
+    List<Product> findAll();
+    List<Product> findByNameContainingIgnoreCase(String keyword);
+    // Trong ProductRepository
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.vouchers v WHERE v.discountType = 'PERCENT' AND v.discountValue = :percent")
+    List<Product> findProductsWithVoucherPercent(@Param("percent") int percent);
+    @Query("SELECT p FROM Product p WHERE p.genre.category.name = :categoryName")
+    List<Product> findByCategoryName(@Param("categoryName") String categoryName);
     @NonNull
     @Query("select p from Product p where p.isDeleted=false")
     Page<Product> findAll(@NonNull Pageable pageable);
