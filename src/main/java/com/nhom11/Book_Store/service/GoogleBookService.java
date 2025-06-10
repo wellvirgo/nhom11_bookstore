@@ -3,6 +3,7 @@ package com.nhom11.Book_Store.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhom11.Book_Store.model.Image;
 import com.nhom11.Book_Store.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

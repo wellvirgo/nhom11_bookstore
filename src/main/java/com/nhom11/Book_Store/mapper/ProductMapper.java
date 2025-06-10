@@ -14,4 +14,6 @@ public interface ProductMapper {
     ProductShowListAdminDTO mapToProductShowListAdminDTO(Product product);
 
     ProductInTrash mapToProductInTrash(Product product);
+
+    ProductCreation mapToProductCreation(Product product);
 }

@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Thêm sách mới - BookStore Admin</title>
+    <title>Chỉnh sửa sách - BookStore Admin</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -42,6 +42,27 @@
         .error {
             color: red;
         }
+
+        .old-img-container {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            border-radius: 0.375rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .old-img-preview-square {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .img-clickable {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -55,12 +76,12 @@
 <!-- Main Content -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Thêm sách mới</h1>
+        <h1>Chỉnh sửa sách</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin/das">Trang chủ</a></li>
                 <li class="breadcrumb-item">Quản lý sách</li>
-                <li class="breadcrumb-item active">Thêm sách mới</li>
+                <li class="breadcrumb-item active">Chỉnh sửa sách</li>
             </ol>
         </nav>
     </div>
@@ -114,77 +135,27 @@
         </script>
     </c:if>
 
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body text-center p-0">
+                    <img id="modalImage" src="" alt="Phóng to ảnh" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body pt-3">
                         <!-- Toolbar -->
-                        <div class="d-flex justify-content-between mb-4">
-                            <div>
-                                <button id="btnISBN" type="button" class="btn btn-success ms-2"
-                                        data-bs-toggle="modal" data-bs-target="#modalISBN">
-                                    <i class="fa-solid fa-barcode"></i> Mã ISBN
-                                </button>
-                                <button id="btnScanImg" type="button" class="btn btn-secondary ms-2"
-                                        data-bs-toggle="modal" data-bs-target="#modalISBNScan">
-                                    <i class="fa-solid fa-images"></i> Ảnh
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="modalISBN" class="modal fade">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Nhập mã ISBN của sách</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <label for="txtISBN" class="form-label">Mã ISBN</label>
-                                        <input id="txtISBN" type="text" class="form-control"/>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button id="btnConfirmISBN" class="btn btn-primary" type="button">Xác nhận
-                                        </button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                            Hủy
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="modalISBNScan" class="modal fade">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Chọn ảnh mã ISBN của sách</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <label for="isbnFile" class="form-label">Chọn ảnh</label>
-                                        <input class="form-control" type="file" id="isbnFile">
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button id="btnConfirmISBNScan" class="btn btn-primary" type="button">Xác nhận
-                                        </button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                            Hủy
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Tabs -->
                         <ul class="nav nav-tabs nav-tabs-bordered">
                             <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#book-info">Thông tin
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#book-info">Thông
+                                    tin
                                     sách
                                 </button>
                             </li>
@@ -200,11 +171,11 @@
                             </li>
                         </ul>
 
-                        <%--@elvariable id="productCreation" type="com.nhom11.Book_Store.dto.ProductCreation"--%>
+                        <%--@elvariable id="book" type="com.nhom11.Book_Store.dto.ProductCreation"--%>
                         <form:form id="form-create"
                                    action="/admin/add-book" method="post"
                                    class="needs-validation" novalidate="novalidate"
-                                   modelAttribute="productCreation"
+                                   modelAttribute="book"
                                    enctype="multipart/form-data">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <div class="tab-content pt-4">
@@ -236,18 +207,7 @@
                                             <form:select path="supplier"
                                                          class="form-select" id="supplier" required="required">
                                                 <option selected disabled value="">-- Chọn nhà cung cấp --</option>
-                                                <form:option
-                                                        value="Công ty Cổ phần Sách Thái Hà">Công ty Cổ phần Sách Thái Hà</form:option>
-                                                <form:option
-                                                        value="Công ty Sách Vinabook">Công ty Sách Vinabook</form:option>
-                                                <form:option
-                                                        value="Công ty Sách Nhã Nam">Công ty Sách Nhã Nam</form:option>
-                                                <form:option
-                                                        value="Công ty Sách Alpha Books">Công ty Sách Alpha Books</form:option>
-                                                <form:option
-                                                        value="Công ty Sách Phương Nam">Công ty Sách Phương Nam</form:option>
-                                                <form:option
-                                                        value="Công ty Sách Fahasa">Công ty Sách Fahasa</form:option>
+                                                <form:options items="${suppliers}"/>
                                             </form:select>
                                             <div class="invalid-feedback">Vui lòng chọn nhà cung cấp!</div>
                                             <form:errors path="supplier" cssClass="error"/>
@@ -259,17 +219,7 @@
                                             <form:select path="publisher"
                                                          class="form-select" id="publisher" required="required">
                                                 <option selected disabled value="">-- Chọn nhà xuất bản --</option>
-                                                <form:option
-                                                        value="Nhà xuất bản Kim Đồng">Nhà xuất bản Kim Đồng</form:option>
-                                                <form:option value="Nhà xuất bản Trẻ">Nhà xuất bản Trẻ</form:option>
-                                                <form:option
-                                                        value="Nhà xuất bản Giáo Dục">Nhà xuất bản Giáo Dục</form:option>
-                                                <form:option
-                                                        value="Nhà xuất bản Văn học">Nhà xuất bản Văn học</form:option>
-                                                <form:option
-                                                        value="Nhà xuất bản Hội Nhà văn">Nhà xuất bản Hội Nhà văn</form:option>
-                                                <form:option
-                                                        value="Nhà xuất bản Lao Động">Nhà xuất bản Lao Động</form:option>
+                                                <form:options items="${publishers}"/>
                                             </form:select>
                                             <div class="invalid-feedback">Vui lòng chọn nhà xuất bản!</div>
                                             <form:errors path="publisher" cssClass="error"/>
@@ -406,7 +356,50 @@
                                 <div class="tab-pane fade" id="book-images">
                                     <div class="row mb-4">
                                         <div class="col-md-6">
-                                            <label class="form-label fw-bold">Ảnh bìa sách <span
+                                            <p class="fw-bold text-center">Ảnh bìa hiện tại</p>
+                                            <c:if test="${not empty coverImg}">
+                                                <div class="old-img-container mx-auto">
+                                                    <img src="${coverImg}" alt="Ảnh bìa"
+                                                         class="old-img-preview-square img-clickable"
+                                                         data-bs-toggle="modal"
+                                                         data-bs-target="#imageModal"
+                                                         data-img-src="${backImg}">
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="fw-bold text-center">Ảnh bìa sau hiện tại</p>
+                                            <c:if test="${not empty backImg}">
+                                                <div class="old-img-container mx-auto">
+                                                    <img src="${backImg}" alt="Ảnh bìa sau"
+                                                         class="old-img-preview-square img-clickable"
+                                                         data-bs-toggle="modal"
+                                                         data-bs-target="#imageModal"
+                                                         data-img-src="${backImg}">
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <p class="fw-bold">Các ảnh khác hiện tại</p>
+                                        <div class="col-12 d-flex gap-2">
+                                            <c:if test="${not empty additionalImgMap}">
+                                                <c:forEach var="item" items="${additionalImgMap}">
+                                                    <div class="old-img-container">
+                                                        <img src="${item.value}" alt=""
+                                                             class="old-img-preview-square img-clickable"
+                                                             data-bs-toggle="modal"
+                                                             data-bs-target="#imageModal"
+                                                             data-img-src="${item.value}">
+                                                    </div>
+                                                </c:forEach>
+                                            </c:if>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label for="coverImage" class="form-label fw-bold">Ảnh bìa sách <span
                                                     class="text-danger">*</span></label>
                                             <div class="image-upload-container">
                                                 <div class="upload-area" id="coverImageUpload">
@@ -423,7 +416,8 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label class="form-label fw-bold">Ảnh bìa sau (tùy chọn)</label>
+                                            <label for="backCoverImage" class="form-label fw-bold">Ảnh bìa sau (tùy
+                                                chọn)</label>
                                             <div class="image-upload-container">
                                                 <div class="upload-area" id="backCoverImageUpload">
                                                     <i class="bi bi-cloud-arrow-up fs-1"></i>
@@ -440,7 +434,8 @@
                                     </div>
 
                                     <div class="additional-images mb-4">
-                                        <label class="form-label fw-bold">Ảnh bổ sung (tối đa 5 ảnh)</label>
+                                        <label for="additionalImages" class="form-label fw-bold">Ảnh bổ sung (tối đa 5
+                                            ảnh)</label>
                                         <div class="upload-area" id="additionalImagesUpload">
                                             <i class="bi bi-images fs-1"></i>
                                             <p>Kéo thả nhiều ảnh vào đây hoặc <span class="text-primary">Chọn
@@ -484,6 +479,7 @@
 <script src="/js/admin/main.js"></script>
 
 <script>
+
     document.addEventListener('DOMContentLoaded', function () {
         var additionalFiles = [];
         // Initialize Quill editor
@@ -505,6 +501,7 @@
                 ]
             }
         });
+        quill.root.innerHTML = "${book.getDescription()}";
 
         // Tab navigation buttons
         document.querySelectorAll('.next-tab').forEach(button => {
@@ -691,117 +688,15 @@
             });
         });
 
-        document.getElementById('btnConfirmISBN').addEventListener('click', function () {
-            const isbn = document.getElementById('txtISBN').value;
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
 
-            const url = "/api/books/search?isbn=" + isbn;
-            fetch(url, {
-                method: 'GET',
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalISBN'));
-                    modal.hide();
-                    document.getElementById("bookTitle").value = data.name;
-                    document.getElementById("author").value = data.author;
-                    setSelectedOrAddForOption("supplier", data.supplier);
-                    setSelectedOrAddForOption("publisher", data.publisher);
-                    setSelectedOrAddForOption("coverType", data.book_layout);
-                    document.getElementById('publishYear').value = data.publishYear;
-                    handleBookLanguage(data.language);
-                    document.getElementById('pageCount').value = data.quantityPage;
-                    quill.root.innerHTML = data.description || '';
-                })
-                .catch(err => {
-                    console.error('Lỗi: ' + err);
-                    alert('Không tìm thấy thông tin sách với mã ISBN ' + isbn);
-                });
-
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            const triggerImg = event.relatedTarget;
+            const imgSrc = triggerImg.getAttribute('data-img-src');
+            modalImage.src = imgSrc;
         });
 
-        document.getElementById('btnConfirmISBNScan').addEventListener('click', function () {
-            const input = document.getElementById('isbnFile');
-            const file = input.files[0];
-            if (!file) {
-                alert("Vui lòng chọn ảnh")
-                return;
-            }
-            const formData = new FormData();
-            formData.append('file', file);
-            fetch('/api/books/scan', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalISBNScan'));
-                    modal.hide();
-                    document.getElementById("bookTitle").value = data.name;
-                    document.getElementById("author").value = data.author;
-                    setSelectedOrAddForOption("supplier", data.supplier);
-                    setSelectedOrAddForOption("publisher", data.publisher);
-                    setSelectedOrAddForOption("coverType", data.book_layout);
-                    document.getElementById('publishYear').value = data.publishYear;
-                    handleBookLanguage(data.language);
-                    document.getElementById('pageCount').value = data.quantityPage;
-                    quill.root.innerHTML = data.description || '';
-                })
-                .catch(err => {
-                    console.error('Lỗi: ' + err);
-                    alert('Không tìm thấy thông tin sách với mã ISBN ' + isbn);
-                });
-        });
-
-        function setSelectedOrAddForOption(selectId, value) {
-            const select = document.getElementById(selectId);
-            if (!value) {
-                select.value = "";
-                return;
-            }
-
-            let found = false;
-            for (let i = 0; i < select.options.length; i++) {
-                if (select.options[i].value === value) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                const newOption = new Option(value, value, false, true);
-                select.add(newOption);
-            } else {
-                select.value = value;
-            }
-        }
-
-        function handleBookLanguage(languageCode) {
-            const lang = document.getElementById("language");
-            console.log(lang);
-            switch (languageCode) {
-                case 'en':
-                    lang.value = 'Tiếng Anh';
-                    break;
-                case 'vi':
-                    lang.value = 'Tiếng Việt';
-                    break;
-                case 'fr':
-                    lang.value = 'Tiếng Pháp';
-                    break;
-                case 'ja':
-                    lang.value = 'Tiếng Nhật';
-                    break;
-                case 'ko':
-                    lang.value = 'Tiếng Hàn';
-                    break;
-                case 'zh':
-                    lang.value = 'Tiếng Trung';
-                    break;
-            }
-        }
     });
 </script>
 </body>

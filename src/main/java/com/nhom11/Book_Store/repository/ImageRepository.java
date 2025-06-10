@@ -15,4 +15,8 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
             "from Image i join i.product p " +
             "where i.isPrimary=:isPrimary")
     List<ImageDTO> findAllPrimaryImageDTOByBookId(@Param("isPrimary") boolean isPrimary);
+
+    List<Image> findAllByProductId(@Param("productId") long productId);
+
+    void deleteByProductId(@Param("productId") long productId);
 }

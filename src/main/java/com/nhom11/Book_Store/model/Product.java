@@ -30,6 +30,8 @@ public class Product extends BaseEntity {
     String size;
     int quantityPage;
     int quantityAvailable;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
     String description;
 
     @Column(columnDefinition = "boolean default false")

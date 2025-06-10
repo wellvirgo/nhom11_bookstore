@@ -207,10 +207,11 @@
                                         </thead>
                                         <tbody>
                                         <c:forEach var="product" items="${listProduct}" varStatus="status">
-                                            <tr class="clickable-row" data-href="product-detail.html">
+                                            <tr class="clickable-row" data-href="/admin/detail-book/${product.id}">
                                                 <td>${status.index + 1}</td>
+                                                <c:set var="url" value="${product.getImageUrl()}"/>
                                                 <td><img
-                                                        src="/images/book/${product.getImageUrl()}"
+                                                        src="${url.startsWith("https://")?url:"/images/pro-img/".concat(product.getImageUrl())}"
                                                         height="60" style="object-fit: contain;" alt=""></td>
                                                 <td>
                                                     <span class="product-name"><strong>${product.getName()}</strong></span>
@@ -242,8 +243,9 @@
                                                     </c:choose>
                                                 </td>
                                                 <td class="text-center">
-                                                    <button id="btnUpdate" class="btn btn-sm btn-primary mb-1"
+                                                    <button class="btn btn-sm btn-primary mb-1 btn-update"
                                                             title="Chỉnh sửa"
+                                                            data-id="${product.getId()}"
                                                             onclick="event.stopPropagation()"><i
                                                             class="bi bi-pencil-square"></i></button>
                                                     <button class="btn btn-sm btn-danger btn-del"
@@ -505,6 +507,10 @@
     document.getElementById('btnTrash').addEventListener('click', function () {
         window.location.href = '/admin/book/trash';
     });
+
+    document.querySelectorAll('.btn-update').forEach(button => button.addEventListener('click', function () {
+        window.location.href = '/admin/edit-book/' + button.getAttribute('data-id');
+    }));
 </script>
 </body>
 

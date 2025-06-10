@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>com.cloudinary</groupId>
 			<artifactId>cloudinary-http45</artifactId>
-			<version>1.39.0</version> <!-- Kiểm tra phiên bản mới nhất trên Maven Central -->
+			<version>1.39.0</version>
 		</dependency>
 	</dependencies>
 

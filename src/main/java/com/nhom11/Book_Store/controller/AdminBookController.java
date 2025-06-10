@@ -5,6 +5,7 @@ import com.nhom11.Book_Store.dto.ProductCreation;
 import com.nhom11.Book_Store.dto.ProductInTrash;
 import com.nhom11.Book_Store.dto.ProductShowListAdminDTO;
 import com.nhom11.Book_Store.mapper.ProductMapper;
+import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Product;
 import com.nhom11.Book_Store.service.CategoryService;
 import com.nhom11.Book_Store.service.GenreService;
@@ -26,10 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -107,7 +105,7 @@ public class AdminBookController {
         }
         productCreation.setCoverImage(coverImage);
         productCreation.setBackCoverImage(backCoverImage);
-        productCreation.setAdditionalImages(List.of(additionalImages));
+        productCreation.setAdditionalImages(Arrays.asList(additionalImages));
         productService.createProduct(productCreation);
         session.removeAttribute("imageDTOList");
 
@@ -156,6 +154,62 @@ public class AdminBookController {
         int result = productService.restoreDeletedProduct(id);
         redirectAttributes.addFlashAttribute("isRestored", result >= 1 ? 1 : 0);
         return "redirect:/admin/book/trash";
+    }
+
+    @GetMapping("/admin/detail-book/{id}")
+    public String getDetailBook(Model model, @PathVariable(name = "id") long id) {
+        model.addAttribute("book", productService.getProductById(id));
+        model.addAttribute("sidebarSelected", "book");
+        model.addAttribute("sidebarSelectedVal", "listBook");
+        model.addAttribute("imageMap", imageService.getImagesByBookId(id));
+
+        return "admin/book/detail-book";
+    }
+
+    @GetMapping("/admin/edit-book/{id}")
+    public String getEditBookPage(Model model, @PathVariable("id") long id) {
+        ProductCreation book = productService.getProductCreationById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("genreNames", genreService.getAllGenreNames());
+        model.addAttribute("sidebarSelected", "book");
+        model.addAttribute("sidebarSelectedVal", "listBook");
+        model.addAttribute("book", book);
+        List<String> suppliers = new ArrayList<>(Arrays.asList(
+                "Công ty Cổ phần Sách Thái Hà",
+                "Công ty Sách Vinabook",
+                "Công ty Sách Nhã Nam",
+                "Công ty Sách Alpha Books",
+                "Công ty Sách Phương Nam",
+                "Công ty Sách Fahasa"
+        ));
+        if (book.getSupplier() != null && !suppliers.contains(book.getSupplier())) {
+            suppliers.add(book.getSupplier());
+        }
+
+        List<String> publishers = new ArrayList<>(Arrays.asList(
+                "Nhà xuất bản Kim Đồng",
+                "Nhà xuất bản Trẻ",
+                "Nhà xuất bản Giáo Dục",
+                "Nhà xuất bản Văn học",
+                "Nhà xuất bản Hội Nhà văn",
+                "Nhà xuất bản Lao Động"
+        ));
+        if (book.getPublisher() != null && !publishers.contains(book.getPublisher())) {
+            publishers.add(book.getPublisher());
+        }
+
+        Map<String, String> imageMap = imageService.getImagesByBookId(id);
+        Map<String, String> addtionalImgMap = imageMap.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals("0") && !entry.getKey().equals("-1"))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        model.addAttribute("suppliers", suppliers);
+        model.addAttribute("publishers", publishers);
+        model.addAttribute("coverImg", imageMap.get("0"));
+        model.addAttribute("backImg", imageMap.get("-1"));
+        model.addAttribute("additionalImgMap", addtionalImgMap);
+
+
+        return "admin/book/update-book";
     }
 
     private void setGeneralModelAttributesForListBook(

@@ -86,4 +86,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "group by p.id, p.name, p.price " +
             "order by sum(oi.quantity) desc")
     List<TopSellingProduct> findTopSellingProducts(Pageable pageable);
+
+    Product findProductById(long id);
 }

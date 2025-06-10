@@ -9,7 +9,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -26,5 +28,20 @@ public class ImageService {
         imageDTOList = imageRepository.findAllPrimaryImageDTOByBookId(true);
 
         return imageDTOList;
+    }
+
+    public Map<String, String> getImagesByBookId(long bookId) {
+        Map<String, String> imagesWithOrderMap = new HashMap<>();
+        List<Image> imageList = imageRepository.findAllByProductId(bookId);
+        imageList.forEach(image -> {
+            String url = image.getUrl().startsWith("https://") ? image.getUrl() : "/images/pro-img/".concat(image.getUrl());
+            imagesWithOrderMap.put(String.valueOf(image.getImgOrder()), url);
+        });
+
+        return imagesWithOrderMap;
+    }
+
+    public void deleteImagesByBookId(long bookId) {
+        imageRepository.deleteByProductId(bookId);
     }
 }
