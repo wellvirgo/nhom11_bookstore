@@ -84,6 +84,20 @@
                 <li class="breadcrumb-item active">Chỉnh sửa sách</li>
             </ol>
         </nav>
+<%--        <div class="d-flex gap-4">--%>
+<%--            <div class="form-check">--%>
+<%--                <input class="form-check-input" type="radio" name="radioDefault" id="rdBusinessActive">--%>
+<%--                <label class="form-check-label" for="rdBusinessActive">--%>
+<%--                    Đang kinh doanh--%>
+<%--                </label>--%>
+<%--            </div>--%>
+<%--            <div class="form-check">--%>
+<%--                <input class="form-check-input" type="radio" name="radioDefault" id="rdBusinessInActive" checked>--%>
+<%--                <label class="form-check-label" for="rdBusinessInActive">--%>
+<%--                    Ngừng kinh doanh--%>
+<%--                </label>--%>
+<%--            </div>--%>
+<%--        </div>--%>
     </div>
 
     <c:if test="${status eq 'success'}">
@@ -93,7 +107,7 @@
                 data-bs-autohide="true" data-bs-delay="2000">
             <div class="d-flex">
                 <div class="toast-body">
-                    Thêm sách thành công
+                    Cập nhật sách thành công!
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
                         aria-label="Close"></button>
@@ -117,7 +131,7 @@
                 data-bs-autohide="true" data-bs-delay="2000">
             <div class="d-flex">
                 <div class="toast-body">
-                    Thêm sách không thành công, có lỗi dữ liệu nhập vào
+                    Có lỗi khi cập nhật sách!
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
                         aria-label="Close"></button>
@@ -173,7 +187,7 @@
 
                         <%--@elvariable id="book" type="com.nhom11.Book_Store.dto.ProductCreation"--%>
                         <form:form id="form-create"
-                                   action="/admin/add-book" method="post"
+                                   action="/admin/edit-book/${id}" method="post"
                                    class="needs-validation" novalidate="novalidate"
                                    modelAttribute="book"
                                    enctype="multipart/form-data">
@@ -399,8 +413,7 @@
 
                                     <div class="row mb-4">
                                         <div class="col-md-6">
-                                            <label for="coverImage" class="form-label fw-bold">Ảnh bìa sách <span
-                                                    class="text-danger">*</span></label>
+                                            <label for="coverImage" class="form-label fw-bold">Ảnh bìa sách</label>
                                             <div class="image-upload-container">
                                                 <div class="upload-area" id="coverImageUpload">
                                                     <i class="bi bi-cloud-arrow-up fs-1"></i>
@@ -409,7 +422,7 @@
                                                     <p class="text-muted small">JPG, PNG hoặc WEBP (max. 2MB)</p>
                                                     <input type="file" id="coverImage" name="coverImage"
                                                            class="file-input"
-                                                           accept="image/*" required hidden>
+                                                           accept="image/*" hidden>
                                                 </div>
                                                 <div id="coverPreview" class="image-preview"></div>
                                             </div>
@@ -454,7 +467,7 @@
                                         <div>
                                             <a href="/admin/list-books" type="button"
                                                class="btn btn-secondary me-2">Hủy</a>
-                                            <button type="submit" class="btn btn-success">Lưu sách</button>
+                                            <button type="submit" class="btn btn-success">Cập nhật</button>
                                         </div>
                                     </div>
                                 </div>

@@ -44,4 +44,16 @@ public class ImageService {
     public void deleteImagesByBookId(long bookId) {
         imageRepository.deleteByProductId(bookId);
     }
+
+    public void deleteCoverImageByBookId(long bookId) {
+        imageRepository.deleteCoverImageByBookId(bookId);
+    }
+
+    public void deleteBackCoverImageByBookId(long bookId) {
+        imageRepository.deleteBackCoverImageByBookId(bookId);
+    }
+
+    public void deleteAddImageByBookId(long bookId) {
+        imageRepository.deleteAddImageByBookId(bookId);
+    }
 }

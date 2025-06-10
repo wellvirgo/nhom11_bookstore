@@ -167,13 +167,15 @@ public class AdminBookController {
     }
 
     @GetMapping("/admin/edit-book/{id}")
-    public String getEditBookPage(Model model, @PathVariable("id") long id) {
+    public String getEditBookPage(Model model, @PathVariable("id") long id,
+                                  @RequestParam("status") Optional<String> statusOptional) {
         ProductCreation book = productService.getProductCreationById(id);
         model.addAttribute("id", id);
         model.addAttribute("genreNames", genreService.getAllGenreNames());
         model.addAttribute("sidebarSelected", "book");
         model.addAttribute("sidebarSelectedVal", "listBook");
         model.addAttribute("book", book);
+        statusOptional.ifPresent(s -> model.addAttribute("status", s));
         List<String> suppliers = new ArrayList<>(Arrays.asList(
                 "Công ty Cổ phần Sách Thái Hà",
                 "Công ty Sách Vinabook",
@@ -210,6 +212,30 @@ public class AdminBookController {
 
 
         return "admin/book/update-book";
+    }
+
+    @PostMapping("/admin/edit-book/{id}")
+    public String editBook(Model model,
+                           @PathVariable(name = "id") long id,
+                           @ModelAttribute("book") @Valid ProductCreation book,
+                           BindingResult bindingResult,
+                           @RequestParam("coverImage") MultipartFile coverImage,
+                           @RequestParam("backCoverImage") MultipartFile backCoverImage,
+                           @RequestParam("additionalImages") MultipartFile[] additionalImages,
+                           HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/admin/edit-book/{id}?status=error";
+        }
+        book.setCoverImage(coverImage);
+        book.setBackCoverImage(backCoverImage);
+        book.setAdditionalImages(Arrays.asList(additionalImages));
+        if (productService.updateProduct(book, id)) {
+            session.removeAttribute("imageDTOList");
+            session.removeAttribute("imageDTOList");
+            return "redirect:/admin/edit-book/{id}?status=success";
+        }
+
+        return "redirect:/admin/edit-book/{id}?status=error";
     }
 
     private void setGeneralModelAttributesForListBook(
