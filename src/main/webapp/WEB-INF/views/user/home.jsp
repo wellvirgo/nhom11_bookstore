@@ -158,7 +158,7 @@
               </div>
               
               <!-- banner phụ  -->
-              <div class="banner-ad bg-success-subtle block-2" style="background-repeat: no-repeat; background-position: right bottom;">
+              <div class="banner-ad bg-success-subtle block-2" style="background-position: right bottom">
                 <div class="d-flex justify-content-center align-items-center banner-content p-5">
 
                   <div class="content-wrapper col-md-7">
@@ -173,7 +173,7 @@
               </div>
 
               <!-- banner phụ -->
-              <div class="banner-ad bg-success-subtle block-2" style="background-repeat: no-repeat; background-position: right bottom;">
+              <div class="banner-ad bg-danger block-3" style="background-position: right bottom">
                 <div class="d-flex justify-content-center align-items-center banner-content p-5">
 
                   <div class="content-wrapper col-md-7">
