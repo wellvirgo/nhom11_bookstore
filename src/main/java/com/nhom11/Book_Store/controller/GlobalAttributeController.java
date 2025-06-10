@@ -40,6 +40,7 @@ public class GlobalAttributeController {
     @Autowired
     private WishlistService wishlistService;
 
+    // Các thông tin chung được sử dụng trên toàn bộ ứng dụng
     @ModelAttribute
     public void addCartInfoToModel(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");

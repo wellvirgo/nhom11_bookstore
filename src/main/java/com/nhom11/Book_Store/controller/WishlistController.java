@@ -34,6 +34,7 @@ public class WishlistController {
     @Autowired
     ProductService productService;
 
+    //Lấy danh sách sản phẩm trong wishlist của người dùng - QT- 8/6/2025
     @GetMapping("/wishlist")
     public String listWishlist(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -67,6 +68,7 @@ public class WishlistController {
         return "user/list-book"; // Tái sử dụng giao diện
     }
 
+    // Thêm sản phẩm vào wishlist - QT- 8/6/2025
     @PostMapping("/wishlist/add")
     @ResponseBody
     public Map<String, Object> addToWishlist(@RequestParam Long productId, HttpSession session) {
@@ -88,6 +90,7 @@ public class WishlistController {
         return res;
     }
 
+    // Xóa sản phẩm khỏi wishlist - QT- 8/6/2025
     @PostMapping("/wishlist/remove")
     @ResponseBody
     public Map<String, Object> removeFromWishlist(@RequestParam Long productId, HttpSession session) {
