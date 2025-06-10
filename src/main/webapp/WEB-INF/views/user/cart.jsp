@@ -291,7 +291,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                     href="javascript:history.back()"
                     class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100"
                   >
-                    Tiếp tục mua hàng
+                    Mua Hàng Tiếp
                   </a>
                 </div>
                 <div class="col-md-6">

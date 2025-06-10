@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,6 +17,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     String status;
     LocalDateTime orderDate;
     LocalDateTime deliveryDate;
@@ -39,4 +45,6 @@ public class Order extends BaseEntity {
     private String orderDateStr;
     public String getOrderDateStr() { return orderDateStr; }
     public void setOrderDateStr(String orderDateStr) { this.orderDateStr = orderDateStr; }
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> items = new ArrayList<>();
 }

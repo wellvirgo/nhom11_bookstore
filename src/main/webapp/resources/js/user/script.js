@@ -11,7 +11,13 @@
       $("body").removeClass("preloader-site");
     });
   };
-
+  document.querySelectorAll('[data-bs-toggle="offcanvas"]').forEach((btn) => {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".offcanvas.show").forEach((opened) => {
+        bootstrap.Offcanvas.getInstance(opened).hide();
+      });
+    });
+  });
   // init Chocolat light box
   var initChocolat = function () {
     Chocolat(document.querySelectorAll(".image-link"), {
@@ -146,48 +152,54 @@
       });
     });
   }); // End of a document
-  
+
   function showToast(type, message) {
-    const toast = document.createElement('div');
+    const toast = document.createElement("div");
     toast.className = `custom-toast ${type}`;
     toast.textContent = message;
     document.body.appendChild(toast);
 
     setTimeout(() => {
-        toast.remove();
+      toast.remove();
     }, 3000);
-}
+  }
 
   document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const userType = urlParams.get("userType");
-     console.log("UserType:", userType); 
+    console.log("UserType:", userType);
 
     if (userType) {
-        if (userType === "ADMIN") {
-            localStorage.setItem("toastMessage", "Chào mừng bạn đến với trang quản trị!");
-            localStorage.setItem("toastType", "success");
-        } else if (userType === "USER") {
-            localStorage.setItem("toastMessage", "Chào mừng bạn đến với BookStore!");
-            localStorage.setItem("toastType", "success");
-        }
-        // Xóa userType khỏi URL để không hiển thị lại lần nữa
-        urlParams.delete("userType");
-        const newUrl = window.location.pathname + (urlParams.toString() ? "?" + urlParams.toString() : "");
-        window.history.replaceState({}, document.title, newUrl);
+      if (userType === "ADMIN") {
+        localStorage.setItem(
+          "toastMessage",
+          "Chào mừng bạn đến với trang quản trị!"
+        );
+        localStorage.setItem("toastType", "success");
+      } else if (userType === "USER") {
+        localStorage.setItem(
+          "toastMessage",
+          "Chào mừng bạn đến với BookStore!"
+        );
+        localStorage.setItem("toastType", "success");
+      }
+      // Xóa userType khỏi URL để không hiển thị lại lần nữa
+      urlParams.delete("userType");
+      const newUrl =
+        window.location.pathname +
+        (urlParams.toString() ? "?" + urlParams.toString() : "");
+      window.history.replaceState({}, document.title, newUrl);
     }
 
     // Hiển thị thông báo nếu có trong localStorage
     const toastMessage = localStorage.getItem("toastMessage");
     const toastType = localStorage.getItem("toastType");
     if (toastMessage && toastType) {
-        showToast(toastType, toastMessage);
-        localStorage.removeItem("toastMessage");
-        localStorage.removeItem("toastType");
+      showToast(toastType, toastMessage);
+      localStorage.removeItem("toastMessage");
+      localStorage.removeItem("toastType");
     }
-});
-
-
+  });
 })(jQuery);
 (function ($) {
   "use strict";
@@ -337,4 +349,3 @@
     });
   }); // End of a document
 })(jQuery);
-

@@ -111,20 +111,53 @@ document.getElementById("orderBtn").onclick = function (e) {
     listImg: listImg,
     paymentMethod: paymentMethod,
   };
+  const payload2 = {
+    cartItemIds: cartItemIds,
+    addressId: addressId,
+    subtotal: subtotal,
+    shippingFee: shippingFee,
+    total: total,
+    listImg: listImg,
+    paymentMethod: "PAYOS",
+    userId: userId,
+  };
   if (quantity) payload.quantity = quantity;
-
-  //    fetch('/user/place-order', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify(payload)
-  //     })
-  //     .then(res => {
-  //         if (!res.ok) throw new Error('Server error: ' + res.status);
-  //         return res.text();
-  //     })
-  //     .then(data => {
-  //         // alert('Đặt hàng thành công!');
-  //         window.location.href = '/user-orders';
-  //     })
-  //     .catch(err => alert('Có lỗi xảy ra: ' + err.message));
+  if (paymentMethod == "cod") {
+    fetch("/user/place-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Server error: " + res.status);
+        return res.text();
+      })
+      .then((data) => {
+        // alert('Đặt hàng thành công!');
+        window.location.href = "/user-orders";
+      })
+      .catch((err) => alert("Có lỗi xảy ra: " + err.message));
+  } else {
+    fetch("http://localhost:8080/api/orders/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload2),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Checkout successful:", data);
+        // Handle successful checkout here
+      })
+      .catch((error) => {
+        console.error("Error during checkout:", error);
+        alert("Có lỗi xảy ra khi thanh toán: " + error.message);
+      });
+  }
 };

@@ -158,23 +158,23 @@
               </div>
               
               <!-- banner phụ  -->
-              <div class="banner-ad bg-success-subtle block-2" style="background-color: '#EEF5E5' no-repeat;background-position: right bottom">
-                <div class="row banner-content p-5">
+              <div class="banner-ad bg-success-subtle block-2" style="background:url('/images/ad-image-1.PNG') no-repeat;background-position: right bottom">
+                <div class="d-flex align-items-center justify-content-center banner-content p-5">
 
-                  <div class="content-wrapper col-md-7">
-                    <div class="categories sale mb-3 pb-3">Sale Sập Sàn 50%</div>
-                    <h3 class="banner-title"></h3>
+                  <div class="content-wrapper col-md-8">
+                    <div class="categories sale mb-3 pb-3">Sale Sập Sàn 30%</div>
+                    <p class="item-title">Mỗi trang sách là một chuyến phiêu lưu</>
                     <a href="<c:url value='/user/list-books-sale50'/>" class="d-flex align-items-center nav-link">
                       Xem Thử <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg>
                     </a>                 
                   </div>
-                  <img src="/images/ad-image-1.jpg" height="140px" width="280px">
+
                 </div>
               </div>
 
               <!-- banner phụ -->
-              <div class="banner-ad bg-danger block-3" style="background:url('/images/ad-image-2.png') no-repeat;background-position: right bottom">
-                <div class="row banner-content p-5">
+              <div class="banner-ad bg-danger block-3" style=" no-repeat;background-position: right bottom">
+                <div class="d-flex align-items-center justify-content-center banner-content p-5">
 
                   <div class="content-wrapper col-md-7">
                     <div class="categories sale mb-3 pb-3">VĂN HỌC</div>

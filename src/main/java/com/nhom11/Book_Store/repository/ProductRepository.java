@@ -34,10 +34,13 @@ import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
         
     Optional<Product> findById(Long id);
+    @NonNull
+     //Page<Product> findAll(@NonNull  Pageable pageable);
     
     List<Product> findAll();
     List<Product> findByNameContainingIgnoreCase(String keyword);
@@ -116,4 +119,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "group by p.id, p.name, p.price " +
             "order by sum(oi.quantity) desc")
     List<TopSellingProduct> findTopSellingProducts(Pageable pageable);
+
+    List<Product> findAllByIsDeletedFalse();
+
+    List<Product> id(Long id);
 }
+    
