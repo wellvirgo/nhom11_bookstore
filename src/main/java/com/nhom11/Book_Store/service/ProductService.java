@@ -12,11 +12,11 @@ import com.nhom11.Book_Store.model.Voucher;
 import com.nhom11.Book_Store.repository.GenreRepository;
 import com.nhom11.Book_Store.repository.ImageRepository;
 import com.nhom11.Book_Store.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,26 +25,24 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class ProductService {
-    @Autowired
     ProductRepository productRepository;
-    @Autowired
     GenreRepository genreRepository;
-    @Autowired
     ProductMapper productMapper;
-    @Autowired
     FileUploadService fileUploadService;
-    @Autowired
     ImageService imageService;
+    CloudinaryUploadMediaService cloudinaryUploadMediaService;
 
 
 
@@ -173,7 +171,9 @@ public class ProductService {
         return productRepository.softDelete(id, now);
     }
 
+    @Transactional
     public int deletePermanently(long id) {
+        imageService.deleteImagesByBookId(id);
         return productRepository.deletePermanently(id);
     }
 
@@ -198,8 +198,22 @@ public class ProductService {
         return productRepository.restoreDeletedProduct(id);
     }
 
+    public Product getProductById(long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public ProductCreation getProductCreationById(long id) {
+        Product productFetchedFromDB = productRepository.findById(id).orElse(null);
+        if (productFetchedFromDB == null) {
+            return new ProductCreation();
+        }
+        ProductCreation productCreation = productMapper.mapToProductCreation(productFetchedFromDB);
+        productCreation.setGenreName(productFetchedFromDB.getGenre().getName());
+        return productCreation;
+    }
+
     private void saveImage(MultipartFile image, Product product, boolean isPrimary, int order) {
-        String url = fileUploadService.upload(image, "book");
+        String url = fileUploadService.upload(image, "pro-img");
         if (url.isBlank())
             return;
         Image img = Image.builder()
@@ -220,6 +234,7 @@ public class ProductService {
 
         return topSellingProducts;
     }
+    
     public long getBestDiscountedPrice(Product product) {
         long originalPrice = product.getPrice();
         long bestPrice = originalPrice;

@@ -48,15 +48,8 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private NotificationService notificationService;
-    //Xem danh sach san pham
-    // @GetMapping("/home")
-    // public String listProduct(Model model){
-    //     List<Product> listP = productService.getAllProduct();
-    //     Map<Long, String> productImages = imageService.getPrimaryImageMap();
-    //     model.addAttribute("listSP", listP);
-    //     model.addAttribute("productImages", productImages);
-    //     return "user/home";
-    // }
+
+    //Trang chủ hiển thị sản phẩm - QT - 25/5/2025
     @GetMapping("/home")
     public String listProduct(Model model, @RequestParam(defaultValue = "1") int page, HttpSession session) {
         int pageSize = 10; // Số sản phẩm mỗi trang
@@ -76,7 +69,6 @@ public class ProductController {
             productBestPrices.put(p.getId(), productService.getBestDiscountedPrice(p));
         }
         model.addAttribute("productBestPrices", productBestPrices);
-
         model.addAttribute("categoryNames", categoryNames);
         model.addAttribute("listSP", productPage.getContent());
         model.addAttribute("productImages", productImages);
@@ -84,7 +76,8 @@ public class ProductController {
         model.addAttribute("totalPages", productPage.getTotalPages());
         return "user/home";
     }
-    //Xem chi tiet san pham
+    
+    //Xem chi tiết sản phẩm - QT - 25/5/2025
     @GetMapping("/detail/{id}")
     public String detailProduct(@PathVariable Long id, Model model){
         try{
@@ -102,6 +95,8 @@ public class ProductController {
             return "error/productNF";
         }
     }
+    
+    //Xem danh sách sản phẩm theo danh mục - QT - 7/6/2025
     @GetMapping("/list-books")
     public String listBooksByCategory(@RequestParam("category") String category, Model model) {
         List<Product> products = productService.getProductsByCategory(category);
@@ -123,7 +118,8 @@ public class ProductController {
         model.addAttribute("priceRanges", priceRanges);
         return "user/list-book";
     }
-    //Tim kiem san pham - tra ra JSP 
+    
+    //Xem danh sách sản phẩm theo tìm kiếm - QT - 7/6/2025
     @GetMapping("/search")
     public String searchProduct(@RequestParam("keyword") String keyword, Model model){
         List<Product> listP = productService.searchProduct(keyword);
@@ -150,6 +146,7 @@ public class ProductController {
         return "user/list-book";
     }
 
+    //Xem danh sách sản phẩm sale 50% - QT - 7/6/2025
     @GetMapping("/list-books-sale50")
     public String listBooksSale50(Model model) {
         List<Product> products = productService.getProductsWithVoucherPercent(50); // Viết hàm này trong service
@@ -172,7 +169,8 @@ public class ProductController {
         model.addAttribute("sale50", true); // Để hiển thị banner nếu muốn
         return "user/list-book";
     }
-    //Tim kiem san pham - tra ve JSON cho AJAX
+   
+    //Danh sách sản phẩm tìm kiếm dưới dạng JSON để cho ajax hiển thị ở phần xổ ra trên thanh tìm kiếm - QT - 8/6/2025
     @GetMapping("/search-json")
     @ResponseBody
     public List<ProductforJsonDTO> searchProductJson(@RequestParam("keyword") String keyword) {
@@ -185,7 +183,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
     
-
+    //Hàm đánh dấu thông báo là đã đọc - QT - 8/6/2025
     @PostMapping("/notification/read")
     @ResponseBody
     public void markAsRead(@RequestParam Long id) {

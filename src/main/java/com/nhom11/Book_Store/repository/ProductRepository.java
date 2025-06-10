@@ -123,5 +123,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByIsDeletedFalse();
 
     List<Product> id(Long id);
+    Product findProductById(long id);
 }
     
+

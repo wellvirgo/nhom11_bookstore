@@ -38,6 +38,4 @@ public class CloudinaryUploadMediaService {
         cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
     }
 
-    // Transform the uploaded image
-
 }
