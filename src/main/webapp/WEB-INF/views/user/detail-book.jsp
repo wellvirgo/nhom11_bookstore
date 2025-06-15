@@ -5,7 +5,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>FoodMart - Free eCommerce Grocery Store HTML Website Template</title>
+    <title>Book Store</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,12 +25,14 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap&subset=vietnamese" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="/css/user/detail-product.css" rel="stylesheet">
+    <link href="/css/user/chatbox.css" rel="stylesheet">
   </head>
   <span>
     <div class="preloader-wrapper">
       <div class="preloader">
       </div>
     </div>
+    <jsp:include page="chatbox.jsp" />
     <jsp:include page="header.jsp" />
 
 <section id="selling-product" class="single-product mt-0 mt-md-5">
@@ -415,6 +417,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
   <script src="/js/user/cart.js"></script>
   <script src="/js/user/list-book.js"></script>
   <script src="/js/user/wishlist.js"></script>
+  <script src="/js/user/chatbot.js"></script>
   <!-- Alpine Plugins -->
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <!-- Alpine Core -->

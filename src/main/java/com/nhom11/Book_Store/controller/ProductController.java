@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nhom11.Book_Store.dto.ImageDTO;
 import com.nhom11.Book_Store.dto.ProductforJsonDTO;
+import com.nhom11.Book_Store.dto.TopSellingProduct;
+import com.nhom11.Book_Store.dto.TopSellingProductBanner;
 import com.nhom11.Book_Store.model.Cart;
 import com.nhom11.Book_Store.model.CartItem;
 import com.nhom11.Book_Store.model.Notification;
@@ -56,7 +58,7 @@ public class ProductController {
         Page<Product> productPage = productService.getTrendingProducts(PageRequest.of(page - 1, pageSize));
         Map<Long, String> productImages = imageService.getPrimaryImageMap();
         List<String> categoryNames = categoryService.getCategoryNames();
-
+        List<TopSellingProductBanner> topSellingProducts = productService.findTopSellingProductsInfo(3);
         User user = (User) session.getAttribute("user");
         List<Notification> notifiList = notificationService.getAllNotification(user.getId());
         model.addAttribute("notifiList", notifiList);
@@ -74,6 +76,7 @@ public class ProductController {
         model.addAttribute("productImages", productImages);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("bestSeller", topSellingProducts);
         return "user/home";
     }
     

@@ -19,7 +19,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/css/user/vendor.css">
     <link rel="stylesheet" type="text/css" href="/css/user/style.css">
-
+    <link rel="stylesheet" type="text/css" href="/css/user/dark-mode.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap&subset=vietnamese&subset=vietnamese" rel="stylesheet">
@@ -40,7 +40,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         }
   
         .nav-item.active {
-          color: var(--accent-color); 
+          color: var(--accent-color) !important; 
           font-weight: 500;
         }
   
@@ -123,12 +123,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     
     
       <section
-      class="py-3"
-      style="
-        background-image: url('images/background-pattern.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-      "
+      class="py-3 banner-section"
+      style=""
     >
       <div class="container-fluid">
         <div class="d-flex justify-content-between">
@@ -286,7 +282,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                   <button type="button" class="btn btn-primary editAddressBtn me-2">Sửa</button>
                   <button type="submit" class="btn btn-success saveAddressBtn d-none me-2">Lưu</button>
                   <button type="button" class="btn btn-secondary cancelEditBtn d-none me-2">Hủy</button>
-                  <a href="/user/address/delete?id=${addr.id}" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
+                  <a href="/user/address/delete?id=${addr.id}" style="color: #222 !important; " class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
                 </div>
               </div>
             </form>

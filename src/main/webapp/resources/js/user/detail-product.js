@@ -55,89 +55,88 @@ var relatedSwiper = new Swiper(".products-carousel", {
 });
 
 // Xử lý sự kiện click cho nút tăng giảm số lượng sản phẩm - QT - 7/6/2025
-$('.quantity-right-plus').click(function (e) {
+$(".quantity-right-plus").click(function (e) {
   e.preventDefault();
-  let id = $(this).data('id');
-  let avail = $(this).data('avail');
-  let v = parseInt($('#quantity-' + id ).val());
-  if (v<avail){
-    v = v+1;
+  let id = $(this).data("id");
+  let avail = $(this).data("avail");
+  let v = parseInt($("#quantity-" + id).val());
+  if (v < avail) {
+    v = v + 1;
   }
-  $('#quantity-' + id).val(v);
+  $("#quantity-" + id).val(v);
 });
 
-$('.quantity-left-minus').click(function(e){
+$(".quantity-left-minus").click(function (e) {
   e.preventDefault();
-  let id = $(this).data('id');
-  let v = parseInt($('#quantity-' + id).val());
-  if (v>1){
-    v = v-1;
+  let id = $(this).data("id");
+  let v = parseInt($("#quantity-" + id).val());
+  if (v > 1) {
+    v = v - 1;
   }
-  $('#quantity-' + id).val(v);
+  $("#quantity-" + id).val(v);
 });
 
 //Hàm xử lý gửi dữ liệu thêm vào giỏ hàng - QT - 7/6/20252025
-function addToCart(productId){
-  let v = $('#quantity-' + productId).val();
+function addToCart(productId) {
+  let v = $("#quantity-" + productId).val();
   $.ajax({
-    url: '/user/add-to-cart',
-    type: 'POST',
+    url: "/user/add-to-cart",
+    type: "POST",
     data: {
       productId: productId,
-      quantity: v
+      quantity: v || 1,
     },
-    success: function(response){
-      if(response.success) {
-        alert(response.message || 'Đã thêm vào giỏ hàng');
-        location.reload(); 
+    success: function (response) {
+      if (response.success) {
+        alert(response.message || "Đã thêm vào giỏ hàng");
+        location.reload();
       } else {
-        alert(response.message || 'Có lỗi xảy ra');
+        alert(response.message || "Có lỗi xảy ra");
       }
     },
-    error: function(xhr, status, error) {
-      let message = '';
-      if(xhr.status === 401) {
-        message = 'Vui lòng đăng nhập để thêm vào giỏ hàng';
-      } else if(xhr.status === 400) {
+    error: function (xhr, status, error) {
+      let message = "";
+      if (xhr.status === 401) {
+        message = "Vui lòng đăng nhập để thêm vào giỏ hàng";
+      } else if (xhr.status === 400) {
         message = xhr.responseText;
       } else {
-        message = 'Đã có lỗi xảy ra khi thêm vào giỏ hàng';
+        message = "Đã có lỗi xảy ra khi thêm vào giỏ hàng";
       }
       alert(message);
-    }
+    },
   });
 }
 
-
 //Hàm xử lý gửi dữ liệu khi ấn nút mua ngay - QT - 7/6/2025
-function addToCartBuy(productId){
-  let v = $('#quantity-' + productId).val();
+function addToCartBuy(productId) {
+  let v = $("#quantity-" + productId).val();
   $.ajax({
-    url: '/user/add-to-cart-buy',
-    type: 'POST',
+    url: "/user/add-to-cart-buy",
+    type: "POST",
     data: {
       productId: productId,
-      quantity: v
+      quantity: v,
     },
-    success: function(response){
-      if(response.success) {
-        if(response.redirectUrl){
+    success: function (response) {
+      if (response.success) {
+        if (response.redirectUrl) {
           window.location.href = response.redirectUrl; // chuyển trang theo URL server trả về
         }
       } else {
-        alert(response.message || 'Có lỗi xảy ra');
+        alert(response.message || "Có lỗi xảy ra");
       }
     },
-    error: function(xhr, status, error) {
-      let message = '';
-      if(xhr.status === 401) {
-        message = 'Vui lòng đăng nhập để thêm vào giỏ hàng';
-      } else if(xhr.status === 400) {
+    error: function (xhr, status, error) {
+      let message = "";
+      if (xhr.status === 401) {
+        message = "Vui lòng đăng nhập để thêm vào giỏ hàng";
+      } else if (xhr.status === 400) {
         message = xhr.responseText;
       } else {
-        message = 'Đã có lỗi xảy ra khi thêm vào giỏ hàng';
+        message = "Đã có lỗi xảy ra khi thêm vào giỏ hàng";
       }
       alert(message);
-    }
+    },
   });
 }

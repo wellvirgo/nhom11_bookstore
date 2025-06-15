@@ -85,9 +85,9 @@
     </div>
     <!--1, phần đầu trang  -->
     <jsp:include page="header.jsp" />
-    
+    <jsp:include page="chatbox.jsp" />
     <!--2, banner quảng cáo  -->
-    <section class="py-3" style="background-image: url('/images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
+    <section class="py-3 banner-section">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
@@ -96,59 +96,28 @@
             <div class="banner-blocks">
               
               <!-- banner 1 với hiệu ứng chuyển slide -->
-              <div class="banner-ad large bg-info block-1">
+              <div class="banner-ad large block-1">
 
                 <!-- thư viện tạo hiệu ứng -->
                 <div class="swiper main-swiper">
                   <div class="swiper-wrapper">
 
                     <!-- slide 1 -->
-                    <div class="swiper-slide">
-                      <div class="row banner-content p-5">
-                        <!-- nội dung bên trái  -->
-                        <div class="content-wrapper col-md-7">
-                          <div class="categories my-3">SẢN PHẨM NỔI BẬT</div>
-                          <h3 class="display-4">Khi mọi điều không như ý</h3>
-                          <p>Bạn đã bao giờ cảm thấy như cuộc sống liên tục thử thách bạn, khiến bạn phải không ngừng vật lộn để vượt qua những khó khăn và thất bại bất ngờ?</p>
-                          <!-- nút điều hướng  -->
-                          <a href="<c:url value='/user/detail/151'/>" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Xem thử</a>
-                        </div>
-                        <!-- ảnh bên phải  -->
-                        <div class="img-wrapper col-md-5 ">
-                          <img src="/images/banner1.PNG" class="img-fluid animated">
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <!-- slide 2  -->
-                    <div class="swiper-slide" >
-                      <div class="row banner-content p-5">
-                        <div class="content-wrapper col-md-7">
-                          <div class="categories mb-3 pb-3">SẢN PHẨM NỔI BẬT</div>
-                          <h3 class="banner-title">Mắt biếc</h3>
-                          <p>Bởi sự trong sáng của một tình cảm, bởi cái kết thúc rất, rất buồn khi suốt câu chuyện vẫn là những điều vui, buồn lẫn lộn (cái kết thúc không như mong đợi của mọi người).</p>
-                          <a href="<c:url value='/user/detail/16'/>" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">Tìm hiểu</a>
-                        </div>
-                        <div class="img-wrapper col-md-5">
-                          <img src="/images/banner2.png" class="img-fluid animated">
+                    <c:forEach var="item" items="${bestSeller}">
+                      <div class="swiper-slide">
+                        <div class="row banner-content p-5">
+                          <div class="content-wrapper col-md-7">
+                            <div class="categories my-3">SẢN PHẨM NỔI BẬT</div>
+                            <h3 class="display-4">${item.getName()}</h3>
+                            <p>${item.getDescription()}</p>
+                            <a href="<c:url value='/user/detail/${item.getId()}'/>" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Xem thử</a>
+                          </div>
+                          <div class="img-wrapper col-md-5">
+                            <img src="${item.getImgUrl()}"  class="img-fluid animated" alt="${item.getName()}">
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    <!-- slide 3 -->
-                    <div class="swiper-slide">
-                      <div class="row banner-content p-5">
-                        <div class="content-wrapper col-md-7">
-                          <div class="categories mb-3 pb-3">SẢN PHẨM NỔI BẬT</div>
-                          <h3 class="banner-title">Yêu những điều không hoàn hảo</h3>
-                          <p>Ngẫm lại cuộc sống của chính mình, ta sẽ nhận thấy rất nhiều điều không hoàn hảo. Trước hết, chỉ nhìn vào bản thân mình thôi ta đã cảm nhận được nhiều thiếu sót rồi: lời nói và hành động mâu thuẫn với nhau, vụng về trong những mối quan hệ xã hội, chuyện học hành, công việc không suôn sẻ như ý muốn.</p>
-                          <a href="<c:url value='/user/detail/152'/>" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">Xem Thử</a>
-                        </div>
-                        <div class="img-wrapper col-md-5">
-                          <img src="/images/banner3.png" class="img-fluid animated">
-                        </div>
-                      </div>
-                    </div>
+                    </c:forEach>
                   </div>
 
                   <!-- Phân trang của Swiper (các chấm tròn nhỏ bên dưới slide) -->
@@ -158,7 +127,7 @@
               </div>
               
               <!-- banner phụ  -->
-              <div class="banner-ad bg-success-subtle block-2" style="background-position: right bottom">
+              <div class="banner-ad block-2">
                 <div class="d-flex justify-content-center align-items-center banner-content p-5">
 
                   <div class="content-wrapper col-md-7">
@@ -173,7 +142,7 @@
               </div>
 
               <!-- banner phụ -->
-              <div class="banner-ad bg-danger block-3" style="background-position: right bottom">
+              <div class="banner-ad block-3">
                 <div class="d-flex justify-content-center align-items-center banner-content p-5">
 
                   <div class="content-wrapper col-md-7">
@@ -264,7 +233,7 @@
                                   alt="${p.name}" />
                               </a>
                             </figure>
-                            <h3 class="mb-1" style="font-size: 1rem;">${p.name}</h3>
+                            <h3 class="mb-1" style="font-size: 1rem;min-height: 50px;">${p.name}</h3>
                             <!-- Số lượng còn lại -->
                             <!-- <span class="qty d-block mb-1 small text-secondary" style="font-size: 13px; font-weight: 500;">
                               Còn ${p.quantityAvailable} sản phẩm
@@ -290,7 +259,7 @@
                                 </button>
                               </div>
                               <!-- Nút thêm vào giỏ hàng -->
-                              <button type="button" class="btn btn-dark btn-sm ms-2 add-to-cart-btn" data-id="${p.id}" style= "background-color: #FFC43F; border: none;"onclick="addToCart('${p.id}')">
+                              <button type="button" class="btn btn-dark btn-sm ms-2 add-to-cart-btn" data-id="${p.id}" onclick="addToCart('${p.id}')">
                                 <svg width="24" height="24"><use xlink:href="#cart"></use></svg>
                               </button>
                             </div>
@@ -490,6 +459,24 @@
     <script src="${pageContext.request.contextPath}/js/user/list-book.js"></script>
     <script src="/js/user/detail-product.js"></script>
     <script src="/js/user/wishlist.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.Swiper) {
+          new Swiper('.main-swiper', {
+            loop: true,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+            },
+            autoplay: {
+              delay: 2000,
+              disableOnInteraction: false,
+            },
+            speed: 600,
+          });
+        }
+      });
+    </script>
 
 
   </body>

@@ -35,9 +35,9 @@ public class SecurityConfig {
             "/vendor/**",
             "/images/**",
             "/js/user/**",
+            "/chatbot/**",
             // "/product/**",
             // "/product/add-to-card"
-
         };
 
     private static final String[] PUBLIC_GET_URLS = {

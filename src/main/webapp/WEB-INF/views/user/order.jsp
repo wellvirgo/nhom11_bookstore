@@ -34,6 +34,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap&subset=vietnamese"
       rel="stylesheet"
     />
+    <link href="/css/user/dark-mode.css" rel="stylesheet" type="text/css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -97,7 +98,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         color: #bd2130;
       }
       .nav-item.active {
-        color: var(--accent-color);
+        color: var(--accent-color) !important;
         font-weight: 500;
       }
       #orderList::-webkit-scrollbar {
@@ -144,6 +145,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         justify-content: center;
         line-height: 1.5;
         font-weight: 500;
+        color: #000 !important;
       }
       .modal-content {
         border-radius: 12px;
@@ -294,7 +296,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                             <div class="card-body py-3">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
-                                        <span class="text-muted">Đơn hàng #${order.id}</span>
+                                        <span class="">Đơn hàng #${order.id}</span>
                                         <span class="mx-2">|</span>
                                           <c:choose>
                                               <c:when test="${order.status == 'Processing'}">
@@ -317,7 +319,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                               </c:otherwise>
                                           </c:choose>
                                     </div>
-                                    <span class="text-muted">${order.orderDateStr}</span>
+                                    <span class="">${order.orderDateStr}</span>
                                 </div>
                                 <div class=""><hr> </div>
                                 <div class="row">
@@ -328,15 +330,15 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                     <div class="col-md-7">
                                         <h6>${firstOrderItem.product.name}</h6>
                                         <c:if test = "${fn:length(orderItems) > 1}">
-                                          <small class="text-muted">và ${fn:length(orderItems)-1} sản phẩm khác</small>
+                                          <small class="">và ${fn:length(orderItems)-1} sản phẩm khác</small>
                                         </c:if>
                                     </div>
                                     <div class="py-2"><hr>
                                     </div>
                                     <div class="d-flex justify-content-between text-end">
                                         <div class="d-flex align-items-center">
-                                            <p class="text-muted mb-0">Tổng tiền:</p>
-                                            <h6 class="text-muted mb-0" style="margin-top:4px">
+                                            <p class=" mb-0">Tổng tiền:</p>
+                                            <h6 class=" mb-0" style="margin-top:4px">
                                                 <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/>
                                             </h6>
                                         </div>
@@ -405,7 +407,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                                             </td>
                                                             <td>
                                                                 <h6 class="mb-0">${item.product.name}</h6>
-                                                                <small class="text-muted">Số lượng: ${item.quantity}</small>
+                                                                <small class="">Số lượng: ${item.quantity}</small>
                                                             </td>
                                                             <td class="text-end">
                                                                 <fmt:formatNumber value="${item.price * item.quantity}" type="currency" currencySymbol="₫"/>

@@ -35,6 +35,11 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       type="text/css"
       href="<c:url value='/css/user/style.css'/>"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="<c:url value='/css/user/dark-mode.css'/>"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,6 +49,28 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+    
+    <!-- Theme and Language Icons -->
+    <style>
+      .theme-toggle, .language-toggle {
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        background: var(--primary-bg);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+      
+      .theme-toggle:hover, .language-toggle:hover {
+        background: var(--hover-bg);
+      }
+      
+      .theme-toggle svg, .language-toggle svg {
+        width: 20px;
+        height: 20px;
+        color: var(--primary-text);
+      }
+    </style>
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -234,10 +261,10 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                     <div class="d-flex flex-column justify-content-between">
                         <h6 class="my-0 item-name">${item.product.name}</h6>
                         <div class="d-flex justify-centent-between align-items-center">
-                            <small class="text-body-secondary">
+                            <small class="">
                                 <fmt:formatNumber value="${cartItemBestPrices[item.product.id]}" type="number" groupingUsed="true"/>đ
                             </small>
-                            <small class="text-body-secondary text-decoration-line-through ms-1" style="font-size:12px">
+                            <small class=" text-decoration-line-through ms-1" style="font-size:12px">
                                 <fmt:formatNumber value="${item.product.price}" type="number" groupingUsed="true"/>đ
                             </small>
                         </div>
@@ -301,7 +328,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         </div>
       </div>
     </div>
-
     <header>
       <div class="container-fluid">
         <div class="row py-3 border-bottom">
@@ -309,7 +335,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             class="col-sm-4 col-lg-3 text-center text-sm-start d-flex justify-content-sm-start justify-content-center"
           >
             <div class="main-logo d-flex align-items-center">
-              <a href="<c:url value='/user/home'/>">
+              <a href="<c:url value='/user/home'/>" class="text-decoration-none">
                 <img
                   src="<c:url value='/images/logo.png'/>"
                   alt="logo"
@@ -319,8 +345,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
             </div>
             <div class="d-flex align-items-center ms-1">
               <span
-                ><span style="color: #222; font-size: 25px">Book</span
-                ><span style="color: #fdc650; font-size: 25px"
+                ><span class="title-span" style=" font-size: 25px" data-i18n="book">Book</span
+                ><span style="color: #fdc650; font-size: 25px" data-i18n="store"
                   >Store</span
                 ></span
               >
@@ -416,7 +442,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                 </a>
               </li>
               <!-- giỏ hàng  -->
-              <li class="">
+              <li>
                 <a
                   href="#"
                   class="rounded-circle bg-light p-2 mx-1 position-relative"
@@ -433,7 +459,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
                     id="cart-quantity-header"
                   >
                     ${fn:length(cartItems)}
-                    <span class="visually-hidden">unread messages</span>
+                    <span class="visually-hidden" data-i18n="unread_messages">unread messages</span>
                   </span>
                 </a>
               </li>
@@ -441,13 +467,45 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               <li>
                 <a
                     href="<c:url value='/user-control?param=profile'/>"
-                  class="rounded-circle bg-light p-2 mx-1"
-                >
+                  class="rounded-circle bg-light p-2 mx-1">
                   <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#user"></use>
                   </svg>
                 </a>
               </li>
+              
+              <!-- Theme Toggle Button -->
+              <li>
+                <label class="switch">
+                  <input type="checkbox" id="theme-toggle">
+                  <span class="slider round">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                  </span>
+                </label>
+              </li>
+              
+              <!-- Language Toggle Button -->
+              <!-- <li>
+                <button id="language-toggle" class="language-toggle mx-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                  </svg>
+                </button>
+              </li> -->
+              
               <li class="d-lg-none">
                 <a
                   href="#"
@@ -483,5 +541,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/js/user/cart.js"></script>
     <script src="/js/user/notifi.js"></script>
+    <script src="/js/user/theme-language.js"></script>
+    
+    <!-- Add theme and language scripts -->
   </body>
 </html>

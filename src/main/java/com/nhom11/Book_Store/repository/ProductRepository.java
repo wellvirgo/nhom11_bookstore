@@ -18,6 +18,7 @@ package com.nhom11.Book_Store.repository;
 
 import com.nhom11.Book_Store.dto.ProductInTrash;
 import com.nhom11.Book_Store.dto.TopSellingProduct;
+import com.nhom11.Book_Store.dto.TopSellingProductBanner;
 import com.nhom11.Book_Store.model.Product;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -124,6 +126,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> id(Long id);
     Product findProductById(long id);
+
+    @Query("select new com.nhom11.Book_Store.dto.TopSellingProductBanner(" +
+       "p.id, p.name, p.description,sum(oi.quantity),null) " +
+       "from OrderItem oi join oi.product p " +
+       "group by p.id, p.name, p.description " +
+       "order by sum(oi.quantity) desc")
+    List<TopSellingProductBanner> findTopSellingProductsInfo(Pageable pageable);
+    @EntityGraph(attributePaths = "images")
+    Page<Product> findAllByIsDeletedFalse(Pageable pageable);
 }
     
 

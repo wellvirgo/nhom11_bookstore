@@ -1,0 +1,392 @@
+:root {
+  /* Light mode variables */
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f9fa;
+  --primary-text: #212529;
+  --secondary-text: #6c757d;
+  --border-color: #dee2e6;
+  --card-bg: #ffffff;
+  --hover-bg: #e0e0e0;
+  --banner-bg-1: #e0e0e0; /* Light mode color for block-1, adjust as needed */
+  --banner-bg-2: #d4edda; /* Light mode color for block-2 (success-subtle), adjust as needed */
+  --banner-bg-3: #f8d7da; /* Light mode color for block-3 (danger), adjust as needed */
+  --banner-background-image: url("/images/background-pattern.jpg"); /* Light background pattern */
+}
+
+[data-theme="dark"] {
+  /* Dark mode variables */
+  --primary-bg: #1a1a1a;
+  --secondary-bg: #2d2d2d;
+  --primary-text: #e9ecef;
+  --secondary-text: #adb5bd;
+  --border-color: #495057;
+  --card-bg: #2d2d2d;
+  --hover-bg: #3d3d3d;
+  --banner-bg-1: #2d2d2d;
+  --banner-bg-2: #2d2d2d;
+  --banner-bg-3: #2d2d2d;
+  --banner-background-image: url("/images/dark-background-pattern.jpg"); /* Dark background pattern */
+}
+#offcanvasCart {
+  background-color: var(--primary-bg) !important;
+}
+.form-control {
+  background-color: var(--secondary-bg) !important;
+  color: var(--primary-text) !important;
+}
+.search-bar {
+  background-color: var(--secondary-bg) !important;
+}
+.list-group-item {
+  background-color: var(--secondary-bg) !important;
+  color: var(--primary-text) !important;
+}
+.swiper-slide {
+  background-color: var(--secondary-bg) !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+small,
+em,
+th,
+a,
+span {
+  font-family: var(--heading-font);
+  color: var(--primary-text) !important;
+}
+/* Apply theme variables */
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.tabs-header h3 {
+  color: var(--primary-text) !important;
+}
+.section-title {
+  color: var(--primary-text) !important;
+}
+.card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.navbar {
+  background-color: var(--primary-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.btn-outline-secondary {
+  color: var(--primary-text);
+  border-color: var(--border-color);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--hover-bg);
+  color: var(--primary-text);
+}
+
+/* Add more specific styles as needed */
+.banner-section {
+  background-image: var(--banner-background-image);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.banner-ad.block-1 {
+  background-color: var(--banner-bg-1) !important;
+}
+
+.banner-ad.block-2 {
+  background-color: var(--banner-bg-2) !important;
+}
+
+.banner-ad.block-3 {
+  background-color: var(--banner-bg-3) !important;
+}
+
+.banner-ad {
+  background-color: var(--secondary-bg) !important;
+  color: var(--primary-text);
+}
+
+.banner-ad .categories {
+  color: var(--secondary-text);
+}
+.title-span {
+  color: var(--secondary-text);
+}
+.banner-ad .display-4,
+.banner-ad .banner-title,
+.banner-ad .item-title {
+  color: var(--primary-text);
+}
+
+.banner-ad p {
+  color: var(--secondary-text);
+}
+
+.banner-ad .btn-outline-dark {
+  color: var(--primary-text);
+  border-color: var(--border-color);
+}
+
+.banner-ad .btn-outline-dark:hover {
+  background-color: var(--hover-bg);
+  color: var(--primary-text);
+}
+
+.banner-ad .nav-link {
+  color: var(--primary-text);
+}
+
+.banner-ad .nav-link:hover {
+  color: var(--secondary-text);
+}
+.categories {
+  color: var(--primary-text) !important;
+}
+/* Product Item styles for Dark Mode */
+.product-item {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--primary-text) !important;
+  box-shadow: 0px 5px 22px rgba(255, 255, 255, 0.04) !important;
+}
+
+.product-item:hover {
+  box-shadow: 0px 21px 44px rgba(255, 255, 255, 0.08) !important;
+}
+
+.product-item h3 {
+  color: var(--primary-text) !important;
+}
+
+.product-item .price {
+  color: var(--primary-text) !important;
+}
+
+.product-item .price .old-price {
+  color: var(--secondary-text) !important;
+}
+
+.product-item .btn-wishlist {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+.product-item .btn-wishlist svg {
+  color: var(--primary-text) !important;
+}
+
+.product-item .btn-wishlist:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+.product-item .btn-number {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--primary-text) !important;
+}
+
+.product-item .btn-number:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+.product-item .product-qty .form-control.input-number {
+  background-color: var(--secondary-bg) !important;
+  color: var(--primary-text) !important;
+  border-color: var(--border-color) !important;
+}
+
+.product-item .btn-link {
+  color: var(--primary-text) !important;
+}
+
+.product-item .btn-link:hover {
+  color: var(--secondary-text) !important;
+}
+
+.product-item figure {
+  background-color: var(--secondary-bg) !important;
+}
+
+.product-item .qty {
+  color: var(--secondary-text) !important;
+}
+
+.product-item .rating {
+  color: var(--primary-text) !important;
+}
+
+.product-item .rating iconify-icon {
+  color: var(
+    --accent-color
+  ) !important; /* Assuming accent-color is defined and works for both themes */
+}
+
+.product-item .btn-warning {
+  background-color: var(--secondary-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--primary-text) !important;
+}
+
+.product-item .btn-warning:hover {
+  background-color: var(--hover-bg) !important;
+  border-color: var(--hover-bg) !important;
+}
+
+.product-item .btn-warning svg {
+  color: var(--primary-text) !important;
+}
+
+/* pagination */
+.page-link {
+  background-color: var(--secondary-bg) !important ;
+  color: var(--primary-text);
+}
+.page-item.active .page-link {
+  background-color: #ffc43f !important ;
+  color: #000;
+  border: none;
+}
+
+/* Header Icons */
+.rounded-circle.bg-light {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+.rounded-circle.bg-light svg {
+  color: var(--primary-text) !important;
+}
+
+.rounded-circle.bg-light:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+/* Theme and Language Toggles */
+.theme-toggle,
+.language-toggle {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+.theme-toggle svg,
+.language-toggle svg {
+  color: var(--primary-text) !important;
+}
+
+.theme-toggle:hover,
+.language-toggle:hover {
+  background: var(--hover-bg) !important;
+}
+
+/* Toggle Switch Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  margin: 0 10px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--secondary-bg);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--primary-bg);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  z-index: 2;
+}
+
+/* Icon styles */
+.sun-icon,
+.moon-icon {
+  position: relative;
+  z-index: 1;
+  transition: 0.4s;
+  color: var(--primary-text);
+}
+
+.moon-icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sun-icon {
+  opacity: 0;
+  transform: translateX(0);
+}
+
+/* Đảo ngược logic: checked = dark mode */
+input:checked + .slider {
+  background-color: #ffc43f;
+  border-color: #ffc43f;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(32px);
+  -ms-transform: translateX(32px);
+  transform: translateX(32px);
+  background-color: var(--primary-bg);
+}
+
+input:checked + .slider .moon-icon {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+input:checked + .slider .sun-icon {
+  opacity: 1;
+  transform: translateX(0);
+  color: #000;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #ffc43f;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 28px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+  background-color: #ccc;
+}

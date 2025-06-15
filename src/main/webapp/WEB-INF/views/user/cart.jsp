@@ -44,12 +44,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
     <jsp:include page="header.jsp" />
     <section
-      class="py-3"
-      style="
-        background-image: url('/images/background-pattern.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-      "
+      class="py-3 banner-section"
     >
       <div class="container-fluid">
         <div class="d-flex justify-content-between">
@@ -75,7 +70,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                       <tr>
                         <th
                           scope="col"
-                          class="card-title text-uppercase text-muted"
+                          class="card-title text-uppercase "
                         >
                           <div class="">
                             <input
@@ -89,25 +84,25 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                         </th>
                         <th
                           scope="col"
-                          class="card-title text-uppercase text-muted"
+                          class="card-title text-uppercase "
                         >
                           Sản phẩm
                         </th>
                         <th
                           scope="col"
-                          class="card-title text-uppercase text-muted"
+                          class="card-title text-uppercase "
                         >
                           Số lượng
                         </th>
                         <th
                           scope="col"
-                          class="card-title text-uppercase text-muted"
+                          class="card-title text-uppercase "
                         >
                           Thành tiền
                         </th>
                         <th
                           scope="col"
-                          class="card-title text-uppercase text-muted"
+                          class="card-title text-uppercase "
                         ></th>
                       </tr>
                     </thead>
@@ -149,7 +144,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                                 </h5>
                                 <div class="total-price">
                                   <fmt:setLocale value="vi_VN" />
-                                  <span class="money text-dark">
+                                  <span class="money ">
                                     <fmt:formatNumber 
                                       value="${item.product.price}" 
                                       type="currency" 
@@ -203,7 +198,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                             style="height: 120px"
                           >
                           <fmt:setLocale value="vi_VN" />
-                          <span class="money text-dark">
+                          <span class="money ">
                             <fmt:formatNumber
                                 value="${item.product.price * item.quantity}"
                                 type="currency"
@@ -290,6 +285,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                   <a
                     href="javascript:history.back()"
                     class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100"
+                    style="color: #fff !important;"
                   >
                     Mua Hàng Tiếp
                   </a>

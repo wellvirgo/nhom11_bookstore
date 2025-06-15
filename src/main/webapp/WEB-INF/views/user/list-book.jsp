@@ -20,7 +20,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <link rel="stylesheet" type="text/css" href="/css/user/vendor.css">
     <link rel="stylesheet" type="text/css" href="/css/user/style.css">
     <link rel="stylesheet" type="text/css" href="/css/user/home.css">
-
+    <link rel="stylesheet" type="text/css" href="/css/user/chatbox.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap&subset=vietnamese" rel="stylesheet">
@@ -33,9 +33,9 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       <div class="preloader">
       </div>
     </div> --%>
-
+    <jsp:include page="chatbox.jsp" />
     <jsp:include page="header.jsp" />
-    <section class="py-3 mb-5" style="background-image: url('/images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
+    <section class="py-3 mb-5 banner-section" >
       <div class="container-fluid">
         <div class="d-flex justify-content-between">
           <h1 class="page-title pb-2">Sản phẩm</h1>
@@ -348,5 +348,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <script src="/js/user/toast.js"></script>
     <script src="/js/user/cart.js"></script>
     <script src="/js/user/wishlist.js"></script>
+    <script src="/js/user/chatbot.js"></script>
   </body>
 </html>

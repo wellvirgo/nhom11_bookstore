@@ -16,6 +16,8 @@
   <link rel="stylesheet" type="text/css" href="/css/user/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="/css/user/chatbot.css">
 </head>
 <body>
 
@@ -543,5 +545,6 @@
   <script src="/js/user/list-book.js"></script>
   <script src="/js/toast.js"></script>
   <script src="/js/cart.js"></script>
+  <script src="/js/user/chatbot.js"></script>
 </body>
 </html>

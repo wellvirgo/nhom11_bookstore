@@ -40,7 +40,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         }
   
         .nav-item.active {
-          color: var(--accent-color); 
+          color: var(--accent-color) !important; 
           font-weight: 500;
         }
   
@@ -123,12 +123,8 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     
     
       <section
-      class="py-3"
-      style="
-        background-image: url('images/background-pattern.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-      "
+      class="py-3 banner-section"
+      style=""
     >
       <div class="container-fluid">
         <div class="d-flex justify-content-between">
