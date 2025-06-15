@@ -420,33 +420,6 @@ $(document).ready(function () {
   });
 
   // Add refresh button styles
-  $("<style>")
-    .text(
-      `
-      .refresh-btn {
-        background: none;
-        border: none;
-        color: var(--primary-text);
-        padding: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 8px;
-      }
-      .refresh-btn:hover {
-        background: var(--hover-bg);
-        transform: rotate(180deg);
-      }
-      .refresh-btn i {
-        font-size: 16px;
-      }
-    `
-    )
-    .appendTo("head");
-
   function formatReply(reply) {
     console.log("Original reply:", reply);
     let formattedReply = reply;

@@ -52,6 +52,11 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap&subset=vietnamese"
       rel="stylesheet"
     />
+    <!-- Thêm dòng này vào phần <head> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -104,13 +109,13 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
             <i class="fas fa-sync-alt"></i>
           </button>
           <button
-            class="fullscreen-btn"
+            class="fullscreen-btn mt-1"
             id="fullscreenBtn"
             title="Phóng to toàn màn hình"
           >
             <i class="fas fa-expand"></i>
           </button>
-          <button class="close-chat" id="closeChat">
+          <button class="close-chat mt-1" id="closeChat">
             <i class="fas fa-times"></i>
           </button>
           <h4><i class="fas fa-robot"></i> AI Assistant</h4>

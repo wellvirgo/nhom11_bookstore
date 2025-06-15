@@ -209,10 +209,28 @@
 }
 
 .close-chat:hover {
-  background: rgba(255, 255, 255, 0.2);
   transform: rotate(90deg);
 }
-
+.refresh-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+.refresh-btn:hover {
+  transform: rotate(180deg);
+}
+.refresh-btn i {
+  font-size: 16px;
+}
 .fullscreen-btn {
   position: absolute;
   top: 15px;
@@ -229,7 +247,6 @@
 }
 
 .fullscreen-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
 }
 
