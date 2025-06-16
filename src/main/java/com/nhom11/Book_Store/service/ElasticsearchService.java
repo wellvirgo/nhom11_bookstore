@@ -1,5 +1,6 @@
 package com.nhom11.Book_Store.service;
 
+import com.nhom11.Book_Store.dto.SearchResponse;
 import com.nhom11.Book_Store.model.Product;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,24 @@ public class ElasticsearchService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String ES_URL = "http://localhost:9200/products_embedding/_doc/";
 
+    public void deleteProduct(Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        try {
+            restTemplate.exchange(
+                ES_URL + id,           // URL với id của product cần xóa
+                HttpMethod.DELETE,      // Sử dụng DELETE method
+                entity,                 // Headers
+                String.class           // Response type
+            );
+        } catch (Exception e) {
+            // Log lỗi nếu xóa không thành công
+            throw new RuntimeException("Không thể xóa sản phẩm từ Elasticsearch: " + e.getMessage());
+        }
+    }
+    
     public void indexProduct(Product product, List<Float> embedding) {
         Map<String, Object> doc = new HashMap<>();
         doc.put("id", product.getId());
@@ -41,7 +60,7 @@ public class ElasticsearchService {
     }
 
     // Truy vấn cosineSimilary trong Elasticsearch
-    public List<Map<String, Object>> searchByEmbedding(String prompt, List<Float> embedding) {
+    public SearchResponse searchByEmbedding(String prompt, List<Float> embedding, int page, int size) {
         String url = "http://localhost:9200/products_embedding/_search";
 
         Map<String, Object> params = new HashMap<>();
@@ -65,7 +84,10 @@ public class ElasticsearchService {
                 "should", List.of(
                         Map.of("multi_match", Map.of(
                                 "query", prompt,
-                                "fields", List.of("name^3", "description", "author", "genre_name", "publisher", "category_name")
+                                "type", "most_fields",
+                                "fields", List.of("name^10", "genre_name^2.5", "category_name^2", "description", "publisher"),
+                                "fuzziness", "AUTO",
+                                "prefix_length", 2
                         )),
                         Map.of("match_all", Map.of())  // fallback nếu multi_match không match
                 ),
@@ -80,10 +102,12 @@ public class ElasticsearchService {
         );
 
         Map<String, Object> body = Map.of(
-                "size", 5,
+                "from", page * size,
+                "size", size,
                 "min_score", 1.5,
                 "_source", List.of("id", "name", "description", "price", "author", "publisher", "genre_name", "category_name"),
-                "query", Map.of("script_score", scriptScore)
+                "query", Map.of("script_score", scriptScore),
+                "track_total_hits", true
         );
 
         HttpHeaders headers = new HttpHeaders();
@@ -92,14 +116,27 @@ public class ElasticsearchService {
 
         ResponseEntity<Map> response = new RestTemplate().postForEntity(url, request, Map.class);
 
-        // Trích xuất danh sách hits
-        List<Map<String, Object>> hits = (List<Map<String, Object>>)
-                ((Map<String, Object>) response.getBody().get("hits")).get("hits");
+//        // Trích xuất danh sách hits
+//        List<Map<String, Object>> hits = (List<Map<String, Object>>)
+//                ((Map<String, Object>) response.getBody().get("hits")).get("hits");
+//
+//        return hits.stream()
+//                .map(hit -> (Map<String, Object>) hit.get("_source"))
+//                .toList();
 
-        return hits.stream()
+        Map<String, Object> hits = (Map<String, Object>) response.getBody().get("hits");
+        List<Map<String, Object>> hitsList = (List<Map<String, Object>>) hits.get("hits");
+
+        // Lấy tổng số kết quả từ total
+        Map<String, Object> total = (Map<String, Object>) hits.get("total");
+        long totalResults = ((Number) total.get("value")).longValue();
+
+        List<Map<String, Object>> data = hitsList.stream()
                 .map(hit -> (Map<String, Object>) hit.get("_source"))
                 .toList();
+
+        int totalPages = (int) Math.ceil((double) totalResults / size);
+
+        return new SearchResponse(data, totalResults, totalPages, page);
     }
 }
-
-

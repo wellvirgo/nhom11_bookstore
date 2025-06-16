@@ -1,5 +1,6 @@
 package com.nhom11.Book_Store.controller;
 
+import com.nhom11.Book_Store.dto.SearchResponse;
 import com.nhom11.Book_Store.service.ElasticsearchService;
 import com.nhom11.Book_Store.service.EmbeddingService;
 import com.nhom11.Book_Store.service.GeminiPromptAnalyzer;
@@ -21,7 +22,11 @@ public class SearchController {
     @Value("${openai.api_key}")
     private String apiKey;
     @GetMapping("/search_ai")
-    public ResponseEntity<?> searchAI(@RequestParam String prompt) {
+    public ResponseEntity<?> searchAI(
+            @RequestParam String prompt,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         try {
             // handle prompt before embedding
 //            GeminiPromptAnalyzer analyzer = new GeminiPromptAnalyzer(apiKey);
@@ -31,7 +36,7 @@ public class SearchController {
             List<Float> embedding = embeddingService.getEmbedding(prompt);
 
             // Gửi truy vấn để Elasticsearch
-            List<Map<String, Object>> searchResult = elasticsearchService.searchByEmbedding(prompt, embedding);
+            SearchResponse searchResult = elasticsearchService.searchByEmbedding(prompt, embedding, page, size);
             return ResponseEntity.ok(searchResult);
 //            return ResponseEntity.ok(analyzerPrompt);
         } catch (Exception e) {
