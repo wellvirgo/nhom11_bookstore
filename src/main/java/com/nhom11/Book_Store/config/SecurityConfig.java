@@ -86,7 +86,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, PUBLIC_POST_URLS).permitAll()
 
                         .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable()) 
+                .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(authenticationSuccessHandler())
@@ -111,4 +111,21 @@ public class SecurityConfig {
 
         // return http.build();
     }
+//@Bean
+//public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//    http
+//            .authorizeHttpRequests(auth -> auth
+//                    .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
+//                    // Cho phép tất cả các request mà không cần xác thực
+//                    .anyRequest().permitAll()
+//            )
+//            // Vô hiệu hóa CSRF protection
+//            .csrf(csrf -> csrf.disable())
+//            // Vô hiệu hóa form login
+//            .formLogin(form -> form.disable())
+//            // Vô hiệu hóa logout
+//            .logout(logout -> logout.disable());
+//
+//    return http.build();
+//}
 }

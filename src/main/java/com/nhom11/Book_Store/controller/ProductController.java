@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -190,4 +192,13 @@ public class ProductController {
         notificationService.markAsRead(id);
     }
 
+    @GetMapping("/getImageUrl")
+    public ResponseEntity<?> getImageUrl(@RequestParam Long id) {
+        try {
+            String url = productService.getImagebyID(id);
+            return ResponseEntity.ok(url);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

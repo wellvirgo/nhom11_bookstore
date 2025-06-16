@@ -21,21 +21,23 @@ $(document).ready(function () {
 
     // Gọi đúng endpoint trả về JSON cho autocomplete
     $.ajax({
-      url: `/user/search-json?keyword=${encodeURIComponent(inputValue)}`,
+      url: `http://localhost:8080/api/v1/search/search_ai?prompt=sách${inputValue}`,
       method: "GET",
       success: function (response) {
         $autocompleteList.empty();
 
         // response là mảng ProductforJsonDTO
-        if (response && response.length > 0) {
-          response.forEach(function (item) {
+        if (response.data && response.data.length > 0) {
+          response.data.forEach(function (item) {
             const title = item.name;
+            const author = item.author;
             const image = item.image || "";
 
             let itemHtml = `
               <div class="autocomplete-item" data-id="${item.id}" data-title="${title}">
                 ${image ? `<img src="${image}" alt="${title}" width="30" height="40">` : ""}
                 <div class="item-details">
+                  <div class="item-title">${title}</div>
                   <div class="item-title">${title}</div>
                 </div>
               </div>
@@ -131,3 +133,5 @@ $(document).ready(function () {
     }
   });
 });
+// getImagebyID
+// http://localhost:8080/user/getImageByID()
