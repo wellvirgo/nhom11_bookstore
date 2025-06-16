@@ -23,9 +23,11 @@ public class PayOSService {
         int amount = (int) order.getTotalAmount();
         long payOSOrderCode = order.getId();
         String description = "Payment for order #" + payOSOrderCode;
+        // Lấy danh sách các sản phẩm trong đơn hàng
         Stream<ItemData> items = order.getItems().stream()
                 .map(item -> ItemData.builder().name(item.getProduct().getName())
                         .quantity(item.getQuantity()).price((int)item.getProduct().getPrice()).build());
+        // Khởi tạo thông tin thanh toán
         PaymentData paymentData = PaymentData.builder()
                 .orderCode(payOSOrderCode)
                 .amount(amount)

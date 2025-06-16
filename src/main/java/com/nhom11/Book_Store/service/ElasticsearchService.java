@@ -62,45 +62,33 @@ public class ElasticsearchService {
     // Truy vấn cosineSimilary trong Elasticsearch
     public SearchResponse searchByEmbedding(String prompt, List<Float> embedding, int page, int size) {
         String url = "http://localhost:9200/products_embedding/_search";
-
+        // Truy vấn theo vector ngữ nghĩa
         Map<String, Object> params = new HashMap<>();
         params.put("query_vector", embedding);
-
         Map<String, Object> script = Map.of(
                 "source", "cosineSimilarity(params.query_vector, 'embedding') + 1.0",
                 "params", params
         );
-        
-//        Map<String, Object> boolQuery = Map.of(
-//                "must", List.of(
-//                        Map.of("multi_match", Map.of(
-//                                "query", prompt,
-//                                "fields", List.of("name^3", "description", "author", "genre_name", "publisher", "category_name")
-//                        ))
-//                )
-//        );
-
+        // Truy vấn theo fulltext search
         Map<String, Object> boolQuery = Map.of(
                 "should", List.of(
                         Map.of("multi_match", Map.of(
                                 "query", prompt,
                                 "type", "most_fields",
                                 "fields", List.of("name^10", "genre_name^2.5", "category_name^2", "description", "publisher"),
-                                "fuzziness", "AUTO",
+                                "fuzziness", "AUTO", // tìm kiếm mờ cho
                                 "prefix_length", 2
                         )),
-                        Map.of("match_all", Map.of())  // fallback nếu multi_match không match
+                        Map.of("match_all", Map.of())
                 ),
-                "minimum_should_match", 1  // ít nhất 1 cái phải match
+                "minimum_should_match", 1
         );
-
-
+        // tính điểm
         Map<String, Object> scriptScore = Map.of(
                 "script", script,
                 "query", Map.of("bool", boolQuery)
-//                "query", Map.of("match_all", Map.of())
         );
-
+        // kết quả trả về
         Map<String, Object> body = Map.of(
                 "from", page * size,
                 "size", size,
@@ -109,34 +97,20 @@ public class ElasticsearchService {
                 "query", Map.of("script_score", scriptScore),
                 "track_total_hits", true
         );
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<?> request = new HttpEntity<>(body, headers);
-
         ResponseEntity<Map> response = new RestTemplate().postForEntity(url, request, Map.class);
-
-//        // Trích xuất danh sách hits
-//        List<Map<String, Object>> hits = (List<Map<String, Object>>)
-//                ((Map<String, Object>) response.getBody().get("hits")).get("hits");
-//
-//        return hits.stream()
-//                .map(hit -> (Map<String, Object>) hit.get("_source"))
-//                .toList();
-
         Map<String, Object> hits = (Map<String, Object>) response.getBody().get("hits");
+        // Lấy danh sách kết quả
         List<Map<String, Object>> hitsList = (List<Map<String, Object>>) hits.get("hits");
-
         // Lấy tổng số kết quả từ total
         Map<String, Object> total = (Map<String, Object>) hits.get("total");
         long totalResults = ((Number) total.get("value")).longValue();
-
         List<Map<String, Object>> data = hitsList.stream()
                 .map(hit -> (Map<String, Object>) hit.get("_source"))
                 .toList();
-
         int totalPages = (int) Math.ceil((double) totalResults / size);
-
         return new SearchResponse(data, totalResults, totalPages, page);
     }
 }

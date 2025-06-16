@@ -107,7 +107,6 @@ public class OrderService {
         else if (status.equals("PENDING")) {
             order.setStatus("pending");
         }
-//        return orderRepository.save(order);
     }
 
 }
