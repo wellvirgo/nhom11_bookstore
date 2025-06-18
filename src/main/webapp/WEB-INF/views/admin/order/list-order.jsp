@@ -188,11 +188,15 @@
                 '<td class="text-center">' + order.id + '</td>' +
                 '<td class="text-center">' + order.orderDate + '</td>' +
                 '<td class="text-center">' + order.customerName + '</td>' +
-                '<td class="text-center">' + order.totalAmount + '</td>' +
+                '<td class="text-center">' +
+                new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(order.totalAmount) +
+                '</td>' +
                 '<td class="text-center">' + order.paymentStatus + '</td>' +
                 '<td class="text-center">' + order.customerPhone + '</td>' +
                 '<td class="text-center">' + order.status + '</td>' +
-                '<td class="text-center">' + 'Action' + '</td>';
+                '<td class="text-center">' +
+                `<button class="btn btn-sm btn-info" title="Xem chi tiết" data-order-id=` + order.id + ">"+
+                `<i class="bi bi-eye"></i></button>` + '</td>';
             tbody.appendChild(row);
         });
         $('.datatable').DataTable({
@@ -213,6 +217,11 @@
             headerCallback: function (thead, data, start, end, display) {
                 $(thead).find('th').eq(4).addClass('red');
             }
+        });
+
+        $('tbody').on('click', '.btn-info', function () {
+            const orderId = $(this).data('order-id');
+            window.open("/admin/order-detail/"+orderId);
         });
     })
 </script>

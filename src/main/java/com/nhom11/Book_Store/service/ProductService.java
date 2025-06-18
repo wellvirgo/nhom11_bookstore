@@ -1,9 +1,6 @@
 package com.nhom11.Book_Store.service;
 
-import com.nhom11.Book_Store.dto.ImageDTO;
-import com.nhom11.Book_Store.dto.ProductCreation;
-import com.nhom11.Book_Store.dto.ProductInTrash;
-import com.nhom11.Book_Store.dto.TopSellingProduct;
+import com.nhom11.Book_Store.dto.*;
 import com.nhom11.Book_Store.mapper.ProductMapper;
 import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Image;
@@ -124,45 +121,46 @@ public class ProductService {
         });
     }
 
-    public boolean updateProduct(ProductCreation productCreation, long id) {
+    public boolean updateProduct(ProductUpdate productUpdate, long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty()) {
             return false;
         }
 
         Product oldProduct = optionalProduct.get();
-        oldProduct.setName(productCreation.getName());
-        oldProduct.setAuthor(productCreation.getAuthor());
-        oldProduct.setSupplier(productCreation.getSupplier());
-        oldProduct.setPublisher(productCreation.getPublisher());
-        oldProduct.setBook_layout(productCreation.getBook_layout());
-        oldProduct.setPrice(productCreation.getPrice());
-        oldProduct.setPublishYear(productCreation.getPublishYear());
-        oldProduct.setLanguage(productCreation.getLanguage());
-        oldProduct.setWeight(productCreation.getWeight());
-        oldProduct.setSize(productCreation.getSize());
-        oldProduct.setQuantityPage(productCreation.getQuantityPage());
-        oldProduct.setQuantityAvailable(productCreation.getQuantityAvailable());
-        oldProduct.setDescription(productCreation.getDescription());
+        oldProduct.setName(productUpdate.getName());
+        oldProduct.setAuthor(productUpdate.getAuthor());
+        oldProduct.setSupplier(productUpdate.getSupplier());
+        oldProduct.setPublisher(productUpdate.getPublisher());
+        oldProduct.setBook_layout(productUpdate.getBook_layout());
+        oldProduct.setPrice(productUpdate.getPrice());
+        oldProduct.setPublishYear(productUpdate.getPublishYear());
+        oldProduct.setLanguage(productUpdate.getLanguage());
+        oldProduct.setWeight(productUpdate.getWeight());
+        oldProduct.setSize(productUpdate.getSize());
+        oldProduct.setQuantityPage(productUpdate.getQuantityPage());
+        oldProduct.setQuantityAvailable(productUpdate.getQuantityAvailable());
+        oldProduct.setDescription(productUpdate.getDescription());
+        oldProduct.setInActive(productUpdate.isInActive());
 
         Genre genre = genreRepository
-                .getGenreByName(productCreation.getGenreName())
+                .getGenreByName(productUpdate.getGenreName())
                 .orElseGet(genreRepository::findTop1ByOrderByIdAsc);
         oldProduct.setGenre(genre);
         productRepository.save(oldProduct);
 
-        if(!productCreation.getCoverImage().isEmpty()){
+        if(!productUpdate.getCoverImage().isEmpty()){
             imageService.deleteCoverImageByBookId(oldProduct.getId());
-            saveImage(productCreation.getCoverImage(), oldProduct, true, 0);
+            saveImage(productUpdate.getCoverImage(), oldProduct, true, 0);
         }
-        if(!productCreation.getBackCoverImage().isEmpty()){
+        if(!productUpdate.getBackCoverImage().isEmpty()){
             imageService.deleteBackCoverImageByBookId(oldProduct.getId());
-            saveImage(productCreation.getBackCoverImage(), oldProduct, false, -1);
+            saveImage(productUpdate.getBackCoverImage(), oldProduct, false, -1);
         }
-        if(!productCreation.getAdditionalImages().isEmpty()){
+        if(!productUpdate.getAdditionalImages().isEmpty()){
             imageService.deleteAddImageByBookId(oldProduct.getId());
             AtomicInteger orderOfAdditionalImages = new AtomicInteger(1);
-            productCreation.getAdditionalImages().forEach(image -> {
+            productUpdate.getAdditionalImages().forEach(image -> {
                 saveImage(image, oldProduct, false, orderOfAdditionalImages.get());
                 orderOfAdditionalImages.getAndIncrement();
             });
@@ -213,6 +211,16 @@ public class ProductService {
         ProductCreation productCreation = productMapper.mapToProductCreation(productFetchedFromDB);
         productCreation.setGenreName(productFetchedFromDB.getGenre().getName());
         return productCreation;
+    }
+
+    public ProductUpdate getProductUpdateById(long id) {
+        Product productFetchedFromDB = productRepository.findById(id).orElse(null);
+        if (productFetchedFromDB == null) {
+            return new ProductUpdate();
+        }
+        ProductUpdate productUpdate = productMapper.mapToProductUpdate(productFetchedFromDB);
+        productUpdate.setGenreName(productFetchedFromDB.getGenre().getName());
+        return productUpdate;
     }
 
     private void saveImage(MultipartFile image, Product product, boolean isPrimary, int order) {

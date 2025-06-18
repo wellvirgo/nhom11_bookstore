@@ -40,7 +40,7 @@
 <main id="main" class="main">
     <!-- Orders List Content - System Style -->
     <div class="pagetitle">
-        <h1>Danh sách đơn hàng</h1>
+        <h1>Thùng rác</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin/das">Dashboard</a></li>

@@ -1,9 +1,6 @@
 package com.nhom11.Book_Store.controller;
 
-import com.nhom11.Book_Store.dto.ImageDTO;
-import com.nhom11.Book_Store.dto.ProductCreation;
-import com.nhom11.Book_Store.dto.ProductInTrash;
-import com.nhom11.Book_Store.dto.ProductShowListAdminDTO;
+import com.nhom11.Book_Store.dto.*;
 import com.nhom11.Book_Store.mapper.ProductMapper;
 import com.nhom11.Book_Store.model.Genre;
 import com.nhom11.Book_Store.model.Product;
@@ -169,7 +166,7 @@ public class AdminBookController {
     @GetMapping("/admin/edit-book/{id}")
     public String getEditBookPage(Model model, @PathVariable("id") long id,
                                   @RequestParam("status") Optional<String> statusOptional) {
-        ProductCreation book = productService.getProductCreationById(id);
+        ProductUpdate book = productService.getProductUpdateById(id);
         model.addAttribute("id", id);
         model.addAttribute("genreNames", genreService.getAllGenreNames());
         model.addAttribute("sidebarSelected", "book");
@@ -217,7 +214,7 @@ public class AdminBookController {
     @PostMapping("/admin/edit-book/{id}")
     public String editBook(Model model,
                            @PathVariable(name = "id") long id,
-                           @ModelAttribute("book") @Valid ProductCreation book,
+                           @ModelAttribute("book") @Valid ProductUpdate book,
                            BindingResult bindingResult,
                            @RequestParam("coverImage") MultipartFile coverImage,
                            @RequestParam("backCoverImage") MultipartFile backCoverImage,

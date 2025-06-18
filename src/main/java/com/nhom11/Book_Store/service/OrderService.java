@@ -7,11 +7,14 @@ import com.nhom11.Book_Store.constrant.PaymentStatus;
 import com.nhom11.Book_Store.dto.OrderInReportChart;
 import com.nhom11.Book_Store.dto.OrderShowListDTO;
 import com.nhom11.Book_Store.model.Order;
+import com.nhom11.Book_Store.model.OrderItem;
+import com.nhom11.Book_Store.repository.OrderItemRepository;
 import com.nhom11.Book_Store.repository.OrderRepository;
 import com.nhom11.Book_Store.specification.OrderSpecification;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,12 +22,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class OrderService {
     OrderRepository orderRepository;
+    OrderItemRepository orderItemRepository;
 
     public List<OrderShowListDTO> findAll() {
         return orderRepository.fetchAll();
@@ -141,8 +147,8 @@ public class OrderService {
 
         Map<String, String> paramReportChartInThisYear = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
-        String orderCountJson= "";
-        String orderTotalAmountJson= "";
+        String orderCountJson = "";
+        String orderTotalAmountJson = "";
         try {
             orderCountJson = mapper.writeValueAsString(orderCountArr);
             orderTotalAmountJson = mapper.writeValueAsString(orderTotalAmountArr);
@@ -153,6 +159,28 @@ public class OrderService {
         paramReportChartInThisYear.put("orderTotalAmountJson", orderTotalAmountJson);
 
         return paramReportChartInThisYear;
+    }
+
+    public Order getOrderById(long orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        return order.orElseThrow(() -> new RuntimeException("Order not found"));
+    }
+
+    public List<OrderItem> getOrderItemByOrderId(long orderId) {
+        return orderItemRepository.findByOrderId(orderId);
+    }
+
+    public boolean updateOrder(Order updateOrder) {
+        Order savedOrder;
+        try{
+            savedOrder=getOrderById(updateOrder.getId());
+        }catch (RuntimeException ex){
+            log.error("Error updating order");
+            return false;
+        }
+        savedOrder.setStatus(updateOrder.getStatus());
+        orderRepository.save(savedOrder);
+        return true;
     }
 
     private double getChangePercentage(long current, long previous) {

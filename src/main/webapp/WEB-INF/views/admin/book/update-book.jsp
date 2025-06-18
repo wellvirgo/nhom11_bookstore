@@ -84,20 +84,6 @@
                 <li class="breadcrumb-item active">Chỉnh sửa sách</li>
             </ol>
         </nav>
-<%--        <div class="d-flex gap-4">--%>
-<%--            <div class="form-check">--%>
-<%--                <input class="form-check-input" type="radio" name="radioDefault" id="rdBusinessActive">--%>
-<%--                <label class="form-check-label" for="rdBusinessActive">--%>
-<%--                    Đang kinh doanh--%>
-<%--                </label>--%>
-<%--            </div>--%>
-<%--            <div class="form-check">--%>
-<%--                <input class="form-check-input" type="radio" name="radioDefault" id="rdBusinessInActive" checked>--%>
-<%--                <label class="form-check-label" for="rdBusinessInActive">--%>
-<%--                    Ngừng kinh doanh--%>
-<%--                </label>--%>
-<%--            </div>--%>
-<%--        </div>--%>
     </div>
 
     <c:if test="${status eq 'success'}">
@@ -185,7 +171,7 @@
                             </li>
                         </ul>
 
-                        <%--@elvariable id="book" type="com.nhom11.Book_Store.dto.ProductCreation"--%>
+                        <%--@elvariable id="book" type="com.nhom11.Book_Store.dto.ProductUpdate"--%>
                         <form:form id="form-create"
                                    action="/admin/edit-book/${id}" method="post"
                                    class="needs-validation" novalidate="novalidate"
@@ -196,6 +182,20 @@
                                 <!-- Book Info Tab -->
                                 <div class="tab-pane fade show active" id="book-info">
                                     <div class="row g-3">
+                                        <div class="col-12 d-flex gap-4">
+                                            <div class="form-check ps-0">
+                                                <form:radiobutton path="inActive" value="false" id="rdBusinessActive"/>
+                                                <label class="form-check-label" for="rdBusinessActive">
+                                                    Đang kinh doanh
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <form:radiobutton path="inActive" value="true" id="rdBusinessInActive"/>
+                                                <label class="form-check-label" for="rdBusinessInActive">
+                                                    Ngừng kinh doanh
+                                                </label>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <label for="bookTitle" class="form-label">Tên sách <span
                                                     class="text-danger">*</span></label>

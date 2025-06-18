@@ -1,6 +1,7 @@
 package com.nhom11.Book_Store.repository;
 
 import com.nhom11.Book_Store.dto.ProductInTrash;
+import com.nhom11.Book_Store.dto.ProductShowListAdminDTO;
 import com.nhom11.Book_Store.dto.TopSellingProduct;
 import com.nhom11.Book_Store.model.Product;
 import jakarta.transaction.Transactional;
