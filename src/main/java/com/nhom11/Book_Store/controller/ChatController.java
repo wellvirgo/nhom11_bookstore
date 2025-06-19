@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.nhom11.Book_Store.service.ChatBoxService;
-import com.nhom11.Book_Store.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,20 +23,20 @@ import org.slf4j.LoggerFactory;
 @RequiredArgsConstructor
 public class ChatController {
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
-    private final ProductService chatbotBookService; // Đổi tên service cho đúng
     private final ChatBoxService chatBoxService; // Giữ nguyên cho AI service
     
     @PostMapping
-    public ResponseEntity<?> chat(@RequestBody Map<String, String> payload) {
-        String question = payload.get("message");
+    public ResponseEntity<?> chat(@RequestBody Map<String, Object> payload) {
+        String question = (String) payload.get("message");
+        List<Map<String, Object>> historyMessages = (List<Map<String, Object>>) payload.get("historyMessages");
         
         try {
             // Lấy book context
-            String bookContext = chatbotBookService.getOptimizedPromptJSON(0, 150);
+            String bookContext = chatBoxService.getOptimizedPromptJSON(0, 150);
             logger.info("Retrieved book context length: {}", bookContext.length());
             
-            // Tạo full prompt với HTML format
-            String fullPrompt = createFullHTMLPrompt(bookContext, question);
+            // Tạo full prompt với HTML format và history
+            String fullPrompt = createFullHTMLPrompt(bookContext, question, historyMessages);
             
             // Gọi AI service
             String aiResponse = chatBoxService.askGemma(fullPrompt);
@@ -73,11 +73,17 @@ public class ChatController {
     }
     
     // Tạo prompt yêu cầu trả về HTML
-    private String createFullHTMLPrompt(String bookContext, String question) {
+    private String createFullHTMLPrompt(String bookContext, String question, List<Map<String, Object>> historyMessages) {
+        // Format history messages
+        String formattedHistory = formatHistoryMessages(historyMessages);
+        
         return """
         Bạn là trợ lý ảo thông minh của cửa hàng sách trực tuyến.
         
         **QUAN TRỌNG: Luôn trả về phản hồi dưới dạng HTML được format đẹp!**
+        
+        === LỊCH SỬ TIN NHẮN ===
+        %s
         
         === THÔNG TIN SẢN PHẨM ===
         Danh sách sách hiện có:
@@ -142,7 +148,7 @@ public class ChatController {
                     </div>
                     <div class="book-actions d-flex">
                         <button class="btn btn-cart" onclick="addToCart('[id]')" data-book-id="[id]">🛒 Thêm vào giỏ</button>
-                        <button class="btn btn-detail" data-book-id="[id]">👁️ Xem chi tiết</button>
+                        <button class="btn btn-detail"><a class="nav-link">👁️ Xem chi tiết</a></button>
                     </div>
                 </div>
             </div>
@@ -166,17 +172,74 @@ public class ChatController {
         - Sử dụng semantic HTML với class names phù hợp
         - Khi có action_id, format: action_id="[value]"
         - Sử dụng emoji để làm đẹp
+        - Lấy lịch sử tin nhắn cũ để tư vấn chính xác hơn
+        - Nếu khách hàng phân vân xem chọn cuốn thì xem tin nhắn cũ để có thể quyết định chọn sách cho khách hàng
         - Khi khách hàng nhấn xem chi tiết sách thì chuyển đến /user/detail/[id]
-        - Khi tư vấn hiển thị tối đa 3 sách và 1 nút xem thêm dẫn đến /user/list-books?category=[category] nếu khách hỏi về thể loại sách 
+        - Khi tư vấn hiển thị tối đa 3 sách và 1 nút xem thêm dẫn đến /user/list-books?category=[category] nếu khách hỏi về thể loại sách
         - Đảm bảo HTML valid và well-formed
         - Trả lời ngắn gọn, thân thiện
-        
+        - Format lại giá sản phẩm cho đẹp
+        - Giao tiếp được với khách hàng
+        - Hiển thị giao diện tối ưu phụ thuộc vào kích thước bỏ những thẻ <br> bị thừa
         ---
         
-        Câu hỏi của khách hàng: %s
+        Câu hỏi hiện tại của khách hàng: %s
         
         Hãy trả lời bằng HTML được format đẹp, thân thiện và thực hiện đúng chức năng được yêu cầu.
-        """.formatted(bookContext, question);
+        Dựa vào lịch sử tin nhắn để hiểu rõ hơn về nhu cầu của khách hàng và tư vấn chính xác hơn.
+        """.formatted(formattedHistory, bookContext, question);
+    }
+    
+    // Format lịch sử tin nhắn
+    private String formatHistoryMessages(List<Map<String, Object>> historyMessages) {
+        if (historyMessages == null || historyMessages.isEmpty()) {
+            return "Chưa có lịch sử tin nhắn.";
+        }
+
+        StringBuilder formattedHistory = new StringBuilder();
+        formattedHistory.append("<div class='chat-history'>\n");
+        
+        for (Map<String, Object> message : historyMessages) {
+            String content = (String) message.get("content");
+            boolean isUser = (boolean) message.get("isUser");
+            String time = (String) message.get("time");
+            
+            // Clean content
+            content = cleanMessageContent(content);
+            
+            formattedHistory.append(String.format("""
+                <div class='history-message %s'>
+                    <div class='message-time'>%s</div>
+                    <div class='message-content'>%s</div>
+                </div>
+                """, 
+                isUser ? "user" : "bot",
+                time,
+                content
+            ));
+        }
+        
+        formattedHistory.append("</div>");
+        return formattedHistory.toString();
+    }
+    
+    // Clean message content
+    private String cleanMessageContent(String content) {
+        if (content == null) return "";
+        
+        // Remove extra whitespace and newlines
+        content = content.trim()
+                        .replaceAll("\\s+", " ")
+                        .replaceAll("(?m)^\\s*$[\n\r]{1,}", "\n");
+        
+        // If content is HTML, clean it
+        if (content.contains("<")) {
+            // Remove extra <br> tags
+            content = content.replaceAll("<br\\s*/?>(\\s*<br\\s*/?>)+", "<br>")
+                           .replaceAll("(^\\s*<br\\s*/?>|\\s*<br\\s*/?>\\s*$)", "");
+        }
+        
+        return content;
     }
     
     // Xử lý AI response để đảm bảo có HTML

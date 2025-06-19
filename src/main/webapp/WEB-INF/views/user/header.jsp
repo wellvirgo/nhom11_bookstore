@@ -466,7 +466,14 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               <!-- user  -->
               <li>
                 <a
-                    href="<c:url value='/user-control?param=profile'/>"
+                    href="<c:choose>
+                        <c:when test="${not empty sessionScope.user}">
+                            <c:url value='/user-control?param=profile'/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:url value='/login'/>
+                        </c:otherwise>
+                    </c:choose>"
                   class="rounded-circle bg-light p-2 mx-1">
                   <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#user"></use>

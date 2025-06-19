@@ -16,12 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nhom11.Book_Store.dto.ImageDTO;
 import com.nhom11.Book_Store.dto.ProductforJsonDTO;
-import com.nhom11.Book_Store.dto.TopSellingProduct;
 import com.nhom11.Book_Store.dto.TopSellingProductBanner;
-import com.nhom11.Book_Store.model.Cart;
-import com.nhom11.Book_Store.model.CartItem;
 import com.nhom11.Book_Store.model.Notification;
 import com.nhom11.Book_Store.model.Product;
 import com.nhom11.Book_Store.model.User;
@@ -52,19 +48,30 @@ public class ProductController {
     private NotificationService notificationService;
 
     //Trang chủ hiển thị sản phẩm - QT - 25/5/2025
-    @GetMapping("/home")
+    @GetMapping({"/home","/user"})
     public String listProduct(Model model, @RequestParam(defaultValue = "1") int page, HttpSession session) {
         int pageSize = 10; // Số sản phẩm mỗi trang
         Page<Product> productPage = productService.getTrendingProducts(PageRequest.of(page - 1, pageSize));
         Map<Long, String> productImages = imageService.getPrimaryImageMap();
         List<String> categoryNames = categoryService.getCategoryNames();
         List<TopSellingProductBanner> topSellingProducts = productService.findTopSellingProductsInfo(3);
+        
+        // Xử lý thông báo chỉ khi user đã đăng nhập
         User user = (User) session.getAttribute("user");
-        List<Notification> notifiList = notificationService.getAllNotification(user.getId());
-        model.addAttribute("notifiList", notifiList);
-        System.out.println("notifiList: " + notifiList.size());
-        long unreadCount = notifiList.stream().filter(n -> !n.isRead()).count();
-        model.addAttribute("unreadCount", unreadCount);
+        // List<Notification> notifiList = notificationService.getAllNotification(user.getId());
+        // model.addAttribute("notifiList", notifiList);
+        // System.out.println("notifiList: " + notifiList.size());
+        // long unreadCount = notifiList.stream().filter(n -> !n.isRead()).count();
+        // model.addAttribute("unreadCount", unreadCount);
+        if (user != null) {
+            List<Notification> notifiList = notificationService.getAllNotification(user.getId());
+            model.addAttribute("notifiList", notifiList);
+            long unreadCount = notifiList.stream().filter(n -> !n.isRead()).count();
+            model.addAttribute("unreadCount", unreadCount);
+        } else {
+            model.addAttribute("notifiList", List.of());
+            model.addAttribute("unreadCount", 0L);
+        }
 
         Map<Long, Long> productBestPrices = new HashMap<>();
         for (Product p : productPage.getContent()) {

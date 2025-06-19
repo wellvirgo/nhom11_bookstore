@@ -36,10 +36,52 @@ function isLoggedIn() {
   return true;
 }
 function handleLogout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("tokenExpiration");
-  showToast("success", "Đăng xuất thành công");
-  window.location.href = "/login"; // Điều hướng về trang đăng nhập
+  // First make a request to server to invalidate session
+  fetch("/logout", {
+    method: "POST",
+    credentials: "include", // Important to include cookies
+  })
+    .then((response) => {
+      if (response.ok) {
+        // Clear client-side data
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiration");
+        localStorage.removeItem("userData");
+        localStorage.removeItem("cart");
+
+        // Clear cookies
+        document.cookie.split(";").forEach(function (c) {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(
+              /=.*/,
+              "=;expires=" + new Date().toUTCString() + ";path=/"
+            );
+        });
+
+        // Show success message
+        showToast("success", "Đăng xuất thành công");
+
+        // Close the modal if it's open
+        const logoutModal = bootstrap.Modal.getInstance(
+          document.getElementById("logoutModal")
+        );
+        if (logoutModal) {
+          logoutModal.hide();
+        }
+
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+          window.location.href = "/user/home";
+        }, 1000);
+      } else {
+        throw new Error("Logout failed");
+      }
+    })
+    .catch((error) => {
+      console.error("Error during logout:", error);
+      showToast("error", "Có lỗi xảy ra khi đăng xuất. Vui lòng thử lại.");
+    });
 }
 document.querySelector("form").addEventListener("submit", function (e) {
   e.preventDefault(); // Ngăn gửi form ngay
@@ -100,29 +142,29 @@ document.querySelector("form").addEventListener("submit", function (e) {
 });
 
 function initProfileEditForm() {
-  const editBtn = document.getElementById('editBtn');
-  const saveBtn = document.getElementById('saveBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
-  const inputs = document.querySelectorAll('#profileForm input');
-  const genderSelect = document.getElementById('genderSelect');
+  const editBtn = document.getElementById("editBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const inputs = document.querySelectorAll("#profileForm input");
+  const genderSelect = document.getElementById("genderSelect");
 
   if (!editBtn || !saveBtn || !cancelBtn) return;
 
-  editBtn.onclick = function() {
-    inputs.forEach(i => i.removeAttribute('readonly'));
-    if (genderSelect) genderSelect.removeAttribute('disabled');
-    editBtn.classList.add('d-none');
-    saveBtn.classList.remove('d-none');
-    cancelBtn.classList.remove('d-none');
+  editBtn.onclick = function () {
+    inputs.forEach((i) => i.removeAttribute("readonly"));
+    if (genderSelect) genderSelect.removeAttribute("disabled");
+    editBtn.classList.add("d-none");
+    saveBtn.classList.remove("d-none");
+    cancelBtn.classList.remove("d-none");
   };
 
-  cancelBtn.onclick = function() {
+  cancelBtn.onclick = function () {
     location.reload();
   };
 
-  saveBtn.onclick = function() {
-    document.getElementById('profileForm').submit();
+  saveBtn.onclick = function () {
+    document.getElementById("profileForm").submit();
   };
 }
 
-document.addEventListener('DOMContentLoaded', initProfileEditForm);
+document.addEventListener("DOMContentLoaded", initProfileEditForm);

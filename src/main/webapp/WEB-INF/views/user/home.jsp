@@ -220,7 +220,7 @@
                               class="btn-wishlist position-absolute end-0 m-2 ${wishlistProductIds.contains(p.id) ? 'added' : ''}" 
                               data-product-id="${p.id}" 
                               title="Thêm vào wishlist">
-                              <svg width="24" height="24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <svg class="icon-heart" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <use xlink:href="#heart"></use> <!-- Nếu dùng SVG sprite -->
                               </svg>
                             </a>

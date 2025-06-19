@@ -32,3 +32,15 @@ function handleLogin(event) {
     },
   });
 }
+function showToast(message, type) {
+  const toast = $("<div>")
+    .addClass(`custom-toast ${type}`)
+    .text(message)
+    .appendTo("body");
+
+  setTimeout(() => {
+    toast.fadeOut(300, function () {
+      $(this).remove();
+    });
+  }, 3000);
+}

@@ -5,6 +5,7 @@
   --primary-text: #212529;
   --secondary-text: #6c757d;
   --border-color: #dee2e6;
+  --primary-light-color: #fffbe6;
   --card-bg: #ffffff;
   --hover-bg: #e0e0e0;
   --banner-bg-1: #e0e0e0; /* Light mode color for block-1, adjust as needed */
@@ -22,6 +23,7 @@
   --border-color: #495057;
   --card-bg: #2d2d2d;
   --hover-bg: #3d3d3d;
+  --primary-light-color: #2d2d2d;
   --banner-bg-1: #2d2d2d;
   --banner-bg-2: #2d2d2d;
   --banner-bg-3: #2d2d2d;
@@ -175,19 +177,28 @@ body {
   color: var(--secondary-text) !important;
 }
 
-.product-item .btn-wishlist {
+/* .product-item .btn-wishlist {
   background-color: var(--card-bg) !important;
   border-color: var(--border-color) !important;
-}
+} */
 
-.product-item .btn-wishlist svg {
+/* .product-item .btn-wishlist svg {
   color: var(--primary-text) !important;
-}
+} */
 
-.product-item .btn-wishlist:hover {
+/* .product-item .btn-wishlist:hover {
   background-color: var(--hover-bg) !important;
+} */
+.modal-content {
+  background-color: var(--primary-bg);
 }
-
+.address-option.selected {
+  border: 2px solid #ffc107 !important; /* vàng */
+  background: var(--primary-light-color);
+}
+.payment-section {
+  background-color: var(--secondary-bg) !important;
+}
 .product-item .btn-number {
   background-color: var(--card-bg) !important;
   border-color: var(--border-color) !important;

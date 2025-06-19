@@ -165,7 +165,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       <div class="preloader"></div>
     </div>
     <jsp:include page="header.jsp" />
-
+    <jsp:include page="chatbox.jsp" />
     <main>
       <section class="">
         <div class="container-fluid">

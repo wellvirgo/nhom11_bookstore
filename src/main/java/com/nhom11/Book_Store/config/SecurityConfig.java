@@ -43,7 +43,11 @@ public class SecurityConfig {
     private static final String[] PUBLIC_GET_URLS = {
             "/favicon.ico",
             "/login",
-            "/register"
+            "/register",
+            "/",
+            "/user/home",
+            "/user/**",
+            "/product/**"
     };
 
     private static final String[] PUBLIC_POST_URLS = {"/register"};
@@ -77,7 +81,6 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
 
                         .requestMatchers(PUBLIC_URLS).permitAll()
 
@@ -96,36 +99,12 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessHandler((request, response, authentication) -> {
                             log.info("User {} logged out", authentication.getName());
-                            response.sendRedirect("/login?logout");
+                            response.sendRedirect("/user/home");
                         }))
 
                 .sessionManagement(s -> s
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         return http.build();
-        // http
-        // .authorizeHttpRequests(auth -> auth
-        //     .anyRequest().permitAll()  // Cho phép tất cả các request
-        // )
-        // .csrf(csrf -> csrf.disable());  // Tắt bảo vệ CSRF
-
-        // return http.build();
     }
-    // @Bean
-    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    //     http
-    //             .authorizeHttpRequests(auth -> auth
-    //                     .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
-    //                     // Cho phép tất cả các request mà không cần xác thực
-    //                     .anyRequest().permitAll()
-    //             )
-    //             // Vô hiệu hóa CSRF protection
-    //             .csrf(csrf -> csrf.disable())
-    //             // Vô hiệu hóa form login
-    //             .formLogin(form -> form.disable())
-    //             // Vô hiệu hóa logout
-    //             .logout(logout -> logout.disable());
-
-    //     return http.build();
-    // }
 }

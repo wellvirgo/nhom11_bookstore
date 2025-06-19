@@ -541,32 +541,34 @@ span {
     grid-area: 4 / 1 / 5 / 2;
   }
 }
-#toast-container {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1050;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
 
 /* Toast giống Ant Design */
 .custom-toast {
-  display: flex;
-  align-items: center;
-  width: auto;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
-  font-weight: 500;
-  opacity: 0;
-  transform: translateY(-10px);
-  animation: fadeInUp 0.5s forwards;
-  font-family: "Nunito", sans-serif;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  color: white;
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.custom-toast.success {
+  background-color: #28a745;
+}
+.custom-toast.error {
+  background-color: #dc3545;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Icon bên trái */
@@ -577,8 +579,8 @@ span {
 
 /* Màu sắc theo trạng thái */
 .toast-success {
-  background-color: #f6ffed;
-  color: #389e0d;
+  background-color: #28a745;
+  color: #fff;
 }
 .toast-error {
   background-color: #fff1f0;
@@ -683,7 +685,6 @@ span {
   line-height: 15px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #252525;
   bottom: 0;
   right: 0;
 }
@@ -1020,12 +1021,23 @@ span {
   }
 }
 .btn-wishlist.added {
-  background-color: white; /* Giữ nền trắng */
+  background-color: red !important; /* Giữ nền trắng */
   border-radius: 50%;
-  color: red; /* Đảm bảo màu viền/biểu tượng */
 }
-
+.btn-wishlist.added:hover {
+  background-color: #fff !important; /* Giữ nền trắng */
+  border-radius: 50%;
+}
+.btn-wishlist.added:hover > .icon-heart {
+  color: #000 !important;
+}
+.btn-wishlist.added > .icon-heart {
+  color: #fff !important;
+}
+.icon-heart {
+  color: #000;
+}
 /* Đổi màu trái tim (SVG) khi đã thêm */
 .btn-wishlist.added svg use {
-  fill: red;
+  fill: red !important;
 }

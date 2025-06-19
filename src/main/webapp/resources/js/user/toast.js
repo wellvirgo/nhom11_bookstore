@@ -25,10 +25,7 @@ function showToast(type, message) {
   // Tạo HTML Toast
   let toastHtml = `
         <div id="${toastId}" class="custom-toast ${toastClass}">
-            <span class="toast-icon">${iconHtml}</span>
-            <div>
-                <small style="font-size: 18px;">${message}</small>
-            </div>
+                <p style="font-size: 14px;color:#fff !important;font-weight:500;margin;">${message}</p>
         </div>
     `;
 

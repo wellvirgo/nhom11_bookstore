@@ -28,6 +28,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     />
     <link rel="stylesheet" type="text/css" href="/css/user/vendor.css" />
     <link rel="stylesheet" type="text/css" href="/css/user/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/user/dark-mode.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,7 +42,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <div class="preloader-wrapper">
       <div class="preloader"></div>
     </div>
-
+    <jsp:include page="chatbox.jsp" />
     <jsp:include page="header.jsp" />
     <section
       class="py-3 banner-section"
@@ -140,7 +141,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                             <div class="col-lg-8 flex-column">
                               <div class="card-detail ps-3">
                                 <h5 class="card-title">
-                                  <a href="#" class="text-decoration-none fs-6">${item.product.name}</a>
+                                  <a href="/user/detail/${item.product.id}" class="text-decoration-none fs-6">${item.product.name}</a>
                                 </h5>
                                 <div class="total-price">
                                   <fmt:setLocale value="vi_VN" />
@@ -229,7 +230,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
           </div>
           <div class="col-md-4">
             <div class="cart-totals bg-grey py-5">
-              <h4 class="text-dark pb-4">Tổng giá</h4>
+              <h4 class="pb-4">Tổng giá</h4>
               <div class="total-price pb-5">
                 <table cellspacing="0" class="table text-uppercase">
                   <tbody>
@@ -272,7 +273,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                     <tr class="order-total pt-2 pb-2 border-bottom">
                       <th>Total</th>
                       <td data-title="Total">
-                        <span class="price-amount amount text-dark ps-5" id="totalValue">
+                        <span class="price-amount amount ps-5" id="totalValue">
                           0 đ
                         </span>
                       </td>
@@ -528,7 +529,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                         data-minorder="${voucher.minOrderValue}">
                   <label for="voucher-${voucher.id}">
                     <strong>${voucher.code}</strong> - ${voucher.description}
-                    <span class="badge bg-info ms-2">
+                    <span class="badge bg-info ms-2 text-dark">
                       <c:choose>
                         <c:when test="${voucher.discountType eq 'PERCENT'}">
                           ${voucher.discountValue}%

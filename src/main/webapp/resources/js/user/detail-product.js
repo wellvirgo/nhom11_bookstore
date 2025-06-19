@@ -88,7 +88,7 @@ function addToCart(productId) {
     },
     success: function (response) {
       if (response.success) {
-        alert(response.message || "Đã thêm vào giỏ hàng");
+        showToast("success", "Thêm vào gio hàng thành công");
         location.reload();
       } else {
         alert(response.message || "Có lỗi xảy ra");
@@ -139,4 +139,14 @@ function addToCartBuy(productId) {
       alert(message);
     },
   });
+}
+function showToast(type, message) {
+  const toast = document.createElement("div");
+  toast.className = `custom-toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
 }

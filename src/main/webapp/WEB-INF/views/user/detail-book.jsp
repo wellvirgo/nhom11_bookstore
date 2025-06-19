@@ -85,7 +85,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
               class="btn-wishlist ${wishlistProductIds.contains(product.id) ? 'added' : ''}" 
               data-product-id="${product.id}" 
               title="Thêm vào wishlist">
-              <svg width="24" height="24">
+              <svg class="icon-heart" width="24" height="24">
                 <use xlink:href="#heart"></use>
               </svg>
             </a>

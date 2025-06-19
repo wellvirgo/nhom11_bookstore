@@ -239,6 +239,28 @@ $(document).ready(function () {
     e.stopPropagation();
   });
 
+  // Clean message content
+  function cleanMessageContent(content) {
+    if (!content) return "";
+
+    // Remove extra newlines and spaces
+    content = content
+      .replace(/^\s+|\s+$/g, "") // Trim start/end
+      .replace(/\n\s+/g, " ") // Replace newlines with space
+      .replace(/\s+/g, " "); // Replace multiple spaces with single space
+
+    // If content is HTML, clean it
+    if (content.includes("<")) {
+      // Remove extra <br> tags
+      content = content
+        .replace(/<br\s*\/?>\s*<br\s*\/?>/g, "<br>")
+        .replace(/<br\s*\/?>\s*$/g, "") // Remove trailing <br>
+        .replace(/^\s*<br\s*\/?>/g, ""); // Remove leading <br>
+    }
+
+    return content;
+  }
+
   // Add message function
   function addMessage(message, isUser = false) {
     if (!hasMessages) {
@@ -252,10 +274,13 @@ $(document).ready(function () {
       minute: "2-digit",
     });
 
+    // Clean message content before displaying
+    const cleanedMessage = cleanMessageContent(message);
+
     const messageHtml = `
           <div class="message ${messageClass}">
               <div class="message-bubble">
-                  ${message}
+                  ${cleanedMessage}
               </div>
               <div class="message-time">${time}</div>
           </div>
@@ -263,7 +288,18 @@ $(document).ready(function () {
 
     chatMessages.append(messageHtml);
     scrollToBottom();
-    saveMessages(); // Save messages after adding new message
+
+    // Save cleaned message to localStorage
+    const messages = [];
+    chatMessages.find(".message").each(function () {
+      const $message = $(this);
+      messages.push({
+        content: cleanMessageContent($message.find(".message-bubble").html()),
+        time: $message.find(".message-time").text(),
+        isUser: $message.hasClass("user"),
+      });
+    });
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
 
     // Show notification if chat is closed
     if (!isOpen && !isUser) {
@@ -305,13 +341,24 @@ $(document).ready(function () {
     sendButton.prop("disabled", true);
     showTyping();
 
+    // Get message history from localStorage
+    const savedMessages = localStorage.getItem("chatMessages");
+    let historyMessages = [];
+    if (savedMessages) {
+      historyMessages = JSON.parse(savedMessages).map((msg) => ({
+        ...msg,
+        content: cleanMessageContent(msg.content),
+      }));
+    }
+
     // API call
     $.ajax({
       url: API_URL,
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify({
-        message: message,
+        message: cleanMessageContent(message),
+        historyMessages: historyMessages,
         timestamp: new Date().toISOString(),
       }),
       timeout: 30000,

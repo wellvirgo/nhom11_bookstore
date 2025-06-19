@@ -35,7 +35,7 @@
         }
         .payment-method.selected {
             border-color: #0d6efd;
-            background-color: #f8f9fa;
+            /* background-color: #f8f9fa; */
         }
         .address-option.selected {
             border: 2px solid #ffc107 !important; /* vàng */
@@ -46,6 +46,7 @@
 </head>
 <body>
     <jsp:include page="header.jsp"/>
+    <jsp:include page="chatbox.jsp" />
     <div class="container py-5">
         <h2 class="mb-4">Thanh toán</h2>
         <!-- Nút Thay đổi -->

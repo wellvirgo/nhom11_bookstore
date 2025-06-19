@@ -120,7 +120,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     </div>
 
    <jsp:include page ="header.jsp" />
-    
+   <jsp:include page="chatbox.jsp" />
     
       <section
       class="py-3 banner-section"
